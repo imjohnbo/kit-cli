@@ -4,6 +4,7 @@ import { printDetail, printSuccess, addFormatOption, withErrorHandler } from '..
 import {
   getAll,
   setApiKey,
+  setOAuthClientId,
   setDefaultFormat,
   setPerPage,
 } from '../config.js';
@@ -60,6 +61,14 @@ export function configCommand() {
         console.error(chalk.red(err.message));
         process.exit(1);
       }
+    });
+
+  cmd
+    .command('set-client-id <id>')
+    .description('Set your Kit OAuth client ID (used by `kit login`)')
+    .action((id) => {
+      setOAuthClientId(id);
+      console.log(chalk.green('\u2713 OAuth client ID saved.'));
     });
 
   cmd

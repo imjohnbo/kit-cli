@@ -4,18 +4,24 @@ import { chmodSync } from 'node:fs';
 const config = new Conf({
   projectName: 'kit-cli',
   schema: {
-    apiKey: { type: 'string', default: '' },
-    defaultFormat: { type: 'string', default: 'table', enum: ['table', 'json'] },
-    perPage: { type: 'number', default: 50, minimum: 1, maximum: 1000 },
+    apiKey:         { type: 'string', default: '' },
+    defaultFormat:  { type: 'string', default: 'table', enum: ['table', 'json'] },
+    perPage:        { type: 'number', default: 50, minimum: 1, maximum: 1000 },
+    oauthClientId:  { type: 'string', default: '' },
+    accessToken:    { type: 'string', default: '' },
+    refreshToken:   { type: 'string', default: '' },
+    tokenExpiresAt: { type: 'number', default: 0 }, // unix ms
   },
 });
 
-// Restrict config file permissions to owner-only (contains API key)
+// Restrict config file permissions to owner-only (contains API key / tokens)
 try {
   chmodSync(config.path, 0o600);
 } catch {
   // May fail on Windows or if file doesn't exist yet — non-fatal
 }
+
+// --- API key ---
 
 export function getApiKey() {
   return process.env.KIT_API_KEY || config.get('apiKey');
@@ -32,13 +38,51 @@ export function setApiKey(key) {
     throw new Error('API key contains invalid control characters.');
   }
   config.set('apiKey', key.trim());
-  // Re-apply restrictive permissions after write
-  try {
-    chmodSync(config.path, 0o600);
-  } catch {
-    // non-fatal
-  }
+  secureConfig();
 }
+
+// --- OAuth client ID ---
+
+export function getOAuthClientId() {
+  return process.env.KIT_CLIENT_ID || config.get('oauthClientId');
+}
+
+export function setOAuthClientId(id) {
+  config.set('oauthClientId', id.trim());
+}
+
+// --- OAuth tokens ---
+
+export function getAccessToken() {
+  return config.get('accessToken');
+}
+
+export function getRefreshToken() {
+  return config.get('refreshToken');
+}
+
+export function isTokenExpired() {
+  const expiresAt = config.get('tokenExpiresAt');
+  if (!expiresAt) return true;
+  // Treat as expired 5 minutes early to avoid races
+  return Date.now() > expiresAt - 5 * 60 * 1000;
+}
+
+export function setTokens(accessToken, refreshToken, createdAt, expiresIn) {
+  // Kit returns created_at as unix seconds, expires_in as seconds
+  config.set('accessToken', accessToken);
+  config.set('refreshToken', refreshToken);
+  config.set('tokenExpiresAt', (createdAt + expiresIn) * 1000);
+  secureConfig();
+}
+
+export function clearTokens() {
+  config.set('accessToken', '');
+  config.set('refreshToken', '');
+  config.set('tokenExpiresAt', 0);
+}
+
+// --- Preferences ---
 
 export function getDefaultFormat() {
   return config.get('defaultFormat');
@@ -56,13 +100,33 @@ export function setPerPage(n) {
   config.set('perPage', n);
 }
 
+// --- Misc ---
+
 export function getAll() {
+  const accessToken = getAccessToken();
+  const expiresAt = config.get('tokenExpiresAt');
+  let oauthStatus = '(not logged in)';
+  if (accessToken) {
+    const expiry = expiresAt ? new Date(expiresAt).toISOString() : 'unknown';
+    oauthStatus = isTokenExpired() ? `(expired at ${expiry})` : `****${accessToken.slice(-4)} (expires ${expiry})`;
+  }
+
   return {
-    apiKey: getApiKey() ? '****' + getApiKey().slice(-4) : '(not set)',
+    apiKey:        getApiKey() ? '****' + getApiKey().slice(-4) : '(not set)',
+    oauthClientId: getOAuthClientId() || '(not set)',
+    oauthToken:    oauthStatus,
     defaultFormat: getDefaultFormat(),
-    perPage: getPerPage(),
-    configPath: config.path,
+    perPage:       getPerPage(),
+    configPath:    config.path,
   };
+}
+
+function secureConfig() {
+  try {
+    chmodSync(config.path, 0o600);
+  } catch {
+    // non-fatal
+  }
 }
 
 export default config;

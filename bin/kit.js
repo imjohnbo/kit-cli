@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { accountCommand, configCommand, setupSkillCommand } from '../src/commands/account.js';
+import { loginCommand, logoutCommand } from '../src/commands/auth.js';
 import { subscribersCommand } from '../src/commands/subscribers.js';
 import { tagsCommand } from '../src/commands/tags.js';
 import { formsCommand } from '../src/commands/forms.js';
@@ -20,6 +21,8 @@ program
   .description('CLI for the Kit (ConvertKit) email marketing API (V4)')
   .version('1.0.0');
 
+program.addCommand(loginCommand());
+program.addCommand(logoutCommand());
 program.addCommand(accountCommand());
 program.addCommand(configCommand());
 program.addCommand(setupSkillCommand());

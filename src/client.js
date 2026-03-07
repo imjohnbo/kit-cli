@@ -1,4 +1,5 @@
-import { getApiKey } from './config.js';
+import { getApiKey, getAccessToken, isTokenExpired } from './config.js';
+import { refreshAccessToken } from './auth.js';
 
 const BASE_URL = 'https://api.kit.com/v4';
 const MAX_PAGINATE_PAGES = 100;
@@ -10,17 +11,6 @@ class KitApiError extends Error {
     this.status = status;
     this.errors = errors;
   }
-}
-
-function requireApiKey() {
-  const key = getApiKey();
-  if (!key) {
-    console.error(
-      'No API key configured. Run `kit config set-api-key <key>` or set KIT_API_KEY env var.'
-    );
-    process.exit(1);
-  }
-  return key;
 }
 
 /**
@@ -60,8 +50,32 @@ export function safeJsonParse(str, label = 'JSON') {
   }
 }
 
+async function getAuthHeader() {
+  const accessToken = getAccessToken();
+
+  if (accessToken) {
+    if (isTokenExpired()) {
+      try {
+        const newToken = await refreshAccessToken();
+        return { 'Authorization': `Bearer ${newToken}` };
+      } catch (err) {
+        console.error(`Token refresh failed: ${err.message}`);
+        console.error('Run `kit login` to re-authenticate.');
+        process.exit(1);
+      }
+    }
+    return { 'Authorization': `Bearer ${accessToken}` };
+  }
+
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    console.error('Not authenticated. Run `kit login` or set KIT_API_KEY env var.');
+    process.exit(1);
+  }
+  return { 'X-Kit-Api-Key': apiKey };
+}
+
 async function request(method, path, { body, query } = {}) {
-  const apiKey = requireApiKey();
   const url = new URL(`${BASE_URL}${path}`);
 
   if (query) {
@@ -72,8 +86,9 @@ async function request(method, path, { body, query } = {}) {
     }
   }
 
+  const authHeader = await getAuthHeader();
   const headers = {
-    'X-Kit-Api-Key': apiKey,
+    ...authHeader,
     'Accept': 'application/json',
   };
 
