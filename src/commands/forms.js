@@ -14,7 +14,7 @@ const FORM_COLUMNS = [
   { header: 'Name', accessor: (d) => d.name },
   { header: 'Type', accessor: (d) => d.type },
   { header: 'Format', accessor: (d) => d.format },
-  { header: 'State', accessor: (d) => d.state },
+  { header: 'Archived', accessor: (d) => d.archived ? 'yes' : 'no' },
   { header: 'Created', accessor: (d) => d.created_at?.slice(0, 10) },
 ];
 

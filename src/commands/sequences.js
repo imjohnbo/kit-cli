@@ -12,7 +12,7 @@ import {
 const SEQ_COLUMNS = [
   { header: 'ID', accessor: (d) => d.id },
   { header: 'Name', accessor: (d) => d.name },
-  { header: 'State', accessor: (d) => d.state },
+  { header: 'Hold', accessor: (d) => d.hold ? 'yes' : 'no' },
   { header: 'Created', accessor: (d) => d.created_at?.slice(0, 10) },
 ];
 

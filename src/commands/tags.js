@@ -40,16 +40,21 @@ export function tagsCommand() {
   );
 
   // Create tag
-  cmd
+  const create = cmd
     .command('create <name>')
-    .description('Create a new tag')
-    .action(
-      withErrorHandler(async (name) => {
-        const res = await post('/tags', { name });
-        const tag = res.tag || res;
+    .description('Create a new tag');
+  addFormatOption(create);
+  create.action(
+    withErrorHandler(async (name, opts) => {
+      const res = await post('/tags', { name });
+      const tag = res.tag || res;
+      if ((opts.format || 'table') === 'json') {
+        console.log(JSON.stringify(tag, null, 2));
+      } else {
         printSuccess(`Tag created: ${tag.id} - ${tag.name}`);
-      })
-    );
+      }
+    })
+  );
 
   // List subscribers for tag
   const subs = cmd

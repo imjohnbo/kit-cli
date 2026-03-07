@@ -25,7 +25,7 @@ const DETAIL_FIELDS = [
   { label: 'Description', accessor: (d) => d.description },
   { label: 'Content', accessor: (d) => truncate(d.content, 200) },
   { label: 'Public', accessor: (d) => d.public },
-  { label: 'Status', accessor: (d) => d.status },
+  { label: 'Status', accessor: (d) => d.status || (d.send_at ? 'scheduled' : d.published_at ? 'sent' : 'draft') },
   { label: 'Send At', accessor: (d) => d.send_at },
   { label: 'Thumbnail URL', accessor: (d) => d.thumbnail_url },
   { label: 'Email Template', accessor: (d) => d.email_template?.name || d.email_template_id },
@@ -149,14 +149,12 @@ export function broadcastsCommand() {
       const data = res.broadcast || res;
       printDetail(data, [
         { label: 'ID', accessor: (d) => d.id },
-        { label: 'Subject', accessor: (d) => d.subject },
         { label: 'Recipients', accessor: (d) => d.stats?.recipients },
+        { label: 'Opens', accessor: (d) => d.stats?.emails_opened },
         { label: 'Open Rate', accessor: (d) => d.stats?.open_rate },
+        { label: 'Total Clicks', accessor: (d) => d.stats?.total_clicks },
         { label: 'Click Rate', accessor: (d) => d.stats?.click_rate },
         { label: 'Unsubscribes', accessor: (d) => d.stats?.unsubscribes },
-        { label: 'Total Clicks', accessor: (d) => d.stats?.total_clicks },
-        { label: 'Opens', accessor: (d) => d.stats?.open_count },
-        { label: 'Clicks', accessor: (d) => d.stats?.click_count },
         { label: 'Status', accessor: (d) => d.stats?.status },
       ], opts);
     })

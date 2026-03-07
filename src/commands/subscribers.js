@@ -169,12 +169,12 @@ export function subscribersCommand() {
         const data = res.subscriber || res;
         printDetail(data, [
           { label: 'ID', accessor: (d) => d.id },
-          { label: 'Emails Sent', accessor: (d) => d.stats?.emails_sent },
-          { label: 'Emails Opened', accessor: (d) => d.stats?.emails_opened },
-          { label: 'Emails Clicked', accessor: (d) => d.stats?.emails_clicked },
+          { label: 'Emails Sent', accessor: (d) => d.stats?.sent },
+          { label: 'Emails Opened', accessor: (d) => d.stats?.opened },
+          { label: 'Emails Clicked', accessor: (d) => d.stats?.clicked },
           { label: 'Open Rate', accessor: (d) => d.stats?.open_rate },
           { label: 'Click Rate', accessor: (d) => d.stats?.click_rate },
-          { label: 'Bounces', accessor: (d) => d.stats?.bounces },
+          { label: 'Bounces', accessor: (d) => d.stats?.bounced },
         ], opts);
       })
     );
