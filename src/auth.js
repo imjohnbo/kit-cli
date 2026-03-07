@@ -1,10 +1,9 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { exec } from 'node:child_process';
-import { setTokens, getOAuthClientId, getRefreshToken } from './config.js';
+import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri } from './config.js';
 
 const REDIRECT_PORT = 9876;
-export const REDIRECT_URI = 'https://imjohnbo.github.io/kit-cli/callback.html';
 const AUTHORIZE_URL = 'https://api.kit.com/v4/oauth/authorize';
 const TOKEN_URL = 'https://api.kit.com/v4/oauth/token';
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
@@ -76,7 +75,7 @@ async function exchangeCode(clientId, code, verifier) {
       code_verifier: verifier,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: REDIRECT_URI,
+      redirect_uri: getOAuthRedirectUri(),
     }),
   });
 
@@ -124,7 +123,7 @@ export async function login(clientId) {
   const authUrl = new URL(AUTHORIZE_URL);
   authUrl.searchParams.set('client_id', clientId);
   authUrl.searchParams.set('response_type', 'code');
-  authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
+  authUrl.searchParams.set('redirect_uri', getOAuthRedirectUri());
   authUrl.searchParams.set('code_challenge', challenge);
   authUrl.searchParams.set('code_challenge_method', 'S256');
   authUrl.searchParams.set('state', state);

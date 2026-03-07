@@ -94,7 +94,7 @@ async function request(method, path, { body, query } = {}) {
 
   const opts = { method, headers };
 
-  if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+  if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE')) {
     headers['Content-Type'] = 'application/json';
     opts.body = JSON.stringify(body);
   }
@@ -129,8 +129,8 @@ export async function put(path, body) {
   return request('PUT', path, { body });
 }
 
-export async function del(path) {
-  return request('DELETE', path);
+export async function del(path, body) {
+  return request('DELETE', path, { body });
 }
 
 export async function paginate(path, query = {}, dataKey) {

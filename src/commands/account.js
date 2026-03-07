@@ -5,6 +5,7 @@ import {
   getAll,
   setApiKey,
   setOAuthClientId,
+  setOAuthRedirectUri,
   setDefaultFormat,
   setPerPage,
 } from '../config.js';
@@ -69,6 +70,14 @@ export function configCommand() {
     .action((id) => {
       setOAuthClientId(id);
       console.log(chalk.green('\u2713 OAuth client ID saved.'));
+    });
+
+  cmd
+    .command('set-redirect-uri <uri>')
+    .description('Set the OAuth redirect URI (default: hosted GitHub Pages shim)')
+    .action((uri) => {
+      setOAuthRedirectUri(uri);
+      console.log(chalk.green('\u2713 OAuth redirect URI saved.'));
     });
 
   cmd

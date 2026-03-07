@@ -8,6 +8,7 @@ const config = new Conf({
     defaultFormat:  { type: 'string', default: 'table', enum: ['table', 'json'] },
     perPage:        { type: 'number', default: 50, minimum: 1, maximum: 1000 },
     oauthClientId:  { type: 'string', default: '' },
+    oauthRedirectUri: { type: 'string', default: '' },
     accessToken:    { type: 'string', default: '' },
     refreshToken:   { type: 'string', default: '' },
     tokenExpiresAt: { type: 'number', default: 0 }, // unix ms
@@ -49,6 +50,16 @@ export function getOAuthClientId() {
 
 export function setOAuthClientId(id) {
   config.set('oauthClientId', id.trim());
+}
+
+// --- OAuth redirect URI ---
+
+export function getOAuthRedirectUri() {
+  return process.env.KIT_REDIRECT_URI || config.get('oauthRedirectUri') || '';
+}
+
+export function setOAuthRedirectUri(uri) {
+  config.set('oauthRedirectUri', uri.trim());
 }
 
 // --- OAuth tokens ---
@@ -112,12 +123,13 @@ export function getAll() {
   }
 
   return {
-    apiKey:        getApiKey() ? '****' + getApiKey().slice(-4) : '(not set)',
-    oauthClientId: getOAuthClientId() || '(not set)',
-    oauthToken:    oauthStatus,
-    defaultFormat: getDefaultFormat(),
-    perPage:       getPerPage(),
-    configPath:    config.path,
+    apiKey:          getApiKey() ? '****' + getApiKey().slice(-4) : '(not set)',
+    oauthClientId:   getOAuthClientId() || '(not set)',
+    oauthRedirectUri: getOAuthRedirectUri(),
+    oauthToken:      oauthStatus,
+    defaultFormat:   getDefaultFormat(),
+    perPage:         getPerPage(),
+    configPath:      config.path,
   };
 }
 

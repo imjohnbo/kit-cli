@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import { accountCommand, configCommand, setupSkillCommand } from '../src/commands/account.js';
 import { loginCommand, logoutCommand } from '../src/commands/auth.js';
+import { bulkCommand } from '../src/commands/bulk.js';
 import { subscribersCommand } from '../src/commands/subscribers.js';
 import { tagsCommand } from '../src/commands/tags.js';
 import { formsCommand } from '../src/commands/forms.js';
@@ -36,5 +37,6 @@ program.addCommand(purchasesCommand());
 program.addCommand(webhooksCommand());
 program.addCommand(segmentsCommand());
 program.addCommand(emailTemplatesCommand());
+program.addCommand(bulkCommand());
 
 program.parse();

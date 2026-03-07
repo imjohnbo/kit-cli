@@ -1,165 +1,176 @@
 # kit-cli
 
-A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing API (V4).
-
-Manage your subscribers, tags, forms, sequences, broadcasts, custom fields, purchases, webhooks, segments, and email templates from the terminal. Includes a [Claude Code](https://claude.ai/claude-code) skill for AI-assisted account management.
+A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing API (V4). Includes a [Claude Code](https://claude.ai/claude-code) skill for AI-assisted account management.
 
 ## Install
 
-```sh
+```
 npm install -g kit-cli
 ```
 
 Requires Node.js 18+.
 
-## Setup
+## Authentication
 
-Get your V4 API key from [Kit Developer Settings](https://app.kit.com) and configure it:
+### OAuth (recommended)
 
-```sh
-kit config set-api-key YOUR_API_KEY
+1. Register an OAuth app at [Kit Developer Settings](https://app.kit.com/account_settings/developer_settings)
+2. Set up a redirect shim — an HTTPS page that forwards the browser back to your local CLI server. See [`docs/callback.html`](docs/callback.html) for a template you can host (e.g. GitHub Pages). Register its URL as the app's Redirect URI.
+3. Configure and log in:
+
+```
+kit config set-client-id <id>
+kit config set-redirect-uri <https://your-shim-url>
+kit login
 ```
 
-Or set the `KIT_API_KEY` environment variable:
+Tokens are stored locally and refreshed automatically. Run `kit logout` to clear them.
 
-```sh
-export KIT_API_KEY=YOUR_API_KEY
+### API key
+
+```
+kit config set-api-key <key>
+# or: export KIT_API_KEY=<key>
 ```
 
-## Usage
+When both are present, OAuth takes priority.
 
-```sh
-kit <command> <subcommand> [options]
+## Commands
+
+```
+kit login                     Authenticate via OAuth (PKCE)
+kit logout                    Clear stored OAuth tokens
+kit account                   View account info
+kit config show               Show all config and auth status
 ```
 
-### Account
+### subscribers
 
-```sh
-kit account                          # View account info
-kit config show                      # Show CLI config
-kit config set-format json           # Default to JSON output
-kit config set-per-page 100          # Default page size
+```
+list [options]
+get [options] <id>
+create [options] <email>
+update [options] <id>
+unsubscribe <id>
+tags [options] <id>
+stats [options] <id>
 ```
 
-### Subscribers
+### tags
 
-```sh
-kit subscribers list                 # List all subscribers
-kit subscribers list -e jane@example.com  # Find by email
-kit subscribers list -s active       # Filter by state
-kit subscribers get 12345            # Get subscriber details
-kit subscribers create user@example.com -n "Jane"  # Create/upsert
-kit subscribers update 12345 -n "Jane Doe"         # Update
-kit subscribers unsubscribe 12345    # Unsubscribe
-kit subscribers tags 12345           # List subscriber's tags
-kit subscribers stats 12345          # Engagement stats
+```
+list [options]
+create <name>
+subscribers [options] <tagId>
+add <tagId> <subscriberId>
+add-by-email <tagId> <email>
+remove <tagId> <subscriberId>
 ```
 
-### Tags
+### forms
 
-```sh
-kit tags list                        # List all tags
-kit tags create "VIP"                # Create a tag
-kit tags subscribers 99              # List subscribers with tag
-kit tags add 99 12345                # Tag subscriber by ID
-kit tags add-by-email 99 jane@example.com  # Tag by email
-kit tags remove 99 12345             # Remove tag
+```
+list [options]
+subscribers [options] <formId>
+add <formId> <subscriberId>
+add-by-email <formId> <email>
 ```
 
-### Forms
+### sequences
 
-```sh
-kit forms list                       # List all forms
-kit forms list -s active -t embed    # Filter by status/type
-kit forms subscribers 42             # List form subscribers
-kit forms add 42 12345               # Add subscriber to form
-kit forms add-by-email 42 jane@example.com
+```
+list [options]
+subscribers [options] <sequenceId>
+add <sequenceId> <subscriberId>
+add-by-email <sequenceId> <email>
 ```
 
-### Sequences
+### broadcasts
 
-```sh
-kit sequences list                   # List all sequences
-kit sequences subscribers 7          # List sequence subscribers
-kit sequences add 7 12345            # Add subscriber to sequence
-kit sequences add-by-email 7 jane@example.com
+```
+list [options]
+get [options] <id>
+create [options]
+update [options] <id>
+delete <id>
+stats [options] <id>
 ```
 
-### Broadcasts
+### custom-fields
 
-```sh
-kit broadcasts list                  # List all broadcasts
-kit broadcasts get 555               # Get broadcast details
-kit broadcasts stats 555             # Get engagement stats
-kit broadcasts create --subject "Weekly Update" --content "<p>Hello!</p>"
-kit broadcasts create --subject "Sale!" --send-at 2025-12-25T09:00:00Z --tag-ids 1,2
-kit broadcasts update 555 --subject "New Subject"
-kit broadcasts delete 555            # Delete draft/scheduled
+```
+list [options]
+create <label>
+update <id> <label>
+delete <id>
 ```
 
-### Custom Fields
+### purchases
 
-```sh
-kit custom-fields list               # List all custom fields
-kit custom-fields create "Last Name" # Create a custom field
-kit custom-fields update 10 "Surname"  # Update label
-kit custom-fields delete 10          # Delete (removes all data)
+```
+list [options]
+get [options] <id>
 ```
 
-### Purchases, Webhooks, Segments, Templates
+### webhooks
 
-```sh
-kit purchases list                   # List purchases
-kit purchases get 200                # Get purchase details
-
-kit webhooks list                    # List webhooks
-kit webhooks create https://example.com/hook subscriber.subscriber_activate
-kit webhooks delete 300              # Delete webhook
-
-kit segments list                    # List segments
-kit email-templates list             # List email templates
+```
+list [options]
+create [options] <targetUrl> <eventName>
+delete <id>
 ```
 
-### Global Options
+### segments · email-templates
 
-All list commands support:
+```
+list [options]
+```
 
-| Flag | Description |
-|------|-------------|
-| `-f, --format <table\|json>` | Output format (default: table) |
-| `--per-page <n>` | Results per page, max 1000 (default: 50) |
-| `--after <cursor>` | Cursor for next page |
-| `--before <cursor>` | Cursor for previous page |
+### bulk (requires OAuth)
+
+All bulk commands take `--file <path>` (JSON array) and optional `--callback-url <url>`. Batches of ≤100 are processed synchronously (results returned immediately); larger batches are queued asynchronously and POSTed to the callback URL when complete.
+
+```
+bulk subscribers create --file <path>           [{email_address, first_name?, state?}, ...]
+bulk tags create        --file <path>           [{name}, ...]
+bulk tags add           --file <path>           [{tag_id, subscriber_id}, ...]
+bulk tags remove        --file <path>           [{tag_id, subscriber_id}, ...]
+bulk forms add          --file <path>           [{form_id, subscriber_id, referrer?}, ...]
+bulk custom-fields create       --file <path>   [{label}, ...]
+bulk custom-fields update-values --file <path>  [{subscriber_id, subscriber_custom_field_id, value}, ...]
+```
+
+### Global list options
+
+```
+-f, --format <table|json>   output format (default: table)
+--per-page <n>              results per page, max 1000 (default: 50)
+--after <cursor>            next page cursor
+--before <cursor>           previous page cursor
+```
+
+Run `kit <command> --help` for full flag details on any command.
 
 ## Claude Code Skill
 
-This package includes a `/kit` skill for [Claude Code](https://claude.ai/claude-code) that lets you manage your Kit account with natural language.
-
-### Install the skill
-
-```sh
+```
 kit setup-skill
 ```
 
-This copies the skill to `~/.claude/skills/kit/`, making it available in all Claude Code sessions.
-
-### Use it
-
-In Claude Code, type:
+Installs the `/kit` skill to `~/.claude/skills/kit/`. Then in Claude Code:
 
 ```
 /kit list my subscribers
 /kit create a broadcast about our new product launch
-/kit show me stats for broadcast 12345
 /kit tag subscriber jane@example.com with "vip"
 ```
 
 ## Security
 
-- **API key storage**: Your API key is stored in a config file with `600` permissions (owner read/write only). Use the `KIT_API_KEY` environment variable if you prefer not to persist it to disk.
-- **Input validation**: All IDs are validated before being used in API paths to prevent path traversal. Numeric options are validated. JSON inputs are parsed safely with clear error messages.
-- **Rate limiting**: Kit enforces 120 requests per 60 seconds for API key auth. The CLI does not implement client-side throttling — the API will return 429 if you exceed the limit.
-- **Pagination safety**: Auto-pagination is capped at 100 pages to prevent runaway loops.
+- Config file is stored with `600` permissions (owner-only). Contains API key and OAuth tokens.
+- OAuth tokens auto-refresh 5 minutes before expiry. Run `kit logout` to clear.
+- All IDs are validated before URL interpolation to prevent path traversal.
+- Auto-pagination is capped at 100 pages.
 
 ## License
 
