@@ -1,0 +1,43 @@
+{
+  "name": "kit-cli",
+  "version": "1.0.0",
+  "description": "A fully featured CLI for the Kit (ConvertKit) email marketing API",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "kit": "./bin/kit.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "skills/"
+  ],
+  "scripts": {
+    "start": "node bin/kit.js"
+  },
+  "keywords": [
+    "kit",
+    "convertkit",
+    "email",
+    "marketing",
+    "cli",
+    "api",
+    "newsletter",
+    "subscribers",
+    "broadcasts",
+    "claude-code"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/kit-cli"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "cli-table3": "^0.6.5",
+    "commander": "^13.1.0",
+    "conf": "^13.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
