@@ -10,7 +10,7 @@ npm i && npm link
 
 Requires Node.js 18+.
 
-## Authentication
+## Authentication 
 
 ### OAuth (recommended)
 
