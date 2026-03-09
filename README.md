@@ -5,7 +5,7 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 ## Install
 
 ```
-npm install -g kit-cli
+npm i && npm link
 ```
 
 Requires Node.js 18+.
