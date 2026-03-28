@@ -13,7 +13,8 @@
     "skills/"
   ],
   "scripts": {
-    "start": "node bin/kit.js"
+    "start": "node bin/kit.js",
+    "test": "node --test scripts/*.test.js"
   },
   "keywords": [
     "kit",
