@@ -1,6 +1,7 @@
 node_modules/
 .DS_Store
 *.log
+.worktrees/
 spec/v4.new.json
 spec/.issue-title.txt
 spec/.issue-body.md
