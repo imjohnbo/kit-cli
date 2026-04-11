@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
-import { exec } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri } from './config.js';
 
 const REDIRECT_PORT = 9876;
@@ -26,7 +26,7 @@ function openBrowser(url) {
     process.platform === 'win32' ? 'start' :
     process.platform === 'darwin' ? 'open' :
     'xdg-open';
-  exec(`${cmd} "${url}"`);
+  execFile(cmd, [url]);
 }
 
 function waitForCallback() {
@@ -42,8 +42,9 @@ function waitForCallback() {
         server.close();
         resolve(code);
       } else {
+        const safeError = (error || 'Unknown error').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         res.writeHead(400, { 'Content-Type': 'text/html' });
-        res.end(`<html><body style="font-family:sans-serif;padding:2rem"><h2>Authorization failed</h2><p>${error || 'Unknown error'}</p></body></html>`);
+        res.end(`<html><body style="font-family:sans-serif;padding:2rem"><h2>Authorization failed</h2><p>${safeError}</p></body></html>`);
         server.close();
         reject(new Error(`Authorization failed: ${error || 'unknown error'}`));
       }
