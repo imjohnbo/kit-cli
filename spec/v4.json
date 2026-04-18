@@ -23,13 +23,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns current account and user info",
@@ -167,13 +173,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns list of colors for the current account",
@@ -240,13 +252,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Updates and returns list of colors for the current account",
@@ -368,13 +386,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns Creator Profile details",
@@ -493,13 +517,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns your email stats for the last 90 days",
@@ -608,10 +638,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -761,10 +795,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -799,6 +837,24 @@
           {
             "name": "per_page",
             "description": "Number of results per page. Default 500, maximum 1000.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "sent_after",
+            "description": "Get broadcasts sent after this date (format yyyy-mm-dd).",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "sent_before",
+            "description": "Get broadcasts sent before this date (format yyyy-mm-dd).",
             "in": "query",
             "required": false,
             "schema": {
@@ -1104,13 +1160,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates a new broadcast",
@@ -1245,8 +1307,8 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 29,
-                    "publication_id": 29,
+                    "id": 47,
+                    "publication_id": 38,
                     "created_at": "2023-02-17T11:43:55Z",
                     "subject": "Hello!",
                     "preview_text": "Pleased to meet you!",
@@ -1561,13 +1623,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns stats for all broadcasts on the account",
@@ -1686,35 +1754,35 @@
                 "example": {
                   "broadcasts": [
                     {
-                      "id": 125,
+                      "id": 183,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0,
+                        "open_rate": 0.0,
                         "emails_opened": 0,
-                        "click_rate": 0,
-                        "unsubscribe_rate": 0,
+                        "click_rate": 0.0,
+                        "unsubscribe_rate": 0.0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0,
+                        "progress": 0.0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
                     },
                     {
-                      "id": 124,
+                      "id": 182,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0,
+                        "open_rate": 0.0,
                         "emails_opened": 0,
-                        "click_rate": 0,
-                        "unsubscribe_rate": 0,
+                        "click_rate": 0.0,
+                        "unsubscribe_rate": 0.0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0,
+                        "progress": 0.0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
@@ -1723,8 +1791,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzEyNV0=",
-                    "end_cursor": "WzEyNF0=",
+                    "start_cursor": "WzE4M10=",
+                    "end_cursor": "WzE4Ml0=",
                     "per_page": 500
                   }
                 }
@@ -1763,12 +1831,14 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
+                  "properties": {
+                  },
                   "required": [
                     "errors"
                   ]
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           }
@@ -1787,10 +1857,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -1801,7 +1875,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 123
+            "example": 147
           }
         ],
         "responses": {
@@ -1887,7 +1961,7 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 121,
+                    "id": 145,
                     "clicks": [
                       {
                         "url": "https://example.com/52",
@@ -1986,10 +2060,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2000,7 +2078,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 178
+            "example": 216
           }
         ],
         "responses": {
@@ -2089,18 +2167,18 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 177,
+                    "id": 213,
                     "stats": {
                       "recipients": 0,
-                      "open_rate": 0,
+                      "open_rate": 0.0,
                       "emails_opened": 0,
-                      "click_rate": 0,
-                      "unsubscribe_rate": 0,
+                      "click_rate": 0.0,
+                      "unsubscribe_rate": 0.0,
                       "unsubscribes": 0,
                       "total_clicks": 0,
                       "show_total_clicks": false,
                       "status": "draft",
-                      "progress": 0,
+                      "progress": 0.0,
                       "open_tracking_disabled": false,
                       "click_tracking_disabled": false
                     }
@@ -2175,10 +2253,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2189,7 +2271,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 91
+            "example": 112
           }
         ],
         "responses": {
@@ -2312,10 +2394,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2335,7 +2421,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 24
+            "example": 42
           }
         ],
         "responses": {
@@ -2467,8 +2553,8 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 22,
-                    "publication_id": 22,
+                    "id": 40,
+                    "publication_id": 31,
                     "created_at": "2023-02-17T11:43:55Z",
                     "subject": "You'll never guess...",
                     "preview_text": null,
@@ -2564,10 +2650,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2578,7 +2668,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 64
+            "example": 85
           }
         ],
         "responses": {
@@ -2708,8 +2798,8 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 55,
-                    "publication_id": 55,
+                    "id": 73,
+                    "publication_id": 64,
                     "created_at": "2023-02-17T11:43:55Z",
                     "subject": "Hello!",
                     "preview_text": "Pleased to meet you!",
@@ -2732,7 +2822,7 @@
                           {
                             "type": "segment",
                             "ids": [
-                              47
+                              48
                             ]
                           }
                         ]
@@ -3015,7 +3105,7 @@
                       {
                         "type": "segment",
                         "ids": [
-                          47
+                          48
                         ]
                       }
                     ],
@@ -3041,10 +3131,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates the custom_fields synchronously when 100 or less custom fields are requested",
@@ -3085,7 +3179,8 @@
                     },
                     "failures": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                      }
                     }
                   },
                   "required": [
@@ -3096,28 +3191,30 @@
                 "example": {
                   "custom_fields": [
                     {
-                      "id": 96,
+                      "id": 100,
                       "key": "existing_custom_field",
                       "label": "Existing Custom Field",
-                      "name": "ck_field_96_existing_custom_field",
+                      "name": "ck_field_100_existing_custom_field",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 98,
+                      "id": 102,
                       "key": "interests",
                       "label": "Interests",
-                      "name": "ck_field_98_interests",
+                      "name": "ck_field_102_interests",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 97,
+                      "id": 101,
                       "key": "last_name",
                       "label": "Last name",
-                      "name": "ck_field_97_last_name",
+                      "name": "ck_field_101_last_name",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
-                  "failures": []
+                  "failures": [
+
+                  ]
                 }
               }
             }
@@ -3128,9 +3225,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -3272,10 +3371,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates or updates custom field values synchronously when 100 or less values are requested",
@@ -3353,13 +3456,13 @@
                 "example": {
                   "custom_field_values": [
                     {
-                      "subscriber_id": 526,
-                      "subscriber_custom_field_id": 109,
+                      "subscriber_id": 590,
+                      "subscriber_custom_field_id": 113,
                       "value": "Smith"
                     },
                     {
-                      "subscriber_id": 526,
-                      "subscriber_custom_field_id": 110,
+                      "subscriber_id": 590,
+                      "subscriber_custom_field_id": 114,
                       "value": "Acme Inc"
                     }
                   ],
@@ -3370,7 +3473,7 @@
                       ],
                       "custom_field_value": {
                         "subscriber_id": null,
-                        "subscriber_custom_field_id": 109,
+                        "subscriber_custom_field_id": 113,
                         "value": "Jones"
                       }
                     },
@@ -3379,7 +3482,7 @@
                         "Custom field does not exist"
                       ],
                       "custom_field_value": {
-                        "subscriber_id": 526,
+                        "subscriber_id": 590,
                         "subscriber_custom_field_id": 999999,
                         "value": "Test"
                       }
@@ -3395,9 +3498,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -3557,10 +3662,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Adds subscribers to forms synchronously when 100 or less form/subscribers are requested",
@@ -3679,7 +3788,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 544,
+                      "id": 608,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3694,7 +3803,7 @@
                       }
                     },
                     {
-                      "id": 544,
+                      "id": 608,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3715,7 +3824,7 @@
                         "Subscriber does not exist"
                       ],
                       "subscription": {
-                        "form_id": 122,
+                        "form_id": 124,
                         "subscriber_id": null,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
@@ -3726,7 +3835,7 @@
                       ],
                       "subscription": {
                         "form_id": null,
-                        "subscriber_id": 544,
+                        "subscriber_id": 608,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
                     }
@@ -3741,9 +3850,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -3899,10 +4010,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates or updates the subscribers synchronously when 100 or less subscribers are requested",
@@ -4008,21 +4123,21 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 508,
+                      "id": 571,
                       "first_name": null,
                       "email_address": "brooke@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 509,
+                      "id": 572,
                       "first_name": "Camille",
                       "email_address": "camille@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 507,
+                      "id": 570,
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
                       "state": "active",
@@ -4052,9 +4167,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4240,10 +4357,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates or returns existing tags synchronously when 100 or less tags are requested",
@@ -4276,7 +4397,8 @@
                     },
                     "failures": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                      }
                     }
                   },
                   "required": [
@@ -4287,27 +4409,29 @@
                 "example": {
                   "tags": [
                     {
-                      "id": 59,
+                      "id": 65,
                       "name": "Existing Tag",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 60,
+                      "id": 66,
                       "name": "Attended Event",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 61,
+                      "id": 67,
                       "name": "Newsletter",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 62,
+                      "id": 68,
                       "name": "Re-engage",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
-                  "failures": []
+                  "failures": [
+
+                  ]
                 }
               }
             }
@@ -4318,9 +4442,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4463,10 +4589,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Deletes the taggings synchronously when 100 or less tags/subscribers are provided",
@@ -4477,7 +4607,8 @@
                   "properties": {
                     "failures": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                      }
                     }
                   },
                   "required": [
@@ -4485,7 +4616,9 @@
                   ]
                 },
                 "example": {
-                  "failures": []
+                  "failures": [
+
+                  ]
                 }
               }
             }
@@ -4496,9 +4629,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4590,10 +4725,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates the taggings synchronously when 100 or less tags/subscribers are requested",
@@ -4676,14 +4815,14 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 560,
+                      "id": 624,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 560,
+                      "id": 624,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -4696,7 +4835,7 @@
                         "Subscriber does not exist"
                       ],
                       "tagging": {
-                        "tag_id": 74,
+                        "tag_id": 80,
                         "subscriber_id": null
                       }
                     },
@@ -4706,7 +4845,7 @@
                       ],
                       "tagging": {
                         "tag_id": null,
-                        "subscriber_id": 560
+                        "subscriber_id": 624
                       }
                     }
                   ]
@@ -4720,9 +4859,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4875,10 +5016,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5046,13 +5191,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns a 200 and the custom field if it already exists",
@@ -5233,10 +5384,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5345,10 +5500,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5521,10 +5680,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5723,10 +5886,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5883,7 +6050,7 @@
                 "example": {
                   "forms": [
                     {
-                      "id": 49,
+                      "id": 51,
                       "name": "Sign up",
                       "created_at": "2023-02-17T11:43:55Z",
                       "type": "embed",
@@ -5894,7 +6061,7 @@
                       "uid": "f049e3d9ab"
                     },
                     {
-                      "id": 48,
+                      "id": 50,
                       "name": "Lead gen",
                       "created_at": "2023-02-17T11:43:55Z",
                       "type": "hosted",
@@ -5908,8 +6075,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzQ5XQ==",
-                    "end_cursor": "WzQ4XQ==",
+                    "start_cursor": "WzUxXQ==",
+                    "end_cursor": "WzUwXQ==",
                     "per_page": 500
                   }
                 }
@@ -5956,10 +6123,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6032,7 +6203,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 150
+            "example": 152
           },
           {
             "name": "include_total_count",
@@ -6203,9 +6374,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 584,
+                      "id": 648,
                       "first_name": null,
-                      "email_address": "subscriber355@kit.dev",
+                      "email_address": "subscriber356@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6222,9 +6393,9 @@
                       }
                     },
                     {
-                      "id": 583,
+                      "id": 647,
                       "first_name": null,
-                      "email_address": "subscriber354@kit.dev",
+                      "email_address": "subscriber355@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6241,9 +6412,9 @@
                       }
                     },
                     {
-                      "id": 582,
+                      "id": 646,
                       "first_name": null,
-                      "email_address": "subscriber353@kit.dev",
+                      "email_address": "subscriber354@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6263,8 +6434,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzU4NF0=",
-                    "end_cursor": "WzU4Ml0=",
+                    "start_cursor": "WzY0OF0=",
+                    "end_cursor": "WzY0Nl0=",
                     "per_page": 500
                   }
                 }
@@ -6336,10 +6507,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6350,7 +6525,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 212
+            "example": 214
           }
         ],
         "responses": {
@@ -6392,7 +6567,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6444,13 +6620,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 686,
+                    "id": 750,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6502,7 +6679,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6554,13 +6732,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 687,
+                    "id": 751,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6692,10 +6871,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6706,7 +6889,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 190
+            "example": 192
           },
           {
             "name": "id",
@@ -6715,7 +6898,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 668
+            "example": 732
           }
         ],
         "responses": {
@@ -6757,7 +6940,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6809,13 +6993,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 662,
+                    "id": 726,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6868,7 +7053,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6920,13 +7106,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 664,
+                    "id": 728,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -7026,7 +7213,9 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -7166,9 +7355,9 @@
                         "required": [
                           "id",
                           "transaction_id",
-                          "subscriber_id",
                           "status",
                           "email_address",
+                          "subscriber_id",
                           "currency",
                           "transaction_time",
                           "subtotal",
@@ -7217,15 +7406,15 @@
                     {
                       "id": 3,
                       "transaction_id": "512-41-4101",
-                      "subscriber_id": 526,
                       "status": "paid",
                       "email_address": "pru.magoo@convertkit.dev",
+                      "subscriber_id": 20,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 5,
-                      "discount": 0,
-                      "tax": 0,
-                      "total": 5,
+                      "subtotal": 5.0,
+                      "discount": 0.0,
+                      "tax": 0.0,
+                      "total": 5.0,
                       "products": [
                         {
                           "quantity": 1,
@@ -7240,13 +7429,13 @@
                     {
                       "id": 2,
                       "transaction_id": "323-79-5320",
-                      "subscriber_id": 526,
                       "status": "paid",
                       "email_address": "pru.magoo@convertkit.dev",
+                      "subscriber_id": 20,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 10,
-                      "discount": 0,
+                      "subtotal": 10.0,
+                      "discount": 0.0,
                       "tax": 1.05,
                       "total": 11.05,
                       "products": [
@@ -7263,13 +7452,13 @@
                     {
                       "id": 1,
                       "transaction_id": "796-92-4892",
-                      "subscriber_id": 526,
                       "status": "paid",
                       "email_address": "pru.magoo@convertkit.dev",
+                      "subscriber_id": 20,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 78.66,
-                      "discount": 5,
+                      "discount": 5.0,
                       "tax": 7.87,
                       "total": 81.53,
                       "products": [
@@ -7338,10 +7527,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates a purchase for the provided subscriber and returns its details. It also creates products if they don't exist.",
@@ -7437,9 +7630,9 @@
                       "required": [
                         "id",
                         "transaction_id",
-                        "subscriber_id",
                         "status",
                         "email_address",
+                        "subscriber_id",
                         "currency",
                         "transaction_time",
                         "subtotal",
@@ -7458,13 +7651,13 @@
                   "purchase": {
                     "id": 20,
                     "transaction_id": "796-92-4892",
-                    "subscriber_id": 526,
+                    "subscriber_id": 47,
                     "status": "paid",
                     "email_address": "pru.magoo@convertkit.dev",
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5,
+                    "discount": 5.0,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -7666,7 +7859,7 @@
                   "subtotal": 78.66,
                   "tax": 7.87,
                   "shipping": 0,
-                  "discount": 5,
+                  "discount": 5.0,
                   "total": 81.53,
                   "currency": "USD",
                   "transaction_time": "2023-02-17T11:43:55Z",
@@ -7711,7 +7904,9 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -7817,9 +8012,9 @@
                       "required": [
                         "id",
                         "transaction_id",
-                        "subscriber_id",
                         "status",
                         "email_address",
+                        "subscriber_id",
                         "currency",
                         "transaction_time",
                         "subtotal",
@@ -7838,13 +8033,13 @@
                   "purchase": {
                     "id": 14,
                     "transaction_id": "796-92-4892",
-                    "subscriber_id": 526,
+                    "subscriber_id": 31,
                     "status": "paid",
                     "email_address": "pru.magoo@convertkit.dev",
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5,
+                    "discount": 5.0,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -7933,10 +8128,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8044,12 +8243,12 @@
                 "example": {
                   "segments": [
                     {
-                      "id": 63,
+                      "id": 67,
                       "name": "Segment B",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 62,
+                      "id": 66,
                       "name": "Segment A",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
@@ -8057,8 +8256,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzYzXQ==",
-                    "end_cursor": "WzYyXQ==",
+                    "start_cursor": "WzY3XQ==",
+                    "end_cursor": "WzY2XQ==",
                     "per_page": 500
                   }
                 }
@@ -8105,10 +8304,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8177,6 +8380,35 @@
                           },
                           "created_at": {
                             "type": "string"
+                          },
+                          "updated_at": {
+                            "type": "string"
+                          },
+                          "email_address": {
+                            "nullable": true
+                          },
+                          "email_template_id": {
+                            "nullable": true
+                          },
+                          "send_days": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "send_hour": {
+                            "type": "integer"
+                          },
+                          "time_zone": {
+                            "type": "string"
+                          },
+                          "active": {
+                            "type": "boolean"
+                          },
+                          "exclude_subscriber_sources": {
+                            "type": "array",
+                            "items": {
+                            }
                           }
                         },
                         "required": [
@@ -8228,7 +8460,25 @@
                       "name": "Evergreen sequence",
                       "hold": false,
                       "repeat": false,
-                      "created_at": "2023-02-17T11:43:55Z"
+                      "created_at": "2023-02-17T11:43:55Z",
+                      "updated_at": "2023-02-17T11:43:55Z",
+                      "email_address": null,
+                      "email_template_id": null,
+                      "send_days": [
+                        "monday",
+                        "tuesday",
+                        "wednesday",
+                        "thursday",
+                        "friday",
+                        "saturday",
+                        "sunday"
+                      ],
+                      "send_hour": 11,
+                      "time_zone": "America/New_York",
+                      "active": true,
+                      "exclude_subscriber_sources": [
+
+                      ]
                     }
                   ],
                   "pagination": {
@@ -8272,6 +8522,967 @@
         "x-mcp": {
           "enabled": true
         }
+      },
+      "post": {
+        "summary": "Create a sequence",
+        "tags": [
+          "Sequences"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "201": {
+            "description": "Creates a new sequence",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sequence": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "hold": {
+                          "type": "boolean"
+                        },
+                        "repeat": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "email_address": {
+                          "type": "string"
+                        },
+                        "email_template_id": {
+                          "type": "integer"
+                        },
+                        "send_days": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "send_hour": {
+                          "type": "integer"
+                        },
+                        "time_zone": {
+                          "type": "string"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "exclude_subscriber_sources": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "ids": {
+                                "type": "array",
+                                "items": {
+                                  "type": "integer"
+                                }
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "ids"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "hold",
+                        "repeat",
+                        "created_at",
+                        "updated_at",
+                        "email_address",
+                        "email_template_id",
+                        "send_days",
+                        "send_hour",
+                        "time_zone",
+                        "active",
+                        "exclude_subscriber_sources"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "sequence"
+                  ]
+                },
+                "example": {
+                  "sequence": {
+                    "id": 30,
+                    "name": "Full Series",
+                    "hold": true,
+                    "repeat": true,
+                    "created_at": "2026-04-17T13:55:22Z",
+                    "updated_at": "2026-04-17T13:55:22Z",
+                    "email_address": "joe924@ck.lol",
+                    "email_template_id": 11,
+                    "send_days": [
+                      "monday",
+                      "wednesday",
+                      "friday"
+                    ],
+                    "send_hour": 9,
+                    "time_zone": "America/Los_Angeles",
+                    "active": true,
+                    "exclude_subscriber_sources": [
+                      {
+                        "type": "sequence",
+                        "ids": [
+                          29
+                        ]
+                      },
+                      {
+                        "type": "tag",
+                        "ids": [
+                          2
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Returns a 403 with an error message if the current account is unauthorized to create a sequence",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "You do not have sufficient permissions to access this resource. Please contact support."
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns a 422 with an error message when one or more of the parameters were invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "send_hour must be an integer between 0 and 23"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the sequence."
+                  },
+                  "email_address": {
+                    "type": "string",
+                    "description": "The sending email address to use. Uses the account's sending email address if not provided."
+                  },
+                  "email_template_id": {
+                    "type": "integer",
+                    "description": "Id of the email template to use."
+                  },
+                  "send_days": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The days of the week to send the sequence on. Must be one of: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`."
+                  },
+                  "send_hour": {
+                    "type": "integer",
+                    "description": "The hour of the day to send the sequence at. Must be an integer between 0 and 23."
+                  },
+                  "time_zone": {
+                    "type": "string",
+                    "description": "The timezone to use for the sequence. Must be a valid IANA timezone string."
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "`true` to activate the sequence, `false` to deactivate it."
+                  },
+                  "repeat": {
+                    "type": "boolean",
+                    "description": "When `true`, subscribers can restart the sequence multiple times."
+                  },
+                  "hold": {
+                    "type": "boolean",
+                    "description": "When `true`, subscribers added via Visual Automations stay in the sequence after receiving the last email."
+                  },
+                  "exclude_subscriber_sources": {
+                    "type": "array",
+                    "description": "The subscriber sources to exclude from the sequence.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of subscriber source to exclude. Must be one of: `tag`, `sequence`, `form`, `segment`."
+                        },
+                        "ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "description": "The ids of the subscriber sources to exclude."
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "ids"
+                      ]
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Full Series",
+                "email_address": "joe924@ck.lol",
+                "email_template_id": 11,
+                "send_days": [
+                  "monday",
+                  "wednesday",
+                  "friday"
+                ],
+                "send_hour": 9,
+                "time_zone": "America/Los_Angeles",
+                "active": true,
+                "repeat": true,
+                "hold": true,
+                "exclude_subscriber_sources": [
+                  {
+                    "type": "tag",
+                    "ids": [
+                      2
+                    ]
+                  },
+                  {
+                    "type": "sequence",
+                    "ids": [
+                      29
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      }
+    },
+    "/v4/sequences/{id}": {
+      "delete": {
+        "summary": "Delete a sequence",
+        "tags": [
+          "Sequences"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 80
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletes the sequence"
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns a 404 when the provided id does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      },
+      "get": {
+        "summary": "Get a sequence",
+        "tags": [
+          "Sequences"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 23
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the sequence details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sequence": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "hold": {
+                          "type": "boolean"
+                        },
+                        "repeat": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "email_address": {
+                          "nullable": true
+                        },
+                        "email_template_id": {
+                          "nullable": true
+                        },
+                        "send_days": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "send_hour": {
+                          "type": "integer"
+                        },
+                        "time_zone": {
+                          "type": "string"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "exclude_subscriber_sources": {
+                          "type": "array",
+                          "items": {
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "hold",
+                        "repeat",
+                        "created_at",
+                        "updated_at",
+                        "email_address",
+                        "email_template_id",
+                        "send_days",
+                        "send_hour",
+                        "time_zone",
+                        "active",
+                        "exclude_subscriber_sources"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "sequence"
+                  ]
+                },
+                "example": {
+                  "sequence": {
+                    "id": 22,
+                    "name": "Welcome sequence",
+                    "hold": false,
+                    "repeat": false,
+                    "created_at": "2023-02-17T11:43:55Z",
+                    "updated_at": "2023-02-17T11:43:55Z",
+                    "email_address": null,
+                    "email_template_id": null,
+                    "send_days": [
+                      "monday",
+                      "tuesday",
+                      "wednesday",
+                      "thursday",
+                      "friday",
+                      "saturday",
+                      "sunday"
+                    ],
+                    "send_hour": 11,
+                    "time_zone": "America/New_York",
+                    "active": true,
+                    "exclude_subscriber_sources": [
+
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns a 404 when the provided id does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      },
+      "put": {
+        "summary": "Update a sequence",
+        "tags": [
+          "Sequences"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 59
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updates the sequence and returns its details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sequence": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "hold": {
+                          "type": "boolean"
+                        },
+                        "repeat": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "email_address": {
+                          "type": "string"
+                        },
+                        "email_template_id": {
+                          "type": "integer"
+                        },
+                        "send_days": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "send_hour": {
+                          "type": "integer"
+                        },
+                        "time_zone": {
+                          "type": "string"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "exclude_subscriber_sources": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "ids": {
+                                "type": "array",
+                                "items": {
+                                  "type": "integer"
+                                }
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "ids"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "hold",
+                        "repeat",
+                        "created_at",
+                        "updated_at",
+                        "email_address",
+                        "email_template_id",
+                        "send_days",
+                        "send_hour",
+                        "time_zone",
+                        "active",
+                        "exclude_subscriber_sources"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "sequence"
+                  ]
+                },
+                "example": {
+                  "sequence": {
+                    "id": 49,
+                    "name": "New Name",
+                    "hold": true,
+                    "repeat": true,
+                    "created_at": "2026-04-17T13:55:25Z",
+                    "updated_at": "2026-04-17T13:55:25Z",
+                    "email_address": "joe952@ck.lol",
+                    "email_template_id": 12,
+                    "send_days": [
+                      "tuesday",
+                      "thursday"
+                    ],
+                    "send_hour": 14,
+                    "time_zone": "America/Chicago",
+                    "active": false,
+                    "exclude_subscriber_sources": [
+                      {
+                        "type": "sequence",
+                        "ids": [
+                          48
+                        ]
+                      },
+                      {
+                        "type": "tag",
+                        "ids": [
+                          3
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns a 404 when the provided id does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns a 422 with an error message when one or more of the parameters were invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "name can't be blank"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the sequence."
+                  },
+                  "email_address": {
+                    "type": "string",
+                    "description": "The sending email address to use. Uses the account's sending email address if not provided."
+                  },
+                  "email_template_id": {
+                    "type": "integer",
+                    "description": "Id of the email template to use."
+                  },
+                  "send_days": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "The days of the week to send the sequence on. Must be one of: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`."
+                  },
+                  "send_hour": {
+                    "type": "integer",
+                    "description": "The hour of the day to send the sequence at. Must be an integer between 0 and 23."
+                  },
+                  "time_zone": {
+                    "type": "string",
+                    "description": "The timezone to use for the sequence. Must be a valid IANA timezone string."
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "description": "`true` to activate the sequence, `false` to deactivate it."
+                  },
+                  "repeat": {
+                    "type": "boolean",
+                    "description": "When `true`, subscribers can restart the sequence multiple times."
+                  },
+                  "hold": {
+                    "type": "boolean",
+                    "description": "When `true`, subscribers added via Visual Automations stay in the sequence after receiving the last email."
+                  },
+                  "exclude_subscriber_sources": {
+                    "type": "array",
+                    "description": "The subscriber sources to exclude from the sequence.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The type of subscriber source to exclude. Must be one of: `tag`, `sequence`, `form`, `segment`."
+                        },
+                        "ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer",
+                            "description": "The ids of the subscriber sources to exclude."
+                          }
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "ids"
+                      ]
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "New Name",
+                "email_address": "joe952@ck.lol",
+                "email_template_id": 12,
+                "send_days": [
+                  "tuesday",
+                  "thursday"
+                ],
+                "send_hour": 14,
+                "time_zone": "America/Chicago",
+                "active": false,
+                "repeat": true,
+                "hold": true,
+                "exclude_subscriber_sources": [
+                  {
+                    "type": "tag",
+                    "ids": [
+                      3
+                    ]
+                  },
+                  {
+                    "type": "sequence",
+                    "ids": [
+                      48
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
       }
     },
     "/v4/sequences/{sequence_id}/subscribers": {
@@ -8282,10 +9493,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8377,7 +9592,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 28
+            "example": 117
           },
           {
             "name": "status",
@@ -8497,9 +9712,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 799,
+                      "id": 863,
                       "first_name": null,
-                      "email_address": "subscriber481@kit.dev",
+                      "email_address": "subscriber482@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -8508,9 +9723,9 @@
                       }
                     },
                     {
-                      "id": 798,
+                      "id": 862,
                       "first_name": null,
-                      "email_address": "subscriber480@kit.dev",
+                      "email_address": "subscriber481@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -8519,9 +9734,9 @@
                       }
                     },
                     {
-                      "id": 797,
+                      "id": 861,
                       "first_name": null,
-                      "email_address": "subscriber479@kit.dev",
+                      "email_address": "subscriber480@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -8533,8 +9748,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "Wzc5OV0=",
-                    "end_cursor": "Wzc5N10=",
+                    "start_cursor": "Wzg2M10=",
+                    "end_cursor": "Wzg2MV0=",
                     "per_page": 500
                   }
                 }
@@ -8606,10 +9821,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8620,7 +9839,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 97
+            "example": 186
           }
         ],
         "responses": {
@@ -8662,7 +9881,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -8682,13 +9902,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 903,
+                    "id": 967,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -8732,7 +9953,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -8752,13 +9974,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 904,
+                    "id": 968,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -8877,10 +10100,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8891,7 +10118,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 881
+            "example": 945
           },
           {
             "name": "sequence_id",
@@ -8900,7 +10127,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 66
+            "example": 155
           }
         ],
         "responses": {
@@ -8942,7 +10169,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -8962,13 +10190,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 877,
+                    "id": 941,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -9012,7 +10241,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -9032,13 +10262,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 878,
+                    "id": 942,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -9102,9 +10333,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                }
               },
-              "example": {}
+              "example": {
+              }
             }
           }
         },
@@ -9121,10 +10354,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -9353,7 +10590,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 149,
+                      "id": 204,
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
                       "state": "active",
@@ -9366,8 +10603,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzE0OV0=",
-                    "end_cursor": "WzE0OV0=",
+                    "start_cursor": "WzIwNF0=",
+                    "end_cursor": "WzIwNF0=",
                     "per_page": 500
                   }
                 }
@@ -9439,13 +10676,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns a 200 and updates the subscriber first name when a subscriber with provided email already exists",
@@ -9482,7 +10725,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -9501,12 +10745,13 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 289,
+                    "id": 350,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "inactive",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -9547,7 +10792,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -9566,12 +10812,13 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 286,
+                    "id": 346,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -9612,7 +10859,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -9631,12 +10879,13 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 288,
+                    "id": 348,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -9810,13 +11059,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns a list of subscribers matching the filters",
@@ -9921,8 +11176,12 @@
                       "first_name": null,
                       "email_address": "anonymous@example.com",
                       "created_at": "2024-11-15T10:00:00Z",
-                      "tag_names": [],
-                      "tag_ids": []
+                      "tag_names": [
+
+                      ],
+                      "tag_ids": [
+
+                      ]
                     }
                   ],
                   "pagination": {
@@ -10020,10 +11279,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10034,7 +11297,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 262
+            "example": 322
           }
         ],
         "responses": {
@@ -10081,6 +11344,10 @@
                           "required": [
                             "category"
                           ]
+                        },
+                        "canceled_at": {
+                          "type": "string",
+                          "nullable": true
                         }
                       },
                       "required": [
@@ -10099,14 +11366,15 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 261,
+                    "id": 321,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "fields": {
                       "category": "One"
-                    }
+                    },
+                    "canceled_at": null
                   }
                 }
               }
@@ -10177,10 +11445,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10191,7 +11463,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 314
+            "example": 375
           }
         ],
         "responses": {
@@ -10230,7 +11502,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -10249,12 +11522,13 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 309,
+                    "id": 370,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -10295,7 +11569,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -10314,12 +11589,13 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 311,
+                    "id": 372,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -10499,10 +11775,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10513,7 +11793,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 281
+            "example": 341
           }
         ],
         "responses": {
@@ -10578,9 +11858,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                }
               },
-              "example": {}
+              "example": {
+              }
             }
           }
         },
@@ -10598,10 +11880,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10632,7 +11918,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 949
+            "example": 1033
           }
         ],
         "responses": {
@@ -10715,7 +12001,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 949,
+                    "id": 1033,
                     "stats": {
                       "sent": 2,
                       "opened": 1,
@@ -10774,10 +12060,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10825,7 +12115,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 980
+            "example": 1067
           }
         ],
         "responses": {
@@ -10894,12 +12184,12 @@
                 "example": {
                   "tags": [
                     {
-                      "id": 98,
+                      "id": 108,
                       "name": "Tag B",
                       "tagged_at": "2023-02-17T10:43:55Z"
                     },
                     {
-                      "id": 99,
+                      "id": 109,
                       "name": "Tag A",
                       "tagged_at": "2023-02-17T10:43:55Z"
                     }
@@ -10981,10 +12271,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11092,12 +12386,12 @@
                 "example": {
                   "tags": [
                     {
-                      "id": 5,
+                      "id": 11,
                       "name": "Tag B",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 4,
+                      "id": 10,
                       "name": "Tag A",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
@@ -11105,8 +12399,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzVd",
-                    "end_cursor": "WzRd",
+                    "start_cursor": "WzExXQ==",
+                    "end_cursor": "WzEwXQ==",
                     "per_page": 500
                   }
                 }
@@ -11151,13 +12445,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns the tag if it already exists",
@@ -11192,7 +12492,7 @@
                 },
                 "example": {
                   "tag": {
-                    "id": 12,
+                    "id": 18,
                     "name": "Completed",
                     "created_at": "2023-02-17T11:43:55Z"
                   }
@@ -11233,7 +12533,7 @@
                 },
                 "example": {
                   "tag": {
-                    "id": 11,
+                    "id": 17,
                     "name": "Completed",
                     "created_at": "2023-02-17T11:43:55Z"
                   }
@@ -11327,10 +12627,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11341,7 +12645,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 32
+            "example": 38
           }
         ],
         "responses": {
@@ -11378,7 +12682,7 @@
                 },
                 "example": {
                   "tag": {
-                    "id": 30,
+                    "id": 36,
                     "name": "signed up",
                     "created_at": "2023-02-17T11:43:55Z"
                   }
@@ -11498,10 +12802,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11512,7 +12820,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 231
+            "example": 241
           }
         ],
         "responses": {
@@ -11609,10 +12917,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11700,7 +13012,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 126
+            "example": 136
           },
           {
             "name": "tagged_after",
@@ -11824,9 +13136,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 983,
+                      "id": 1070,
                       "first_name": null,
-                      "email_address": "subscriber588@kit.dev",
+                      "email_address": "subscriber612@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -11835,9 +13147,9 @@
                       }
                     },
                     {
-                      "id": 982,
+                      "id": 1069,
                       "first_name": null,
-                      "email_address": "subscriber587@kit.dev",
+                      "email_address": "subscriber611@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -11846,9 +13158,9 @@
                       }
                     },
                     {
-                      "id": 981,
+                      "id": 1068,
                       "first_name": null,
-                      "email_address": "subscriber586@kit.dev",
+                      "email_address": "subscriber610@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -11933,10 +13245,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11947,7 +13263,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 188
+            "example": 198
           }
         ],
         "responses": {
@@ -11989,7 +13305,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -12009,13 +13326,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1105,
+                    "id": 1192,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -12059,7 +13377,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -12079,13 +13398,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1106,
+                    "id": 1193,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -12203,10 +13523,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -12217,7 +13541,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1130
+            "example": 1217
           },
           {
             "name": "tag_id",
@@ -12226,7 +13550,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 209
+            "example": 219
           }
         ],
         "responses": {
@@ -12298,10 +13622,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -12312,7 +13640,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1087
+            "example": 1174
           },
           {
             "name": "tag_id",
@@ -12321,7 +13649,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 165
+            "example": 175
           }
         ],
         "responses": {
@@ -12363,7 +13691,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -12383,13 +13712,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1085,
+                    "id": 1172,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -12433,7 +13763,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -12453,13 +13784,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1086,
+                    "id": 1173,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -12523,9 +13855,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                }
               },
-              "example": {}
+              "example": {
+              }
             }
           }
         },
@@ -12543,10 +13877,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -12676,16 +14014,16 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1083,
+                      "account_id": 1368,
                       "event": {
                         "name": "tag_add",
-                        "tag_id": 36
+                        "tag_id": 42
                       },
                       "target_url": "http://example.convertkit.dev/tags"
                     },
                     {
                       "id": 1,
-                      "account_id": 1083,
+                      "account_id": 1368,
                       "event": {
                         "name": "form_subscribe",
                         "form_id": 10
@@ -12743,13 +14081,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates the webhook",
@@ -12802,7 +14146,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1109,
+                    "account_id": 1394,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
@@ -12943,10 +14287,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
