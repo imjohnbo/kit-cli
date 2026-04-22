@@ -879,7 +879,8 @@
                             "type": "integer"
                           },
                           "publication_id": {
-                            "type": "integer"
+                            "type": "integer",
+                            "description": "Identifier of the underlying publication. Broadcasts that are also published as posts share the same `publication_id` — use it to match a broadcast to its post via `GET /v4/posts`."
                           },
                           "created_at": {
                             "type": "string"
@@ -2439,7 +2440,8 @@
                           "type": "integer"
                         },
                         "publication_id": {
-                          "type": "integer"
+                          "type": "integer",
+                          "description": "Identifier of the underlying publication. Broadcasts that are also published as posts share the same `publication_id` — use it to match a broadcast to its post via `GET /v4/posts`."
                         },
                         "created_at": {
                           "type": "string"
@@ -7205,6 +7207,417 @@
         }
       }
     },
+    "/v4/posts": {
+      "get": {
+        "summary": "List posts",
+        "tags": [
+          "Posts"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "after",
+            "description": "To fetch next page of results, use `?after=<end_cursor>`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "before",
+            "description": "To fetch previous page of results, use `?before=<start_cursor>`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "include_content",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false,
+            "description": "To include the `content` field on each post in the response, use `true`. Omitted by default because it significantly increases response size and latency for large collections."
+          },
+          {
+            "name": "include_total_count",
+            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "per_page",
+            "description": "Number of results per page. Default 500, maximum 1000.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a paginated list of all posts for your account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "posts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "publication_id": {
+                            "type": "integer",
+                            "description": "Identifier of the underlying publication. Posts that were also sent as broadcasts share the same `publication_id` — use it to match a post to its broadcast via `GET /v4/broadcasts`."
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "description": {
+                            "nullable": true
+                          },
+                          "meta_description": {
+                            "nullable": true
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "published_at": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "sent_at": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "thumbnail_alt": {
+                            "nullable": true
+                          },
+                          "thumbnail_url": {
+                            "nullable": true
+                          },
+                          "is_paid": {
+                            "type": "boolean"
+                          },
+                          "public_url": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "publication_id",
+                          "created_at",
+                          "title",
+                          "slug",
+                          "description",
+                          "meta_description",
+                          "status",
+                          "published_at",
+                          "sent_at",
+                          "thumbnail_alt",
+                          "thumbnail_url",
+                          "is_paid",
+                          "public_url"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "has_previous_page": {
+                          "type": "boolean"
+                        },
+                        "has_next_page": {
+                          "type": "boolean"
+                        },
+                        "start_cursor": {
+                          "type": "string"
+                        },
+                        "end_cursor": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "has_previous_page",
+                        "has_next_page",
+                        "start_cursor",
+                        "end_cursor",
+                        "per_page"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "posts",
+                    "pagination"
+                  ]
+                },
+                "example": {
+                  "posts": [
+                    {
+                      "id": 3,
+                      "publication_id": 106,
+                      "created_at": "2026-04-20T14:00:13Z",
+                      "title": "Draft Post",
+                      "slug": null,
+                      "description": null,
+                      "meta_description": null,
+                      "status": "draft",
+                      "published_at": null,
+                      "sent_at": null,
+                      "thumbnail_alt": null,
+                      "thumbnail_url": null,
+                      "is_paid": false,
+                      "public_url": null
+                    },
+                    {
+                      "id": 2,
+                      "publication_id": 105,
+                      "created_at": "2026-04-20T14:00:13Z",
+                      "title": "Email and Web Post",
+                      "slug": "email-and-web-post",
+                      "description": null,
+                      "meta_description": null,
+                      "status": "published",
+                      "published_at": "2026-04-18T14:00:13Z",
+                      "sent_at": "2026-04-20T14:00:13Z",
+                      "thumbnail_alt": null,
+                      "thumbnail_url": null,
+                      "is_paid": false,
+                      "public_url": "https://asdf.kit.com/posts/email-and-web-post"
+                    },
+                    {
+                      "id": 1,
+                      "publication_id": 104,
+                      "created_at": "2026-04-20T14:00:13Z",
+                      "title": "Web Only Post",
+                      "slug": "web-only-post",
+                      "description": null,
+                      "meta_description": null,
+                      "status": "published",
+                      "published_at": "2026-04-19T14:00:13Z",
+                      "sent_at": null,
+                      "thumbnail_alt": null,
+                      "thumbnail_url": null,
+                      "is_paid": false,
+                      "public_url": "https://asdf.kit.com/posts/web-only-post"
+                    }
+                  ],
+                  "pagination": {
+                    "has_previous_page": false,
+                    "has_next_page": false,
+                    "start_cursor": "WzNd",
+                    "end_cursor": "WzFd",
+                    "per_page": 500
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      }
+    },
+    "/v4/posts/{id}": {
+      "get": {
+        "summary": "Get a post",
+        "tags": [
+          "Posts"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 29
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the post details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "publication_id": {
+                          "type": "integer",
+                          "description": "Identifier of the underlying publication. Posts that were also sent as broadcasts share the same `publication_id` — use it to match a post to its broadcast via `GET /v4/broadcasts`."
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "nullable": true
+                        },
+                        "meta_description": {
+                          "nullable": true
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "published_at": {
+                          "type": "string"
+                        },
+                        "sent_at": {
+                          "nullable": true
+                        },
+                        "thumbnail_alt": {
+                          "nullable": true
+                        },
+                        "thumbnail_url": {
+                          "nullable": true
+                        },
+                        "is_paid": {
+                          "type": "boolean"
+                        },
+                        "public_url": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "publication_id",
+                        "created_at",
+                        "title",
+                        "slug",
+                        "description",
+                        "meta_description",
+                        "status",
+                        "published_at",
+                        "sent_at",
+                        "thumbnail_alt",
+                        "thumbnail_url",
+                        "is_paid",
+                        "public_url",
+                        "content"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "post"
+                  ]
+                },
+                "example": {
+                  "post": {
+                    "id": 25,
+                    "publication_id": 128,
+                    "created_at": "2026-04-20T14:00:17Z",
+                    "title": "My Newsletter Post",
+                    "slug": "my-newsletter-post",
+                    "description": null,
+                    "meta_description": null,
+                    "status": "published",
+                    "published_at": "2026-04-19T14:00:17Z",
+                    "sent_at": null,
+                    "thumbnail_alt": null,
+                    "thumbnail_url": null,
+                    "is_paid": false,
+                    "public_url": "https://asdf.kit.com/posts/my-newsletter-post",
+                    "content": "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<!-- -->\n"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns a 404 when the provided id does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      }
+    },
     "/v4/purchases": {
       "get": {
         "summary": "List purchases",
@@ -8642,9 +9055,9 @@
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-04-17T13:55:22Z",
-                    "updated_at": "2026-04-17T13:55:22Z",
-                    "email_address": "joe924@ck.lol",
+                    "created_at": "2026-04-20T14:01:10Z",
+                    "updated_at": "2026-04-20T14:01:10Z",
+                    "email_address": "joe925@ck.lol",
                     "email_template_id": 11,
                     "send_days": [
                       "monday",
@@ -8825,7 +9238,7 @@
               },
               "example": {
                 "name": "Full Series",
-                "email_address": "joe924@ck.lol",
+                "email_address": "joe925@ck.lol",
                 "email_template_id": 11,
                 "send_days": [
                   "monday",
@@ -9269,9 +9682,9 @@
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-04-17T13:55:25Z",
-                    "updated_at": "2026-04-17T13:55:25Z",
-                    "email_address": "joe952@ck.lol",
+                    "created_at": "2026-04-20T14:01:14Z",
+                    "updated_at": "2026-04-20T14:01:14Z",
+                    "email_address": "joe954@ck.lol",
                     "email_template_id": 12,
                     "send_days": [
                       "tuesday",
@@ -9451,7 +9864,7 @@
               },
               "example": {
                 "name": "New Name",
-                "email_address": "joe952@ck.lol",
+                "email_address": "joe954@ck.lol",
                 "email_template_id": 12,
                 "send_days": [
                   "tuesday",
@@ -14014,7 +14427,7 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1368,
+                      "account_id": 1370,
                       "event": {
                         "name": "tag_add",
                         "tag_id": 42
@@ -14023,7 +14436,7 @@
                     },
                     {
                       "id": 1,
-                      "account_id": 1368,
+                      "account_id": 1370,
                       "event": {
                         "name": "form_subscribe",
                         "form_id": 10
@@ -14146,7 +14559,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1394,
+                    "account_id": 1396,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
