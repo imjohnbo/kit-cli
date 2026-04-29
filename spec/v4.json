@@ -95,6 +95,40 @@
                             "friendly_name",
                             "utc_offset"
                           ]
+                        },
+                        "sending_addresses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "email_address": {
+                                "type": "string"
+                              },
+                              "from_name": {
+                                "type": "string"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "is_default": {
+                                "type": "boolean"
+                              },
+                              "is_verified": {
+                                "type": "boolean"
+                              },
+                              "is_dmarc_configured": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "email_address",
+                              "from_name",
+                              "status",
+                              "is_default",
+                              "is_verified",
+                              "is_dmarc_configured"
+                            ]
+                          }
                         }
                       },
                       "required": [
@@ -127,7 +161,17 @@
                       "name": "America/New_York",
                       "friendly_name": "Eastern Time (US & Canada)",
                       "utc_offset": "-05:00"
-                    }
+                    },
+                    "sending_addresses": [
+                      {
+                        "email_address": "joe27@ck.lol",
+                        "from_name": "Joe",
+                        "status": "pending",
+                        "is_default": true,
+                        "is_verified": false,
+                        "is_dmarc_configured": false
+                      }
+                    ]
                   }
                 }
               }
@@ -826,7 +870,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -3193,24 +3237,24 @@
                 "example": {
                   "custom_fields": [
                     {
-                      "id": 100,
+                      "id": 105,
                       "key": "existing_custom_field",
                       "label": "Existing Custom Field",
-                      "name": "ck_field_100_existing_custom_field",
+                      "name": "ck_field_105_existing_custom_field",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 102,
+                      "id": 107,
                       "key": "interests",
                       "label": "Interests",
-                      "name": "ck_field_102_interests",
+                      "name": "ck_field_107_interests",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 101,
+                      "id": 106,
                       "key": "last_name",
                       "label": "Last name",
-                      "name": "ck_field_101_last_name",
+                      "name": "ck_field_106_last_name",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
@@ -3458,13 +3502,13 @@
                 "example": {
                   "custom_field_values": [
                     {
-                      "subscriber_id": 590,
-                      "subscriber_custom_field_id": 113,
+                      "subscriber_id": 597,
+                      "subscriber_custom_field_id": 118,
                       "value": "Smith"
                     },
                     {
-                      "subscriber_id": 590,
-                      "subscriber_custom_field_id": 114,
+                      "subscriber_id": 597,
+                      "subscriber_custom_field_id": 119,
                       "value": "Acme Inc"
                     }
                   ],
@@ -3475,7 +3519,7 @@
                       ],
                       "custom_field_value": {
                         "subscriber_id": null,
-                        "subscriber_custom_field_id": 113,
+                        "subscriber_custom_field_id": 118,
                         "value": "Jones"
                       }
                     },
@@ -3484,7 +3528,7 @@
                         "Custom field does not exist"
                       ],
                       "custom_field_value": {
-                        "subscriber_id": 590,
+                        "subscriber_id": 597,
                         "subscriber_custom_field_id": 999999,
                         "value": "Test"
                       }
@@ -3790,7 +3834,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 608,
+                      "id": 615,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3805,7 +3849,7 @@
                       }
                     },
                     {
-                      "id": 608,
+                      "id": 615,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3837,7 +3881,7 @@
                       ],
                       "subscription": {
                         "form_id": null,
-                        "subscriber_id": 608,
+                        "subscriber_id": 615,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
                     }
@@ -4125,21 +4169,21 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 571,
+                      "id": 578,
                       "first_name": null,
                       "email_address": "brooke@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 572,
+                      "id": 579,
                       "first_name": "Camille",
                       "email_address": "camille@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 570,
+                      "id": 577,
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
                       "state": "active",
@@ -4817,14 +4861,14 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 624,
+                      "id": 631,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 624,
+                      "id": 631,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -4847,7 +4891,7 @@
                       ],
                       "tagging": {
                         "tag_id": null,
-                        "subscriber_id": 624
+                        "subscriber_id": 631
                       }
                     }
                   ]
@@ -5049,7 +5093,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -5713,7 +5757,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -5919,7 +5963,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -6209,7 +6253,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -6376,9 +6420,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 648,
+                      "id": 655,
                       "first_name": null,
-                      "email_address": "subscriber356@kit.dev",
+                      "email_address": "subscriber358@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6395,9 +6439,9 @@
                       }
                     },
                     {
-                      "id": 647,
+                      "id": 654,
                       "first_name": null,
-                      "email_address": "subscriber355@kit.dev",
+                      "email_address": "subscriber357@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6414,9 +6458,9 @@
                       }
                     },
                     {
-                      "id": 646,
+                      "id": 653,
                       "first_name": null,
-                      "email_address": "subscriber354@kit.dev",
+                      "email_address": "subscriber356@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6436,8 +6480,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzY0OF0=",
-                    "end_cursor": "WzY0Nl0=",
+                    "start_cursor": "WzY1NV0=",
+                    "end_cursor": "WzY1M10=",
                     "per_page": 500
                   }
                 }
@@ -6527,7 +6571,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 214
+            "example": 217
           }
         ],
         "responses": {
@@ -6622,7 +6666,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 750,
+                    "id": 758,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -6734,7 +6778,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 751,
+                    "id": 759,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -6891,7 +6935,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 192
+            "example": 193
           },
           {
             "name": "id",
@@ -6900,7 +6944,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 732
+            "example": 740
           }
         ],
         "responses": {
@@ -6995,7 +7039,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 726,
+                    "id": 733,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7108,7 +7152,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 728,
+                    "id": 735,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7256,7 +7300,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -7391,7 +7435,7 @@
                     {
                       "id": 3,
                       "publication_id": 106,
-                      "created_at": "2026-04-20T14:00:13Z",
+                      "created_at": "2026-04-28T18:53:51Z",
                       "title": "Draft Post",
                       "slug": null,
                       "description": null,
@@ -7407,14 +7451,14 @@
                     {
                       "id": 2,
                       "publication_id": 105,
-                      "created_at": "2026-04-20T14:00:13Z",
+                      "created_at": "2026-04-28T18:53:51Z",
                       "title": "Email and Web Post",
                       "slug": "email-and-web-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-04-18T14:00:13Z",
-                      "sent_at": "2026-04-20T14:00:13Z",
+                      "published_at": "2026-04-26T18:53:51Z",
+                      "sent_at": "2026-04-28T18:53:51Z",
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
                       "is_paid": false,
@@ -7423,13 +7467,13 @@
                     {
                       "id": 1,
                       "publication_id": 104,
-                      "created_at": "2026-04-20T14:00:13Z",
+                      "created_at": "2026-04-28T18:53:51Z",
                       "title": "Web Only Post",
                       "slug": "web-only-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-04-19T14:00:13Z",
+                      "published_at": "2026-04-27T18:53:51Z",
                       "sent_at": null,
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
@@ -7568,13 +7612,13 @@
                   "post": {
                     "id": 25,
                     "publication_id": 128,
-                    "created_at": "2026-04-20T14:00:17Z",
+                    "created_at": "2026-04-28T18:53:56Z",
                     "title": "My Newsletter Post",
                     "slug": "my-newsletter-post",
                     "description": null,
                     "meta_description": null,
                     "status": "published",
-                    "published_at": "2026-04-19T14:00:17Z",
+                    "published_at": "2026-04-27T18:53:56Z",
                     "sent_at": null,
                     "thumbnail_alt": null,
                     "thumbnail_url": null,
@@ -7652,7 +7696,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -7821,7 +7865,7 @@
                       "transaction_id": "512-41-4101",
                       "status": "paid",
                       "email_address": "pru.magoo@convertkit.dev",
-                      "subscriber_id": 20,
+                      "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 5.0,
@@ -7844,7 +7888,7 @@
                       "transaction_id": "323-79-5320",
                       "status": "paid",
                       "email_address": "pru.magoo@convertkit.dev",
-                      "subscriber_id": 20,
+                      "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 10.0,
@@ -7867,7 +7911,7 @@
                       "transaction_id": "796-92-4892",
                       "status": "paid",
                       "email_address": "pru.magoo@convertkit.dev",
-                      "subscriber_id": 20,
+                      "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 78.66,
@@ -8064,7 +8108,7 @@
                   "purchase": {
                     "id": 20,
                     "transaction_id": "796-92-4892",
-                    "subscriber_id": 47,
+                    "subscriber_id": 49,
                     "status": "paid",
                     "email_address": "pru.magoo@convertkit.dev",
                     "currency": "USD",
@@ -8446,7 +8490,7 @@
                   "purchase": {
                     "id": 14,
                     "transaction_id": "796-92-4892",
-                    "subscriber_id": 31,
+                    "subscriber_id": 33,
                     "status": "paid",
                     "email_address": "pru.magoo@convertkit.dev",
                     "currency": "USD",
@@ -8572,7 +8616,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -8748,7 +8792,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -9055,9 +9099,9 @@
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-04-20T14:01:10Z",
-                    "updated_at": "2026-04-20T14:01:10Z",
-                    "email_address": "joe925@ck.lol",
+                    "created_at": "2026-04-28T18:54:46Z",
+                    "updated_at": "2026-04-28T18:54:46Z",
+                    "email_address": "joe927@ck.lol",
                     "email_template_id": 11,
                     "send_days": [
                       "monday",
@@ -9238,7 +9282,7 @@
               },
               "example": {
                 "name": "Full Series",
-                "email_address": "joe925@ck.lol",
+                "email_address": "joe927@ck.lol",
                 "email_template_id": 11,
                 "send_days": [
                   "monday",
@@ -9682,9 +9726,9 @@
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-04-20T14:01:14Z",
-                    "updated_at": "2026-04-20T14:01:14Z",
-                    "email_address": "joe954@ck.lol",
+                    "created_at": "2026-04-28T18:54:49Z",
+                    "updated_at": "2026-04-28T18:54:49Z",
+                    "email_address": "joe956@ck.lol",
                     "email_template_id": 12,
                     "send_days": [
                       "tuesday",
@@ -9864,7 +9908,7 @@
               },
               "example": {
                 "name": "New Name",
-                "email_address": "joe954@ck.lol",
+                "email_address": "joe956@ck.lol",
                 "email_template_id": 12,
                 "send_days": [
                   "tuesday",
@@ -9981,7 +10025,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -10125,9 +10169,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 863,
+                      "id": 873,
                       "first_name": null,
-                      "email_address": "subscriber482@kit.dev",
+                      "email_address": "subscriber484@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -10136,9 +10180,9 @@
                       }
                     },
                     {
-                      "id": 862,
+                      "id": 872,
                       "first_name": null,
-                      "email_address": "subscriber481@kit.dev",
+                      "email_address": "subscriber483@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -10147,9 +10191,9 @@
                       }
                     },
                     {
-                      "id": 861,
+                      "id": 871,
                       "first_name": null,
-                      "email_address": "subscriber480@kit.dev",
+                      "email_address": "subscriber482@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -10161,8 +10205,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "Wzg2M10=",
-                    "end_cursor": "Wzg2MV0=",
+                    "start_cursor": "Wzg3M10=",
+                    "end_cursor": "Wzg3MV0=",
                     "per_page": 500
                   }
                 }
@@ -10315,7 +10359,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 967,
+                    "id": 977,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -10387,7 +10431,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 968,
+                    "id": 978,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -10531,7 +10575,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 945
+            "example": 955
           },
           {
             "name": "sequence_id",
@@ -10603,7 +10647,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 941,
+                    "id": 951,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -10675,7 +10719,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 942,
+                    "id": 952,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -10759,6 +10803,988 @@
         }
       }
     },
+    "/v4/snippets": {
+      "get": {
+        "summary": "List snippets",
+        "tags": [
+          "Snippets"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "after",
+            "description": "To fetch next page of results, use `?after=<end_cursor>`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "archived",
+            "description": "When `true`, returns only archived snippets. Defaults to `false`.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "before",
+            "description": "To fetch previous page of results, use `?before=<start_cursor>`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "include_content",
+            "description": "When `true`, includes both the `content` and `document` fields for each snippet in the response. Defaults to `false`.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          },
+          {
+            "name": "include_total_count",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "per_page",
+            "description": "Number of results per page. Default 500, maximum 1000.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "snippet_type",
+            "description": "Filter snippets by type. Use `inline` for text snippets or `block` for rich-text block snippets.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a paginated list of all snippets for your account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "snippets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "snippet_type": {
+                            "type": "string"
+                          },
+                          "archived": {
+                            "type": "boolean"
+                          },
+                          "key": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "document": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "value": {
+                                "nullable": true
+                              },
+                              "value_html": {
+                                "type": "string"
+                              },
+                              "value_plain": {
+                                "nullable": true
+                              },
+                              "version": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "value",
+                              "value_html",
+                              "value_plain",
+                              "version"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "snippet_type",
+                          "archived",
+                          "key",
+                          "created_at",
+                          "updated_at",
+                          "content",
+                          "document"
+                        ]
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "has_previous_page": {
+                          "type": "boolean"
+                        },
+                        "has_next_page": {
+                          "type": "boolean"
+                        },
+                        "start_cursor": {
+                          "type": "string"
+                        },
+                        "end_cursor": {
+                          "type": "string"
+                        },
+                        "per_page": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "has_previous_page",
+                        "has_next_page",
+                        "start_cursor",
+                        "end_cursor",
+                        "per_page"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "snippets",
+                    "pagination"
+                  ]
+                },
+                "example": {
+                  "snippets": [
+                    {
+                      "id": 5,
+                      "name": "Welcome message",
+                      "snippet_type": "inline",
+                      "archived": false,
+                      "key": "welcome-message",
+                      "created_at": "2023-02-17T11:43:55Z",
+                      "updated_at": "2023-02-17T11:43:55Z",
+                      "content": "Hello {{ subscriber.first_name }}",
+                      "document": {
+                        "id": 81,
+                        "value": null,
+                        "value_html": "content",
+                        "value_plain": null,
+                        "version": 1
+                      }
+                    }
+                  ],
+                  "pagination": {
+                    "has_previous_page": false,
+                    "has_next_page": false,
+                    "start_cursor": "WzVd",
+                    "end_cursor": "WzVd",
+                    "per_page": 500
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      },
+      "post": {
+        "summary": "Create a snippet",
+        "tags": [
+          "Snippets"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "201": {
+            "description": "Creates a new snippet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "snippet": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "snippet_type": {
+                          "type": "string"
+                        },
+                        "archived": {
+                          "type": "boolean"
+                        },
+                        "key": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "document": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "value": {
+                              "nullable": true
+                            },
+                            "value_html": {
+                              "nullable": true
+                            },
+                            "value_plain": {
+                              "nullable": true
+                            },
+                            "version": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "value",
+                            "value_html",
+                            "value_plain",
+                            "version"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "snippet_type",
+                        "archived",
+                        "key",
+                        "created_at",
+                        "updated_at",
+                        "content",
+                        "document"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "snippet"
+                  ]
+                },
+                "example": {
+                  "snippet": {
+                    "id": 31,
+                    "name": "Cat Fact of the Day",
+                    "snippet_type": "inline",
+                    "archived": false,
+                    "key": "cat-fact-of-the-day",
+                    "created_at": "2026-04-28T18:55:07Z",
+                    "updated_at": "2026-04-28T18:55:07Z",
+                    "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees.",
+                    "document": {
+                      "id": 107,
+                      "value": null,
+                      "value_html": null,
+                      "value_plain": null,
+                      "version": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns a 422 with an error message when one or more of the parameters were invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "name can't be blank"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Inline snippet",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the snippet"
+                      },
+                      "snippet_type": {
+                        "type": "string",
+                        "enum": [
+                          "inline"
+                        ],
+                        "description": "Must be 'inline'"
+                      },
+                      "content": {
+                        "type": "string",
+                        "description": "Liquid-enabled text content for the snippet"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "snippet_type",
+                      "content"
+                    ]
+                  },
+                  {
+                    "title": "Block snippet",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the snippet"
+                      },
+                      "snippet_type": {
+                        "type": "string",
+                        "enum": [
+                          "block"
+                        ],
+                        "description": "Must be 'block'"
+                      },
+                      "document_attributes": {
+                        "type": "object",
+                        "description": "Rich-text document for the snippet",
+                        "properties": {
+                          "value_html": {
+                            "type": "string",
+                            "description": "HTML content for the block snippet"
+                          }
+                        },
+                        "required": [
+                          "value_html"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "snippet_type",
+                      "document_attributes"
+                    ]
+                  }
+                ]
+              },
+              "example": {
+                "name": "Cat Fact of the Day",
+                "snippet_type": "inline",
+                "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees."
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      }
+    },
+    "/v4/snippets/{id}": {
+      "get": {
+        "summary": "Get a snippet",
+        "tags": [
+          "Snippets"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 25
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the snippet details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "snippet": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "snippet_type": {
+                          "type": "string"
+                        },
+                        "archived": {
+                          "type": "boolean"
+                        },
+                        "key": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "document": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "value": {
+                              "nullable": true
+                            },
+                            "value_html": {
+                              "type": "string"
+                            },
+                            "value_plain": {
+                              "nullable": true
+                            },
+                            "version": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "value",
+                            "value_html",
+                            "value_plain",
+                            "version"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "snippet_type",
+                        "archived",
+                        "key",
+                        "created_at",
+                        "updated_at",
+                        "content",
+                        "document"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "snippet"
+                  ]
+                },
+                "example": {
+                  "snippet": {
+                    "id": 24,
+                    "name": "Welcome message",
+                    "snippet_type": "inline",
+                    "archived": false,
+                    "key": "welcome-message",
+                    "created_at": "2023-02-17T11:43:55Z",
+                    "updated_at": "2023-02-17T11:43:55Z",
+                    "content": "Hello {{ subscriber.first_name }}",
+                    "document": {
+                      "id": 100,
+                      "value": null,
+                      "value_html": "content",
+                      "value_plain": null,
+                      "version": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns a 404 when the provided id does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      },
+      "put": {
+        "summary": "Update a snippet",
+        "tags": [
+          "Snippets"
+        ],
+        "security": [
+          {
+            "API Key": [
+
+            ]
+          },
+          {
+            "OAuth2": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 58
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updates the snippet and returns its details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "snippet": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "snippet_type": {
+                          "type": "string"
+                        },
+                        "archived": {
+                          "type": "boolean"
+                        },
+                        "key": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "document": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "value": {
+                              "nullable": true
+                            },
+                            "value_html": {
+                              "type": "string"
+                            },
+                            "value_plain": {
+                              "nullable": true
+                            },
+                            "version": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "value",
+                            "value_html",
+                            "value_plain",
+                            "version"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "snippet_type",
+                        "archived",
+                        "key",
+                        "created_at",
+                        "updated_at",
+                        "content",
+                        "document"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "snippet"
+                  ]
+                },
+                "example": {
+                  "snippet": {
+                    "id": 57,
+                    "name": "Dog Fact of the Day",
+                    "snippet_type": "inline",
+                    "archived": false,
+                    "key": "welcome-message",
+                    "created_at": "2023-02-17T11:43:55Z",
+                    "updated_at": "2026-04-28T18:55:11Z",
+                    "content": "Hello {{ subscriber.first_name }}",
+                    "document": {
+                      "id": 133,
+                      "value": null,
+                      "value_html": "content",
+                      "value_plain": null,
+                      "version": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns a 404 when the provided id does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns a 422 with an error message when one or more of the parameters were invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "snippet_type cannot be changed"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "title": "Inline snippet",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "New name for the snippet"
+                      },
+                      "snippet_type": {
+                        "type": "string",
+                        "description": "Cannot be changed — must match the existing type if provided"
+                      },
+                      "archived": {
+                        "type": "boolean",
+                        "description": "Pass `true` to archive or `false` to restore the snippet"
+                      },
+                      "content": {
+                        "type": "string",
+                        "description": "New Liquid-enabled text content"
+                      }
+                    }
+                  },
+                  {
+                    "title": "Block snippet",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "New name for the snippet"
+                      },
+                      "snippet_type": {
+                        "type": "string",
+                        "description": "Cannot be changed — must match the existing type if provided"
+                      },
+                      "archived": {
+                        "type": "boolean",
+                        "description": "Pass `true` to archive or `false` to restore the snippet"
+                      },
+                      "document_attributes": {
+                        "type": "object",
+                        "description": "Updated rich-text document",
+                        "properties": {
+                          "value_html": {
+                            "type": "string",
+                            "description": "New HTML content for the block snippet"
+                          }
+                        },
+                        "required": [
+                          "value_html"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "example": {
+                "name": "Dog Fact of the Day"
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      }
+    },
     "/v4/subscribers": {
       "get": {
         "summary": "List subscribers",
@@ -10828,8 +11854,18 @@
             "example": "alice@convertkit.dev"
           },
           {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "attribution,tags,location",
+            "description": "Comma-separated list of additional fields to include on each subscriber. Valid options: `attribution`, `tags`, `location`, `canceled_at`. `canceled_at` may only be used together with `status=cancelled`."
+          },
+          {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -10955,6 +11991,97 @@
                             "required": [
                               "category"
                             ]
+                          },
+                          "attribution": {
+                            "type": "object",
+                            "description": "Returned when `include` contains `attribution`.",
+                            "nullable": true,
+                            "properties": {
+                              "referrer": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_source": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_medium": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_campaign": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_term": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_content": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_type": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_mechanism": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "Returned when `include` contains `tags`.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "location": {
+                            "type": "object",
+                            "description": "Returned when `include` contains `location`.",
+                            "nullable": true,
+                            "properties": {
+                              "city": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "state": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "country": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "latitude": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "longitude": {
+                                "type": "number",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "canceled_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true,
+                            "description": "Returned when `include` contains `canceled_at`. Requires `status=cancelled`."
                           }
                         },
                         "required": [
@@ -11003,21 +12130,45 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 204,
+                      "id": 206,
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-01-27T11:43:55Z",
                       "fields": {
                         "category": "One"
+                      },
+                      "attribution": {
+                        "referrer": "https://example.com",
+                        "utm_source": null,
+                        "utm_medium": null,
+                        "utm_campaign": null,
+                        "utm_term": null,
+                        "utm_content": null,
+                        "source_type": null,
+                        "source_name": null,
+                        "source_mechanism": null
+                      },
+                      "tags": [
+                        {
+                          "id": 1,
+                          "name": "VIP"
+                        }
+                      ],
+                      "location": {
+                        "city": "Portland",
+                        "state": "OR",
+                        "country": "US",
+                        "latitude": 45.5,
+                        "longitude": -122.6
                       }
                     }
                   ],
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzIwNF0=",
-                    "end_cursor": "WzIwNF0=",
+                    "start_cursor": "WzIwNl0=",
+                    "end_cursor": "WzIwNl0=",
                     "per_page": 500
                   }
                 }
@@ -11158,7 +12309,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 350,
+                    "id": 357,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "inactive",
@@ -11225,7 +12376,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 346,
+                    "id": 353,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -11292,7 +12443,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 348,
+                    "id": 355,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -11710,7 +12861,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 322
+            "example": 329
           }
         ],
         "responses": {
@@ -11779,7 +12930,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 321,
+                    "id": 328,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -11876,7 +13027,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 375
+            "example": 382
           }
         ],
         "responses": {
@@ -11935,7 +13086,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 370,
+                    "id": 377,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12002,7 +13153,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 372,
+                    "id": 379,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12206,7 +13357,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 341
+            "example": 348
           }
         ],
         "responses": {
@@ -12331,7 +13482,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1033
+            "example": 1046
           }
         ],
         "responses": {
@@ -12414,7 +13565,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1033,
+                    "id": 1046,
                     "stats": {
                       "sent": 2,
                       "opened": 1,
@@ -12504,7 +13655,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -12528,7 +13679,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1067
+            "example": 1080
           }
         ],
         "responses": {
@@ -12715,7 +13866,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -13383,7 +14534,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -13549,9 +14700,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 1070,
+                      "id": 1083,
                       "first_name": null,
-                      "email_address": "subscriber612@kit.dev",
+                      "email_address": "subscriber617@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -13560,9 +14711,9 @@
                       }
                     },
                     {
-                      "id": 1069,
+                      "id": 1082,
                       "first_name": null,
-                      "email_address": "subscriber611@kit.dev",
+                      "email_address": "subscriber616@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -13571,9 +14722,9 @@
                       }
                     },
                     {
-                      "id": 1068,
+                      "id": 1081,
                       "first_name": null,
-                      "email_address": "subscriber610@kit.dev",
+                      "email_address": "subscriber615@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -13739,7 +14890,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1192,
+                    "id": 1205,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -13811,7 +14962,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1193,
+                    "id": 1206,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -13954,7 +15105,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1217
+            "example": 1230
           },
           {
             "name": "tag_id",
@@ -14053,7 +15204,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1174
+            "example": 1187
           },
           {
             "name": "tag_id",
@@ -14125,7 +15276,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1172,
+                    "id": 1185,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -14197,7 +15348,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1173,
+                    "id": 1186,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -14321,7 +15472,7 @@
           },
           {
             "name": "include_total_count",
-            "description": "To include the total count of records in the response, use `true`. For large collections, expect a slightly slower response.",
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages.",
             "in": "query",
             "required": false,
             "schema": {
@@ -14427,7 +15578,7 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1370,
+                      "account_id": 1514,
                       "event": {
                         "name": "tag_add",
                         "tag_id": 42
@@ -14436,7 +15587,7 @@
                     },
                     {
                       "id": 1,
-                      "account_id": 1370,
+                      "account_id": 1514,
                       "event": {
                         "name": "form_subscribe",
                         "form_id": 10
@@ -14559,7 +15710,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1396,
+                    "account_id": 1540,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
