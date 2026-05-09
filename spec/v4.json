@@ -23,19 +23,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns current account and user info",
@@ -217,19 +211,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns list of colors for the current account",
@@ -296,19 +284,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Updates and returns list of colors for the current account",
@@ -430,19 +412,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns Creator Profile details",
@@ -561,19 +537,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns your email stats for the last 90 days",
@@ -682,14 +652,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -839,14 +805,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -1205,19 +1167,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Creates a new broadcast",
@@ -1668,18 +1624,66 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
-
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            },
+            "description": "To fetch next page of results, use `?after=<end_cursor>`"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            },
+            "description": "To fetch previous page of results, use `?before=<start_cursor>`"
+          },
+          {
+            "name": "include_total_count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false,
+            "description": "Set to `true` to include the `total_count` in the response. This option can cause slow responses; if paging through results, request it only on the first page and reuse the value for subsequent pages."
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            },
+            "description": "Number of results per page. Default 500, maximum 1000."
+          },
+          {
+            "name": "sent_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          },
+          {
+            "name": "sent_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "nullable": true
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -1755,6 +1759,12 @@
                               "open_tracking_disabled",
                               "click_tracking_disabled"
                             ]
+                          },
+                          "subject": {
+                            "type": "string"
+                          },
+                          "send_at": {
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -1799,35 +1809,39 @@
                 "example": {
                   "broadcasts": [
                     {
-                      "id": 183,
+                      "id": 186,
+                      "subject": "... or will you",
+                      "send_at": null,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0.0,
+                        "open_rate": 0,
                         "emails_opened": 0,
-                        "click_rate": 0.0,
-                        "unsubscribe_rate": 0.0,
+                        "click_rate": 0,
+                        "unsubscribe_rate": 0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0.0,
+                        "progress": 0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
                     },
                     {
-                      "id": 182,
+                      "id": 185,
+                      "subject": "You'll never guess...",
+                      "send_at": null,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0.0,
+                        "open_rate": 0,
                         "emails_opened": 0,
-                        "click_rate": 0.0,
-                        "unsubscribe_rate": 0.0,
+                        "click_rate": 0,
+                        "unsubscribe_rate": 0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0.0,
+                        "progress": 0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
@@ -1836,8 +1850,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzE4M10=",
-                    "end_cursor": "WzE4Ml0=",
+                    "start_cursor": "WzE4Nl0=",
+                    "end_cursor": "WzE4NV0=",
                     "per_page": 500
                   }
                 }
@@ -1876,14 +1890,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  },
+                  "properties": {},
                   "required": [
                     "errors"
                   ]
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           }
@@ -1902,14 +1914,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -2105,14 +2113,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -2123,7 +2127,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 216
+            "example": 242
           }
         ],
         "responses": {
@@ -2212,18 +2216,18 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 213,
+                    "id": 239,
                     "stats": {
                       "recipients": 0,
-                      "open_rate": 0.0,
+                      "open_rate": 0,
                       "emails_opened": 0,
-                      "click_rate": 0.0,
-                      "unsubscribe_rate": 0.0,
+                      "click_rate": 0,
+                      "unsubscribe_rate": 0,
                       "unsubscribes": 0,
                       "total_clicks": 0,
                       "show_total_clicks": false,
                       "status": "draft",
-                      "progress": 0.0,
+                      "progress": 0,
                       "open_tracking_disabled": false,
                       "click_tracking_disabled": false
                     }
@@ -2298,14 +2302,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -2439,14 +2439,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -2696,14 +2692,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -3177,14 +3169,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Creates the custom_fields synchronously when 100 or less custom fields are requested",
@@ -3225,8 +3213,7 @@
                     },
                     "failures": {
                       "type": "array",
-                      "items": {
-                      }
+                      "items": {}
                     }
                   },
                   "required": [
@@ -3258,9 +3245,7 @@
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
-                  "failures": [
-
-                  ]
+                  "failures": []
                 }
               }
             }
@@ -3271,11 +3256,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -3417,14 +3400,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Creates or updates custom field values synchronously when 100 or less values are requested",
@@ -3544,11 +3523,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -3708,14 +3685,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Adds subscribers to forms synchronously when 100 or less form/subscribers are requested",
@@ -3896,11 +3869,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -4056,14 +4027,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Creates or updates the subscribers synchronously when 100 or less subscribers are requested",
@@ -4213,11 +4180,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -4403,14 +4368,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Creates or returns existing tags synchronously when 100 or less tags are requested",
@@ -4443,8 +4404,7 @@
                     },
                     "failures": {
                       "type": "array",
-                      "items": {
-                      }
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4475,9 +4435,7 @@
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
-                  "failures": [
-
-                  ]
+                  "failures": []
                 }
               }
             }
@@ -4488,11 +4446,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -4635,14 +4591,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Deletes the taggings synchronously when 100 or less tags/subscribers are provided",
@@ -4653,8 +4605,7 @@
                   "properties": {
                     "failures": {
                       "type": "array",
-                      "items": {
-                      }
+                      "items": {}
                     }
                   },
                   "required": [
@@ -4662,9 +4613,7 @@
                   ]
                 },
                 "example": {
-                  "failures": [
-
-                  ]
+                  "failures": []
                 }
               }
             }
@@ -4675,11 +4624,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -4771,14 +4718,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Creates the taggings synchronously when 100 or less tags/subscribers are requested",
@@ -4905,11 +4848,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {
-                  }
+                  "properties": {}
                 },
-                "example": {
-                }
+                "example": {}
               }
             }
           },
@@ -5062,14 +5003,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -5237,19 +5174,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns a 200 and the custom field if it already exists",
@@ -5430,14 +5361,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -5546,14 +5473,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -5726,14 +5649,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -5932,14 +5851,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -6169,14 +6084,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -6553,14 +6464,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -6613,8 +6520,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         },
                         "referrer": {
                           "type": "string"
@@ -6672,8 +6578,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    },
+                    "fields": {},
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6725,8 +6630,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         },
                         "referrer": {
                           "type": "string"
@@ -6784,8 +6688,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    },
+                    "fields": {},
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6917,14 +6820,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -6986,8 +6885,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         },
                         "referrer": {
                           "type": "string"
@@ -7045,8 +6943,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    },
+                    "fields": {},
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -7099,8 +6996,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         },
                         "referrer": {
                           "type": "string"
@@ -7158,8 +7054,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    },
+                    "fields": {},
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -7259,14 +7154,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -7435,7 +7326,7 @@
                     {
                       "id": 3,
                       "publication_id": 106,
-                      "created_at": "2026-05-07T08:11:36Z",
+                      "created_at": "2026-05-08T14:39:40Z",
                       "title": "Draft Post",
                       "slug": null,
                       "description": null,
@@ -7451,14 +7342,14 @@
                     {
                       "id": 2,
                       "publication_id": 105,
-                      "created_at": "2026-05-07T08:11:36Z",
+                      "created_at": "2026-05-08T14:39:40Z",
                       "title": "Email and Web Post",
                       "slug": "email-and-web-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-05-05T08:11:36Z",
-                      "sent_at": "2026-05-07T08:11:36Z",
+                      "published_at": "2026-05-06T14:39:40Z",
+                      "sent_at": "2026-05-08T14:39:40Z",
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
                       "is_paid": false,
@@ -7467,13 +7358,13 @@
                     {
                       "id": 1,
                       "publication_id": 104,
-                      "created_at": "2026-05-07T08:11:36Z",
+                      "created_at": "2026-05-08T14:39:40Z",
                       "title": "Web Only Post",
                       "slug": "web-only-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-05-06T08:11:36Z",
+                      "published_at": "2026-05-07T14:39:40Z",
                       "sent_at": null,
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
@@ -7506,14 +7397,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -7612,13 +7499,13 @@
                   "post": {
                     "id": 25,
                     "publication_id": 128,
-                    "created_at": "2026-05-07T08:11:40Z",
+                    "created_at": "2026-05-08T14:39:44Z",
                     "title": "My Newsletter Post",
                     "slug": "my-newsletter-post",
                     "description": null,
                     "meta_description": null,
                     "status": "published",
-                    "published_at": "2026-05-06T08:11:40Z",
+                    "published_at": "2026-05-07T14:39:44Z",
                     "sent_at": null,
                     "thumbnail_alt": null,
                     "thumbnail_url": null,
@@ -7670,9 +7557,7 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -7868,10 +7753,10 @@
                       "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 5.0,
-                      "discount": 0.0,
-                      "tax": 0.0,
-                      "total": 5.0,
+                      "subtotal": 5,
+                      "discount": 0,
+                      "tax": 0,
+                      "total": 5,
                       "products": [
                         {
                           "quantity": 1,
@@ -7891,8 +7776,8 @@
                       "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 10.0,
-                      "discount": 0.0,
+                      "subtotal": 10,
+                      "discount": 0,
                       "tax": 1.05,
                       "total": 11.05,
                       "products": [
@@ -7915,7 +7800,7 @@
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 78.66,
-                      "discount": 5.0,
+                      "discount": 5,
                       "tax": 7.87,
                       "total": 81.53,
                       "products": [
@@ -7984,14 +7869,10 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Creates a purchase for the provided subscriber and returns its details. It also creates products if they don't exist.",
@@ -8114,7 +7995,7 @@
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5.0,
+                    "discount": 5,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -8316,7 +8197,7 @@
                   "subtotal": 78.66,
                   "tax": 7.87,
                   "shipping": 0,
-                  "discount": 5.0,
+                  "discount": 5,
                   "total": 81.53,
                   "currency": "USD",
                   "transaction_time": "2023-02-17T11:43:55Z",
@@ -8361,9 +8242,7 @@
         ],
         "security": [
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -8496,7 +8375,7 @@
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5.0,
+                    "discount": 5,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -8585,14 +8464,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -8756,19 +8631,16 @@
     "/v4/sequences": {
       "get": {
         "summary": "List sequences",
+        "description": "Returns every sequence on the account. A sequence is a self-contained set of automated emails — subscribers join, then receive each email in order, governed by per-email `delay_value` / `delay_unit` and the sequence's overall `send_days`, `send_hour`, and `time_zone` schedule.\n\nEach entry carries the schedule defaults plus three behavioural toggles: `active` (whether the sequence is delivering), `repeat` (whether subscribers can re-enter), and `hold` (whether subscribers stay active after receiving every published email — an evergreen pattern). See [Create a sequence](/api-reference/sequences/create-a-sequence) for the full sequence model.\n\nOnce you have a sequence's `id`, [List sequence emails](/api-reference/sequence-emails/list-sequence-emails) returns the individual emails inside it.\n\nFor end-user context on how creators build sequences, see the help articles on [creating and sending a sequence](https://help.kit.com/en/articles/2502629-creating-and-sending-a-sequence-in-kit) and [evergreen content](https://help.kit.com/en/articles/2502575-what-is-evergreen-content).",
         "tags": [
           "Sequences"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -8864,8 +8736,7 @@
                           },
                           "exclude_subscriber_sources": {
                             "type": "array",
-                            "items": {
-                            }
+                            "items": {}
                           }
                         },
                         "required": [
@@ -8933,9 +8804,7 @@
                       "send_hour": 11,
                       "time_zone": "America/New_York",
                       "active": true,
-                      "exclude_subscriber_sources": [
-
-                      ]
+                      "exclude_subscriber_sources": []
                     }
                   ],
                   "pagination": {
@@ -8982,24 +8851,19 @@
       },
       "post": {
         "summary": "Create a sequence",
+        "description": "Creates an empty sequence — the container that holds sequence emails. After creating the shell, use [Create a sequence email](/api-reference/sequence-emails/create-a-sequence-email) to populate it.\n\nOnly `name` is required. Every other field has a sensible default: Kit fills in the account's default sending address, a daily send schedule, and the account time zone — and any of these can be tuned later via [Update a sequence](/api-reference/sequences/update-a-sequence).\n\nTwo behavioural toggles worth flagging up front. `repeat` controls whether a subscriber can re-enter the sequence: by default a subscriber receives the emails once and is marked complete, but with `repeat: true`, re-adding the same subscriber via a Visual Automation, Rule, Bulk Action, or Import resets their position to the start. Filters and exclusions still apply across restarts. `hold` (evergreen) keeps subscribers active in the sequence after they've received every published email — useful when you plan to add more emails later. Without `hold`, subscribers transition to Completed and won't pick up future additions.\n\n`exclude_subscriber_sources` lets you exclude subscribers acquired via specific tags, sequences, forms, or segments — they'll skip this sequence entirely.\n\nFor end-user context, see the help articles on [creating and sending a sequence](https://help.kit.com/en/articles/2502629-creating-and-sending-a-sequence-in-kit), [restarting a sequence](https://help.kit.com/en/articles/5022528-restart-a-sequence), and [holding subscribers in evergreen sequences](https://help.kit.com/en/articles/5192801-how-to-hold-subscribers-in-evergreen-sequences).",
         "tags": [
           "Sequences"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Creates a new sequence",
@@ -9099,8 +8963,8 @@
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-05-07T08:12:26Z",
-                    "updated_at": "2026-05-07T08:12:26Z",
+                    "created_at": "2026-05-08T14:40:28Z",
+                    "updated_at": "2026-05-08T14:40:28Z",
                     "email_address": "joe927@ck.lol",
                     "email_template_id": 11,
                     "send_days": [
@@ -9320,19 +9184,16 @@
     "/v4/sequences/{id}": {
       "delete": {
         "summary": "Delete a sequence",
+        "description": "Soft-deletes a sequence. The sequence is removed from active delivery immediately, with cleanup of associated state happening in the background.\n\n**Warning:** deleting a sequence with active subscribers stops deliveries to those subscribers — they will not receive remaining emails, and any Visual Automations referencing the sequence will need to be updated. Confirm the sequence is not in active use before deleting.\n\nIf you want to pause rather than delete, use [Update a sequence](/api-reference/sequences/update-a-sequence) with `active: false` instead.",
         "tags": [
           "Sequences"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -9409,19 +9270,16 @@
       },
       "get": {
         "summary": "Get a sequence",
+        "description": "Fetches a single sequence by `id`. Use this when you need the current schedule, the `active` / `repeat` / `hold` flags, the configured `email_address` and `email_template_id`, or `exclude_subscriber_sources` for a known sequence — for example, to confirm settings before adding subscribers or to render an editor.\n\nFor the individual emails inside the sequence, use [List sequence emails](/api-reference/sequence-emails/list-sequence-emails). For the sequence model and field semantics, see [Create a sequence](/api-reference/sequences/create-a-sequence).",
         "tags": [
           "Sequences"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -9487,8 +9345,7 @@
                         },
                         "exclude_subscriber_sources": {
                           "type": "array",
-                          "items": {
-                          }
+                          "items": {}
                         }
                       },
                       "required": [
@@ -9534,9 +9391,7 @@
                     "send_hour": 11,
                     "time_zone": "America/New_York",
                     "active": true,
-                    "exclude_subscriber_sources": [
-
-                    ]
+                    "exclude_subscriber_sources": []
                   }
                 }
               }
@@ -9601,19 +9456,16 @@
       },
       "put": {
         "summary": "Update a sequence",
+        "description": "Updates any sequence settings — `name`, `email_address`, schedule (`send_days`, `send_hour`, `time_zone`), `email_template_id`, `exclude_subscriber_sources`, or the `active` / `repeat` / `hold` flags. Only fields included in the request body change; everything else is preserved.\n\nSome changes have user-visible side effects on subscribers already in the sequence:\n\n**Note:** flipping `active` from `false` to `true` resumes delivery for queued subscribers. Flipping it back to `false` pauses the sequence — subscribers stay in their current position but no new emails are sent until it's reactivated.\n\n**Note:** changing the schedule (`send_days`, `send_hour`, or `time_zone`) only affects future sends. It does not retroactively reschedule emails already queued for delivery.\n\n**Warning:** turning off `repeat` while subscribers are mid-sequence does not stop them from finishing — but they won't be re-eligible to start over after completing.\n\nSee [Create a sequence](/api-reference/sequences/create-a-sequence) for the full sequence model and what each field controls.",
         "tags": [
           "Sequences"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -9726,8 +9578,8 @@
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-05-07T08:12:29Z",
-                    "updated_at": "2026-05-07T08:12:29Z",
+                    "created_at": "2026-05-08T14:40:31Z",
+                    "updated_at": "2026-05-08T14:40:31Z",
                     "email_address": "joe956@ck.lol",
                     "email_template_id": 12,
                     "send_days": [
@@ -9945,19 +9797,16 @@
     "/v4/sequences/{sequence_id}/emails": {
       "get": {
         "summary": "List sequence emails",
+        "description": "Returns every email inside a sequence, ordered by `position` (the order subscribers receive them). Each entry carries timing (`delay_value`, `delay_unit`, `send_days`), publish state (`published`), and metadata (`subject`, `preview_text`, `email_template_id`).\n\n**Tip:** the heavier `content` field is omitted by default to keep responses fast on sequences with many emails. Pass `include_content=true` when you need the body — for example, to render a preview, audit Liquid usage, or sync an external draft.\n\nFor the field semantics — particularly how `delay_unit` and `send_days` interact, and what happens when subscribers hit a `published: false` email — see [Create a sequence email](/api-reference/sequence-emails/create-a-sequence-email).",
         "tags": [
           "Sequence Emails"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -10122,7 +9971,7 @@
                       "sequence_id": 106,
                       "subject": "Welcome to the series",
                       "preview_text": "Here's what to expect",
-                      "email_address": "joe2340@ck.lol",
+                      "email_address": "joe2347@ck.lol",
                       "email_template_id": null,
                       "published": true,
                       "position": 0,
@@ -10209,19 +10058,16 @@
       },
       "post": {
         "summary": "Create a sequence email",
+        "description": "Adds a single email to a sequence. Each sequence email represents one step subscribers receive on their journey through the sequence — its `position` determines order, and `delay_value` / `delay_unit` / `send_days` determine when it fires relative to either the previous email or the subscriber's entry.\n\n`subject`, `delay_value`, and `delay_unit` are required. **Day-based** emails (`delay_unit: \"days\"`) follow the parent sequence's `send_days` and `send_hour`; their per-email `send_days` (e.g. `[\"monday\", \"wednesday\"]`) overrides the sequence schedule for that one email. **Hour-based** emails (`delay_unit: \"hours\"`) ignore the sequence schedule and fire once the delay elapses — Kit checks for hour-delayed sends every 15 minutes — and always return `send_days` as `null`.\n\nNew emails are created in draft (`published: false`) so they don't go out until you flip the flag. `position` is auto-assigned to the end of the sequence if omitted. `content` accepts HTML and can embed snippets with `{{ snippet.<key> }}` — see [Create a snippet](/api-reference/snippets/create-a-snippet) — which Kit resolves at send time, so editing a snippet later updates every email referencing it without a re-publish.\n\n**Note:** only the first email in a sequence can be an immediate send (`delay_value: 0` with `delay_unit: \"days\"`). Subsequent emails need a positive delay.\n\n**Warning:** publishing an immediate first email, or inserting a new email at a `position` earlier than where existing subscribers sit, processes those subscribers and triggers a send right away. Plan around active sequences carefully.\n\nFor end-user context on how creators build sequences in the Kit UI, see the help article on [creating and sending a sequence](https://help.kit.com/en/articles/2502629-creating-and-sending-a-sequence-in-kit).",
         "tags": [
           "Sequence Emails"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -10312,7 +10158,7 @@
                     "sequence_id": 147,
                     "subject": "Welcome to the sequence",
                     "preview_text": null,
-                    "email_address": "joe2399@ck.lol",
+                    "email_address": "joe2406@ck.lol",
                     "email_template_id": null,
                     "published": false,
                     "position": null,
@@ -10495,19 +10341,16 @@
     "/v4/sequences/{sequence_id}/emails/{id}": {
       "delete": {
         "summary": "Delete a sequence email",
+        "description": "Permanently removes one email from a sequence.\n\n**Warning:** subscribers already queued to receive the deleted email will skip it — they'll continue to the next email in sequence order. This is intentional and not retryable. If subscribers need to receive the email's content, send a broadcast or re-add subscribers to the sequence (with `repeat: true`) before deleting.\n\nIf you want to pause rather than delete, use [Update a sequence email](/api-reference/sequence-emails/update-a-sequence-email) with `published: false` instead.",
         "tags": [
           "Sequence Emails"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -10593,19 +10436,16 @@
       },
       "get": {
         "summary": "Get a sequence email",
+        "description": "Fetches a single sequence email by `id`. Unlike [List sequence emails](/api-reference/sequence-emails/list-sequence-emails), this endpoint **always returns the full `content`** — no `include_content` flag needed.\n\nUse this when you have an email's `id` and need the current body, timing, or publish state — for example, to render a preview before pushing an update via [Update a sequence email](/api-reference/sequence-emails/update-a-sequence-email).\n\nFor the field semantics, see [Create a sequence email](/api-reference/sequence-emails/create-a-sequence-email).",
         "tags": [
           "Sequence Emails"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -10705,7 +10545,7 @@
                     "sequence_id": 126,
                     "subject": "Welcome email",
                     "preview_text": "Thanks for signing up",
-                    "email_address": "joe2369@ck.lol",
+                    "email_address": "joe2376@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": 0,
@@ -10785,19 +10625,16 @@
       },
       "put": {
         "summary": "Update a sequence email",
+        "description": "Updates any field on a sequence email — `subject`, `preview_text`, `content`, `delay_value`, `delay_unit`, `send_days`, `position`, `email_template_id`, or `published`. Only fields included in the request body change; everything else is preserved.\n\n**Note:** pass `send_days: null` to revert a per-email schedule override and inherit the parent sequence's `send_days` again. The response will then return all 7 days, indicating no per-email restriction.\n\n**Warning:** sending `send_days` on an email with `delay_unit: \"hours\"` returns `422` — `send_days` only applies to day-based emails.\n\n**Warning:** changing `position` while subscribers are actively progressing through the sequence can cause emails to be sent out of order or skipped. The same caution applies to flipping `published` on a `position: 0` email — it triggers Kit to process all queued subscribers for that email.\n\nFor the sequence-email model and how `delay_unit` and `send_days` interact, see [Create a sequence email](/api-reference/sequence-emails/create-a-sequence-email).",
         "tags": [
           "Sequence Emails"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -10897,7 +10734,7 @@
                     "sequence_id": 172,
                     "subject": "Updated subject",
                     "preview_text": "Updated preview",
-                    "email_address": "joe2433@ck.lol",
+                    "email_address": "joe2440@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": null,
@@ -11080,14 +10917,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -11408,14 +11241,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -11468,8 +11297,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -11495,8 +11323,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -11540,8 +11367,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -11567,8 +11393,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -11687,14 +11512,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -11756,8 +11577,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -11783,8 +11603,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -11828,8 +11647,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -11855,8 +11673,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -11920,11 +11737,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                }
+                "properties": {}
               },
-              "example": {
-              }
+              "example": {}
             }
           }
         },
@@ -11936,19 +11751,16 @@
     "/v4/snippets": {
       "get": {
         "summary": "List snippets",
+        "description": "Returns every snippet on the account. Each snippet's `key` is the identifier used in Liquid — `{{ snippet.key }}` — when creating a broadcast or sequence email. See [Create a snippet](/api-reference/snippets/create-a-snippet) for how snippets work end-to-end.\n\n**Tip:** the heavier `content` and `document` fields are omitted by default to keep responses fast. Pass `include_content=true` when you need the body — for example, to render a preview or audit Liquid usage.\n\nFilter the result with `snippet_type` (`inline` or `block`) and `archived` (defaults to `false`, set `true` to list only archived snippets).",
         "tags": [
           "Snippets"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -12193,24 +12005,19 @@
       },
       "post": {
         "summary": "Create a snippet",
+        "description": "Snippets are reusable pieces of email content you can drop into a broadcast or sequence email using Liquid: `{{ snippet.key }}`. Update the snippet once and every email that references it picks up the new content on next send.\n\nThere are two `snippet_type`s. **`inline`** snippets store plain-text content (with Liquid variable support like `{{ subscriber.first_name }}`) in the `content` field. **`block`** snippets store rich-text HTML — text, lists, images, buttons — in `document_attributes.value_html`. A snippet's type is fixed at creation: it cannot be changed via [Update a snippet](/api-reference/snippets/update-a-snippet).\n\nThe response includes a `key` field. That's the identifier you use in Liquid — for example, a snippet returned with `\"key\": \"welcome-message\"` is referenced inside a broadcast as `{{ snippet.welcome-message }}`. Keys are derived from the snippet name on creation.\n\n**Note:** the API rejects circular references — a snippet cannot reference itself, directly or transitively — with a `422` validation error.\n\nFor end-user context on how creators build and edit snippets in the Kit UI, see the help articles on [content snippets](https://help.kit.com/en/articles/3812712-creating-and-using-content-snippets-in-your-kit-emails) and [code snippets for custom templates](https://help.kit.com/en/articles/2810398-code-snippets-for-custom-email-templates).",
         "tags": [
           "Snippets"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Creates a new snippet",
@@ -12298,8 +12105,8 @@
                     "snippet_type": "inline",
                     "archived": false,
                     "key": "cat-fact-of-the-day",
-                    "created_at": "2026-05-07T08:12:43Z",
-                    "updated_at": "2026-05-07T08:12:43Z",
+                    "created_at": "2026-05-08T14:40:47Z",
+                    "updated_at": "2026-05-08T14:40:47Z",
                     "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees.",
                     "document": {
                       "id": 119,
@@ -12450,19 +12257,16 @@
     "/v4/snippets/{id}": {
       "get": {
         "summary": "Get a snippet",
+        "description": "Fetches a single snippet by `id`. Unlike [List snippets](/api-reference/snippets/list-snippets), this endpoint **always returns the full `content` and `document`** — no `include_content` flag needed.\n\nUse this when you have an `id` (e.g. stored from a prior create call) and need the current `key` and body — for example, to preview the resolved HTML or confirm a snippet still exists before referencing it as `{{ snippet.key }}` in a broadcast or sequence email. See [Create a snippet](/api-reference/snippets/create-a-snippet) for the snippet model.",
         "tags": [
           "Snippets"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -12637,19 +12441,16 @@
       },
       "put": {
         "summary": "Update a snippet",
+        "description": "Rename a snippet, replace its body, or archive/restore it. Updates apply on the next send of any email that references the snippet via `{{ snippet.key }}` — there's no per-email versioning, so a content change ripples to every broadcast or sequence email using that key.\n\nThe request body must match the existing `snippet_type`. For an **`inline`** snippet, send `content` (and optionally `name`, `archived`). For a **`block`** snippet, send `document_attributes.value_html` (and optionally `name`, `archived`). Pass `archived: true` to archive, `false` to restore.\n\n**Warning:** `snippet_type` is immutable. Sending a different value, or sending the body shape for the wrong type, returns a `422` with `snippet_type cannot be changed`.\n\nSee [Create a snippet](/api-reference/snippets/create-a-snippet) for the full snippet model and how `key` ties into Liquid.",
         "tags": [
           "Snippets"
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -12751,7 +12552,7 @@
                     "archived": false,
                     "key": "welcome-message",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "updated_at": "2026-05-07T08:12:47Z",
+                    "updated_at": "2026-05-08T14:40:52Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
                       "id": 145,
@@ -12923,14 +12724,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -13370,19 +13167,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns a 200 and updates the subscriber first name when a subscriber with provided email already exists",
@@ -13419,8 +13210,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -13444,8 +13234,7 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "inactive",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -13486,8 +13275,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -13511,8 +13299,7 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -13553,8 +13340,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -13578,8 +13364,7 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -13753,19 +13538,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns a list of subscribers matching the filters",
@@ -13870,12 +13649,8 @@
                       "first_name": null,
                       "email_address": "anonymous@example.com",
                       "created_at": "2024-11-15T10:00:00Z",
-                      "tag_names": [
-
-                      ],
-                      "tag_ids": [
-
-                      ]
+                      "tag_names": [],
+                      "tag_ids": []
                     }
                   ],
                   "pagination": {
@@ -13973,14 +13748,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -14139,14 +13910,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -14196,8 +13963,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -14221,8 +13987,7 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -14263,8 +14028,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -14288,8 +14052,7 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -14469,14 +14232,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -14552,11 +14311,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                }
+                "properties": {}
               },
-              "example": {
-              }
+              "example": {}
             }
           }
         },
@@ -14574,14 +14331,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -14754,14 +14507,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -14965,14 +14714,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -15139,19 +14884,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Returns the tag if it already exists",
@@ -15321,14 +15060,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -15496,14 +15231,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -15611,14 +15342,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -15939,14 +15666,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -15999,8 +15722,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -16026,8 +15748,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -16071,8 +15792,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -16098,8 +15818,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -16217,14 +15936,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -16316,14 +16031,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -16385,8 +16096,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -16412,8 +16122,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -16457,8 +16166,7 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {
-                          }
+                          "properties": {}
                         }
                       },
                       "required": [
@@ -16484,8 +16192,7 @@
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {
-                    }
+                    "fields": {}
                   }
                 }
               }
@@ -16549,11 +16256,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                }
+                "properties": {}
               },
-              "example": {
-              }
+              "example": {}
             }
           }
         },
@@ -16571,14 +16276,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
@@ -16775,19 +16476,13 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
-        "parameters": [
-
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Creates the webhook",
@@ -16981,14 +16676,10 @@
         ],
         "security": [
           {
-            "API Key": [
-
-            ]
+            "API Key": []
           },
           {
-            "OAuth2": [
-
-            ]
+            "OAuth2": []
           }
         ],
         "parameters": [
