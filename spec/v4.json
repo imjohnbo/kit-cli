@@ -23,13 +23,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns current account and user info",
@@ -211,13 +217,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns list of colors for the current account",
@@ -284,13 +296,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Updates and returns list of colors for the current account",
@@ -412,13 +430,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns Creator Profile details",
@@ -537,13 +561,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns your email stats for the last 90 days",
@@ -652,10 +682,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -805,10 +839,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -1167,13 +1205,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates a new broadcast",
@@ -1624,10 +1668,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -1814,15 +1862,15 @@
                       "send_at": null,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0,
+                        "open_rate": 0.0,
                         "emails_opened": 0,
-                        "click_rate": 0,
-                        "unsubscribe_rate": 0,
+                        "click_rate": 0.0,
+                        "unsubscribe_rate": 0.0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0,
+                        "progress": 0.0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
@@ -1833,15 +1881,15 @@
                       "send_at": null,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0,
+                        "open_rate": 0.0,
                         "emails_opened": 0,
-                        "click_rate": 0,
-                        "unsubscribe_rate": 0,
+                        "click_rate": 0.0,
+                        "unsubscribe_rate": 0.0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0,
+                        "progress": 0.0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
@@ -1890,12 +1938,14 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
+                  "properties": {
+                  },
                   "required": [
                     "errors"
                   ]
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           }
@@ -1914,10 +1964,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2113,10 +2167,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2219,15 +2277,15 @@
                     "id": 239,
                     "stats": {
                       "recipients": 0,
-                      "open_rate": 0,
+                      "open_rate": 0.0,
                       "emails_opened": 0,
-                      "click_rate": 0,
-                      "unsubscribe_rate": 0,
+                      "click_rate": 0.0,
+                      "unsubscribe_rate": 0.0,
                       "unsubscribes": 0,
                       "total_clicks": 0,
                       "show_total_clicks": false,
                       "status": "draft",
-                      "progress": 0,
+                      "progress": 0.0,
                       "open_tracking_disabled": false,
                       "click_tracking_disabled": false
                     }
@@ -2302,10 +2360,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2439,10 +2501,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -2692,10 +2758,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -3169,10 +3239,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates the custom_fields synchronously when 100 or less custom fields are requested",
@@ -3213,7 +3287,8 @@
                     },
                     "failures": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                      }
                     }
                   },
                   "required": [
@@ -3224,28 +3299,30 @@
                 "example": {
                   "custom_fields": [
                     {
-                      "id": 106,
+                      "id": 138,
                       "key": "existing_custom_field",
                       "label": "Existing Custom Field",
-                      "name": "ck_field_106_existing_custom_field",
+                      "name": "ck_field_138_existing_custom_field",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 108,
+                      "id": 140,
                       "key": "interests",
                       "label": "Interests",
-                      "name": "ck_field_108_interests",
+                      "name": "ck_field_140_interests",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 107,
+                      "id": 139,
                       "key": "last_name",
                       "label": "Last name",
-                      "name": "ck_field_107_last_name",
+                      "name": "ck_field_139_last_name",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
-                  "failures": []
+                  "failures": [
+
+                  ]
                 }
               }
             }
@@ -3256,9 +3333,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -3400,10 +3479,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates or updates custom field values synchronously when 100 or less values are requested",
@@ -3481,13 +3564,13 @@
                 "example": {
                   "custom_field_values": [
                     {
-                      "subscriber_id": 594,
-                      "subscriber_custom_field_id": 119,
+                      "subscriber_id": 599,
+                      "subscriber_custom_field_id": 151,
                       "value": "Smith"
                     },
                     {
-                      "subscriber_id": 594,
-                      "subscriber_custom_field_id": 120,
+                      "subscriber_id": 599,
+                      "subscriber_custom_field_id": 152,
                       "value": "Acme Inc"
                     }
                   ],
@@ -3498,7 +3581,7 @@
                       ],
                       "custom_field_value": {
                         "subscriber_id": null,
-                        "subscriber_custom_field_id": 119,
+                        "subscriber_custom_field_id": 151,
                         "value": "Jones"
                       }
                     },
@@ -3507,7 +3590,7 @@
                         "Custom field does not exist"
                       ],
                       "custom_field_value": {
-                        "subscriber_id": 594,
+                        "subscriber_id": 599,
                         "subscriber_custom_field_id": 999999,
                         "value": "Test"
                       }
@@ -3523,9 +3606,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -3685,10 +3770,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Adds subscribers to forms synchronously when 100 or less form/subscribers are requested",
@@ -3807,7 +3896,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 612,
+                      "id": 617,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3822,7 +3911,7 @@
                       }
                     },
                     {
-                      "id": 612,
+                      "id": 617,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3854,7 +3943,7 @@
                       ],
                       "subscription": {
                         "form_id": null,
-                        "subscriber_id": 612,
+                        "subscriber_id": 617,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
                     }
@@ -3869,9 +3958,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4027,10 +4118,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates or updates the subscribers synchronously when 100 or less subscribers are requested",
@@ -4136,21 +4231,21 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 575,
+                      "id": 580,
                       "first_name": null,
                       "email_address": "brooke@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 576,
+                      "id": 581,
                       "first_name": "Camille",
                       "email_address": "camille@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 574,
+                      "id": 579,
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
                       "state": "active",
@@ -4180,9 +4275,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4368,10 +4465,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates or returns existing tags synchronously when 100 or less tags are requested",
@@ -4404,7 +4505,8 @@
                     },
                     "failures": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                      }
                     }
                   },
                   "required": [
@@ -4435,7 +4537,9 @@
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
-                  "failures": []
+                  "failures": [
+
+                  ]
                 }
               }
             }
@@ -4446,9 +4550,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4591,10 +4697,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Deletes the taggings synchronously when 100 or less tags/subscribers are provided",
@@ -4605,7 +4715,8 @@
                   "properties": {
                     "failures": {
                       "type": "array",
-                      "items": {}
+                      "items": {
+                      }
                     }
                   },
                   "required": [
@@ -4613,7 +4724,9 @@
                   ]
                 },
                 "example": {
-                  "failures": []
+                  "failures": [
+
+                  ]
                 }
               }
             }
@@ -4624,9 +4737,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -4718,10 +4833,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Creates the taggings synchronously when 100 or less tags/subscribers are requested",
@@ -4804,14 +4923,14 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 628,
+                      "id": 633,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 628,
+                      "id": 633,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -4834,7 +4953,7 @@
                       ],
                       "tagging": {
                         "tag_id": null,
-                        "subscriber_id": 628
+                        "subscriber_id": 633
                       }
                     }
                   ]
@@ -4848,9 +4967,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                  }
                 },
-                "example": {}
+                "example": {
+                }
               }
             }
           },
@@ -5003,10 +5124,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5174,13 +5299,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns a 200 and the custom field if it already exists",
@@ -5361,10 +5492,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5467,16 +5602,20 @@
       },
       "put": {
         "summary": "Update a custom field",
-        "description": "Updates a custom field label (see [Create a custom field](#create-a-custom-field) above for more information on labels). Note that the key will change but the name remains the same when the label is updated.<br/><br/><strong>Warning: </strong>An update to a custom field will break all of the liquid personalization tags in emails that reference it - e.g. if you update a `Zip_Code` custom field to `Post_Code`, all liquid tags referencing `{{ subscriber.Zip_Code }}` would no longer work and need to be replaced with `{{ subscriber.Post_Code }}`.",
+        "description": "Updates a custom field label (see [Create a custom field](/api-reference/custom-fields/create-a-custom-field) for more information on labels). Note that the key will change but the name remains the same when the label is updated.<br/><br/><strong>Warning: </strong>An update to a custom field will break all of the liquid personalization tags in emails that reference it - e.g. if you update a `Zip_Code` custom field to `Post_Code`, all liquid tags referencing `{{ subscriber.Zip_Code }}` would no longer work and need to be replaced with `{{ subscriber.Post_Code }}`.",
         "tags": [
           "Custom Fields"
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5649,10 +5788,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -5851,10 +5994,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6084,10 +6231,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6331,7 +6482,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 652,
+                      "id": 657,
                       "first_name": null,
                       "email_address": "subscriber354@kit.dev",
                       "state": "active",
@@ -6350,7 +6501,7 @@
                       }
                     },
                     {
-                      "id": 651,
+                      "id": 656,
                       "first_name": null,
                       "email_address": "subscriber353@kit.dev",
                       "state": "active",
@@ -6369,7 +6520,7 @@
                       }
                     },
                     {
-                      "id": 650,
+                      "id": 655,
                       "first_name": null,
                       "email_address": "subscriber352@kit.dev",
                       "state": "active",
@@ -6391,8 +6542,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzY1Ml0=",
-                    "end_cursor": "WzY1MF0=",
+                    "start_cursor": "WzY1N10=",
+                    "end_cursor": "WzY1NV0=",
                     "per_page": 500
                   }
                 }
@@ -6464,10 +6615,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6520,7 +6675,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6572,13 +6728,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 755,
+                    "id": 760,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6630,7 +6787,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6682,13 +6840,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 756,
+                    "id": 761,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6820,10 +6979,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -6843,7 +7006,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 737
+            "example": 742
           }
         ],
         "responses": {
@@ -6885,7 +7048,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -6937,13 +7101,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 730,
+                    "id": 735,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -6996,7 +7161,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         },
                         "referrer": {
                           "type": "string"
@@ -7048,13 +7214,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 732,
+                    "id": 737,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {},
+                    "fields": {
+                    },
                     "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off",
                     "referrer_utm_parameters": {
                       "source": "facebook",
@@ -7154,10 +7321,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -7326,7 +7497,7 @@
                     {
                       "id": 3,
                       "publication_id": 106,
-                      "created_at": "2026-05-08T14:39:40Z",
+                      "created_at": "2026-05-12T12:50:12Z",
                       "title": "Draft Post",
                       "slug": null,
                       "description": null,
@@ -7342,14 +7513,14 @@
                     {
                       "id": 2,
                       "publication_id": 105,
-                      "created_at": "2026-05-08T14:39:40Z",
+                      "created_at": "2026-05-12T12:50:12Z",
                       "title": "Email and Web Post",
                       "slug": "email-and-web-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-05-06T14:39:40Z",
-                      "sent_at": "2026-05-08T14:39:40Z",
+                      "published_at": "2026-05-10T12:50:12Z",
+                      "sent_at": "2026-05-12T12:50:12Z",
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
                       "is_paid": false,
@@ -7358,13 +7529,13 @@
                     {
                       "id": 1,
                       "publication_id": 104,
-                      "created_at": "2026-05-08T14:39:40Z",
+                      "created_at": "2026-05-12T12:50:12Z",
                       "title": "Web Only Post",
                       "slug": "web-only-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-05-07T14:39:40Z",
+                      "published_at": "2026-05-11T12:50:12Z",
                       "sent_at": null,
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
@@ -7397,10 +7568,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -7499,13 +7674,13 @@
                   "post": {
                     "id": 25,
                     "publication_id": 128,
-                    "created_at": "2026-05-08T14:39:44Z",
+                    "created_at": "2026-05-12T12:50:17Z",
                     "title": "My Newsletter Post",
                     "slug": "my-newsletter-post",
                     "description": null,
                     "meta_description": null,
                     "status": "published",
-                    "published_at": "2026-05-07T14:39:44Z",
+                    "published_at": "2026-05-11T12:50:17Z",
                     "sent_at": null,
                     "thumbnail_alt": null,
                     "thumbnail_url": null,
@@ -7557,7 +7732,9 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -7753,10 +7930,10 @@
                       "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 5,
-                      "discount": 0,
-                      "tax": 0,
-                      "total": 5,
+                      "subtotal": 5.0,
+                      "discount": 0.0,
+                      "tax": 0.0,
+                      "total": 5.0,
                       "products": [
                         {
                           "quantity": 1,
@@ -7776,8 +7953,8 @@
                       "subscriber_id": 22,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 10,
-                      "discount": 0,
+                      "subtotal": 10.0,
+                      "discount": 0.0,
                       "tax": 1.05,
                       "total": 11.05,
                       "products": [
@@ -7800,7 +7977,7 @@
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 78.66,
-                      "discount": 5,
+                      "discount": 5.0,
                       "tax": 7.87,
                       "total": 81.53,
                       "products": [
@@ -7869,10 +8046,14 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates a purchase for the provided subscriber and returns its details. It also creates products if they don't exist.",
@@ -7995,7 +8176,7 @@
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5,
+                    "discount": 5.0,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -8197,7 +8378,7 @@
                   "subtotal": 78.66,
                   "tax": 7.87,
                   "shipping": 0,
-                  "discount": 5,
+                  "discount": 5.0,
                   "total": 81.53,
                   "currency": "USD",
                   "transaction_time": "2023-02-17T11:43:55Z",
@@ -8242,7 +8423,9 @@
         ],
         "security": [
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8375,7 +8558,7 @@
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5,
+                    "discount": 5.0,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -8464,10 +8647,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8637,10 +8824,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -8736,7 +8927,8 @@
                           },
                           "exclude_subscriber_sources": {
                             "type": "array",
-                            "items": {}
+                            "items": {
+                            }
                           }
                         },
                         "required": [
@@ -8804,7 +8996,9 @@
                       "send_hour": 11,
                       "time_zone": "America/New_York",
                       "active": true,
-                      "exclude_subscriber_sources": []
+                      "exclude_subscriber_sources": [
+
+                      ]
                     }
                   ],
                   "pagination": {
@@ -8857,13 +9051,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates a new sequence",
@@ -8963,8 +9163,8 @@
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-05-08T14:40:28Z",
-                    "updated_at": "2026-05-08T14:40:28Z",
+                    "created_at": "2026-05-12T12:51:12Z",
+                    "updated_at": "2026-05-12T12:51:12Z",
                     "email_address": "joe927@ck.lol",
                     "email_template_id": 11,
                     "send_days": [
@@ -9190,10 +9390,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -9276,10 +9480,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -9345,7 +9553,8 @@
                         },
                         "exclude_subscriber_sources": {
                           "type": "array",
-                          "items": {}
+                          "items": {
+                          }
                         }
                       },
                       "required": [
@@ -9391,7 +9600,9 @@
                     "send_hour": 11,
                     "time_zone": "America/New_York",
                     "active": true,
-                    "exclude_subscriber_sources": []
+                    "exclude_subscriber_sources": [
+
+                    ]
                   }
                 }
               }
@@ -9462,10 +9673,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -9578,8 +9793,8 @@
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-05-08T14:40:31Z",
-                    "updated_at": "2026-05-08T14:40:31Z",
+                    "created_at": "2026-05-12T12:51:16Z",
+                    "updated_at": "2026-05-12T12:51:16Z",
                     "email_address": "joe956@ck.lol",
                     "email_template_id": 12,
                     "send_days": [
@@ -9803,10 +10018,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -9971,7 +10190,7 @@
                       "sequence_id": 106,
                       "subject": "Welcome to the series",
                       "preview_text": "Here's what to expect",
-                      "email_address": "joe2347@ck.lol",
+                      "email_address": "joe2355@ck.lol",
                       "email_template_id": null,
                       "published": true,
                       "position": 0,
@@ -10064,10 +10283,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10158,7 +10381,7 @@
                     "sequence_id": 147,
                     "subject": "Welcome to the sequence",
                     "preview_text": null,
-                    "email_address": "joe2406@ck.lol",
+                    "email_address": "joe2414@ck.lol",
                     "email_template_id": null,
                     "published": false,
                     "position": null,
@@ -10347,10 +10570,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10442,10 +10669,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10545,7 +10776,7 @@
                     "sequence_id": 126,
                     "subject": "Welcome email",
                     "preview_text": "Thanks for signing up",
-                    "email_address": "joe2376@ck.lol",
+                    "email_address": "joe2384@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": 0,
@@ -10631,10 +10862,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -10734,7 +10969,7 @@
                     "sequence_id": 172,
                     "subject": "Updated subject",
                     "preview_text": "Updated preview",
-                    "email_address": "joe2440@ck.lol",
+                    "email_address": "joe2448@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": null,
@@ -10917,10 +11152,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11132,7 +11371,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 887,
+                      "id": 892,
                       "first_name": null,
                       "email_address": "subscriber480@kit.dev",
                       "state": "active",
@@ -11143,7 +11382,7 @@
                       }
                     },
                     {
-                      "id": 886,
+                      "id": 891,
                       "first_name": null,
                       "email_address": "subscriber479@kit.dev",
                       "state": "active",
@@ -11154,7 +11393,7 @@
                       }
                     },
                     {
-                      "id": 885,
+                      "id": 890,
                       "first_name": null,
                       "email_address": "subscriber478@kit.dev",
                       "state": "active",
@@ -11168,8 +11407,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "Wzg4N10=",
-                    "end_cursor": "Wzg4NV0=",
+                    "start_cursor": "Wzg5Ml0=",
+                    "end_cursor": "Wzg5MF0=",
                     "per_page": 500
                   }
                 }
@@ -11241,10 +11480,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11297,7 +11540,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -11317,13 +11561,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 991,
+                    "id": 996,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -11367,7 +11612,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -11387,13 +11633,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 992,
+                    "id": 997,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -11512,10 +11759,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -11526,7 +11777,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 969
+            "example": 974
           },
           {
             "name": "sequence_id",
@@ -11577,7 +11828,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -11597,13 +11849,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 965,
+                    "id": 970,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -11647,7 +11900,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -11667,13 +11921,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 966,
+                    "id": 971,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "added_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -11737,9 +11992,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                }
               },
-              "example": {}
+              "example": {
+              }
             }
           }
         },
@@ -11757,10 +12014,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -12011,13 +12272,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates a new snippet",
@@ -12105,8 +12372,8 @@
                     "snippet_type": "inline",
                     "archived": false,
                     "key": "cat-fact-of-the-day",
-                    "created_at": "2026-05-08T14:40:47Z",
-                    "updated_at": "2026-05-08T14:40:47Z",
+                    "created_at": "2026-05-12T12:51:34Z",
+                    "updated_at": "2026-05-12T12:51:34Z",
                     "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees.",
                     "document": {
                       "id": 119,
@@ -12263,10 +12530,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -12447,10 +12718,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -12552,7 +12827,7 @@
                     "archived": false,
                     "key": "welcome-message",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "updated_at": "2026-05-08T14:40:52Z",
+                    "updated_at": "2026-05-12T12:51:40Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
                       "id": 145,
@@ -12724,10 +12999,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -13161,19 +13440,25 @@
       },
       "post": {
         "summary": "Create a subscriber",
-        "description": "Behaves as an upsert. If a subscriber with the provided email address does not exist, it creates one with the specified first name and state. If a subscriber with the provided email address already exists, it updates the first name.<br/><br/>We will ignore custom fields that don't already exist in your account. We will not return an error if you try to add data to a custom field that does not exist. Please use <a href=\"#create-a-custom-field\">Create a custom field</a> to create custom fields before setting for subscribers.<br/><br/><strong>NOTE:</strong> Updating the subscriber state with this endpoint is not supported at this time.<br/><strong>NOTE:</strong> We support creating/updating a maximum of 140 custom fields at a time.",
+        "description": "Behaves as an upsert. If a subscriber with the provided email address does not exist, it creates one with the specified first name and state. If a subscriber with the provided email address already exists, it updates the first name.<br/><br/>If you include a custom field key that does not exist on your account, the request returns an error. Use [List custom fields](/api-reference/custom-fields/list-custom-fields) to retrieve existing keys, or [Create a custom field](/api-reference/custom-fields/create-a-custom-field) to add new fields before setting them for subscribers.<br/><br/><strong>NOTE:</strong> Updating the subscriber state with this endpoint is not supported at this time.<br/><strong>NOTE:</strong> We support creating/updating a maximum of 140 custom fields at a time.",
         "tags": [
           "Subscribers"
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns a 200 and updates the subscriber first name when a subscriber with provided email already exists",
@@ -13210,7 +13495,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -13234,7 +13520,8 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "inactive",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -13275,7 +13562,10 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "Custom field values for the subscriber, keyed by the custom field's `key`."
                         }
                       },
                       "required": [
@@ -13299,7 +13589,11 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                      "birthday": "Feb 17",
+                      "last_name": "Lamarr",
+                      "source": "landing page"
+                    }
                   }
                 }
               }
@@ -13340,7 +13634,54 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                            "company": {
+                              "nullable": true
+                            },
+                            "coupon": {
+                              "nullable": true
+                            },
+                            "enrolled_in_coaching": {
+                              "nullable": true
+                            },
+                            "how_did_you_hear_about_us": {
+                              "nullable": true
+                            },
+                            "interests": {
+                              "nullable": true
+                            },
+                            "lead_score": {
+                              "nullable": true
+                            },
+                            "phone_number": {
+                              "nullable": true
+                            },
+                            "postal_code": {
+                              "nullable": true
+                            },
+                            "role": {
+                              "nullable": true
+                            },
+                            "social_media": {
+                              "nullable": true
+                            },
+                            "website": {
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "company",
+                            "coupon",
+                            "enrolled_in_coaching",
+                            "how_did_you_hear_about_us",
+                            "interests",
+                            "lead_score",
+                            "phone_number",
+                            "postal_code",
+                            "role",
+                            "social_media",
+                            "website"
+                          ]
                         }
                       },
                       "required": [
@@ -13364,7 +13705,19 @@
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                      "company": null,
+                      "coupon": null,
+                      "enrolled_in_coaching": null,
+                      "how_did_you_hear_about_us": null,
+                      "interests": null,
+                      "lead_score": null,
+                      "phone_number": null,
+                      "postal_code": null,
+                      "role": null,
+                      "social_media": null,
+                      "website": null
+                    }
                   }
                 }
               }
@@ -13450,51 +13803,10 @@
                   },
                   "fields": {
                     "type": "object",
-                    "nullable": true,
-                    "properties": {
-                      "Last name": {
-                        "type": "string"
-                      },
-                      "Birthday": {
-                        "type": "string"
-                      },
-                      "Source": {
-                        "type": "string"
-                      },
-                      "Role": {
-                        "type": "string"
-                      },
-                      "Company": {
-                        "type": "string"
-                      },
-                      "Postal code": {
-                        "type": "string"
-                      },
-                      "Website": {
-                        "type": "string"
-                      },
-                      "Social media": {
-                        "type": "string"
-                      },
-                      "How did you hear about us?": {
-                        "type": "string"
-                      },
-                      "Interests": {
-                        "type": "string"
-                      },
-                      "Coupon": {
-                        "type": "string"
-                      },
-                      "Phone Number": {
-                        "type": "string"
-                      },
-                      "Enrolled in Coaching": {
-                        "type": "string"
-                      },
-                      "Lead Score": {
-                        "type": "string"
-                      }
-                    }
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "description": "Custom field values keyed by the custom field's `key` (e.g. `last_name`, not `Last Name`). Passing an unknown key returns a 422 error."
                   }
                 },
                 "required": [
@@ -13506,20 +13818,20 @@
                 "email_address": "alice@convertkit.dev",
                 "state": "active",
                 "fields": {
-                  "Last name": "Lamarr",
-                  "Birthday": "Feb 17",
-                  "Source": "landing page",
-                  "Role": "Software developer",
-                  "Company": "Convertkit",
-                  "Postal code": "83702",
-                  "Website": "convertkit.com",
-                  "Social media": "https://www.linkedin.com/company/convertkit",
-                  "How did you hear about us?": "Social media",
-                  "Interests": "Monetization",
-                  "Coupon": "",
-                  "Phone Number": "555-555-5555",
-                  "Enrolled in Coaching": "true",
-                  "Lead Score": "87"
+                  "last_name": "Lamarr",
+                  "birthday": "Feb 17",
+                  "source": "landing page",
+                  "role": "Software developer",
+                  "company": "Convertkit",
+                  "postal_code": "83702",
+                  "website": "convertkit.com",
+                  "social_media": "https://www.linkedin.com/company/convertkit",
+                  "how_did_you_hear_about_us": "Social media",
+                  "interests": "Monetization",
+                  "coupon": "",
+                  "phone_number": "555-555-5555",
+                  "enrolled_in_coaching": "true",
+                  "lead_score": "87"
                 }
               }
             }
@@ -13538,13 +13850,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns a list of subscribers matching the filters",
@@ -13649,8 +13967,12 @@
                       "first_name": null,
                       "email_address": "anonymous@example.com",
                       "created_at": "2024-11-15T10:00:00Z",
-                      "tag_names": [],
-                      "tag_ids": []
+                      "tag_names": [
+
+                      ],
+                      "tag_ids": [
+
+                      ]
                     }
                   ],
                   "pagination": {
@@ -13748,10 +14070,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -13904,16 +14230,20 @@
       },
       "put": {
         "summary": "Update a subscriber",
-        "description": "We will ignore custom fields that don't already exist in your account. We will not return an error if you try to add data to a custom field that does not exist. Please use <a href=\"#create-a-custom-field\">Create a custom field</a> to create custom fields before setting for subscribers.<br/><br/><strong>NOTE: </strong>We support creating/updating a maximum of 140 custom fields at a time.",
+        "description": "If you include a custom field key that does not exist on your account, the request returns an error. Use [List custom fields](/api-reference/custom-fields/list-custom-fields) to retrieve existing keys, or [Create a custom field](/api-reference/custom-fields/create-a-custom-field) to add new fields before setting them for subscribers.<br/><br/><strong>NOTE:</strong> We support creating/updating a maximum of 140 custom fields at a time.",
         "tags": [
           "Subscribers"
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -13924,7 +14254,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 379
+            "example": 384
           }
         ],
         "responses": {
@@ -13963,7 +14293,10 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "Custom field values for the subscriber, keyed by the custom field's `key`."
                         }
                       },
                       "required": [
@@ -13982,12 +14315,16 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 374,
+                    "id": 375,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                      "birthday": "Feb 17",
+                      "last_name": "Lamarr",
+                      "source": "landing page"
+                    }
                   }
                 }
               }
@@ -14028,7 +14365,54 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                            "birthday": {
+                              "nullable": true
+                            },
+                            "company": {
+                              "nullable": true
+                            },
+                            "coupon": {
+                              "nullable": true
+                            },
+                            "how_did_you_hear_about_us": {
+                              "nullable": true
+                            },
+                            "interests": {
+                              "nullable": true
+                            },
+                            "last_name": {
+                              "nullable": true
+                            },
+                            "postal_code": {
+                              "nullable": true
+                            },
+                            "role": {
+                              "nullable": true
+                            },
+                            "social_media": {
+                              "nullable": true
+                            },
+                            "source": {
+                              "nullable": true
+                            },
+                            "website": {
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "birthday",
+                            "company",
+                            "coupon",
+                            "how_did_you_hear_about_us",
+                            "interests",
+                            "last_name",
+                            "postal_code",
+                            "role",
+                            "social_media",
+                            "source",
+                            "website"
+                          ]
                         }
                       },
                       "required": [
@@ -14047,12 +14431,24 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 376,
+                    "id": 377,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                      "birthday": null,
+                      "company": null,
+                      "coupon": null,
+                      "how_did_you_hear_about_us": null,
+                      "interests": null,
+                      "last_name": null,
+                      "postal_code": null,
+                      "role": null,
+                      "social_media": null,
+                      "source": null,
+                      "website": null
+                    }
                   }
                 }
               }
@@ -14152,47 +14548,10 @@
                   },
                   "fields": {
                     "type": "object",
-                    "nullable": true,
-                    "properties": {
-                      "Last name": {
-                        "type": "string"
-                      },
-                      "Birthday": {
-                        "type": "string"
-                      },
-                      "Source": {
-                        "type": "string"
-                      },
-                      "Role": {
-                        "type": "string"
-                      },
-                      "Company": {
-                        "type": "string"
-                      },
-                      "Postal code": {
-                        "type": "string"
-                      },
-                      "Website": {
-                        "type": "string"
-                      },
-                      "Social media": {
-                        "type": "string"
-                      },
-                      "How did you hear about us?": {
-                        "type": "string"
-                      },
-                      "Interests": {
-                        "type": "string"
-                      },
-                      "Coupon": {
-                        "type": "string"
-                      }
+                    "additionalProperties": {
+                      "type": "string"
                     },
-                    "required": [
-                      "Last name",
-                      "Birthday",
-                      "Source"
-                    ]
+                    "description": "Custom field values keyed by the custom field's `key` (e.g. `last_name`, not `Last Name`). Passing an unknown key returns a 422 error."
                   }
                 },
                 "required": [
@@ -14203,17 +14562,17 @@
                 "first_name": "Alice",
                 "email_address": "alice@convertkit.dev",
                 "fields": {
-                  "Last name": "Lamarr",
-                  "Birthday": "Feb 17",
-                  "Source": "landing page",
-                  "Role": "Software developer",
-                  "Company": "Convertkit",
-                  "Postal code": "83702",
-                  "Website": "convertkit.com",
-                  "Social media": "https://www.linkedin.com/company/convertkit",
-                  "How did you hear about us?": "Social media",
-                  "Interests": "Monetization",
-                  "Coupon": ""
+                  "last_name": "Lamarr",
+                  "birthday": "Feb 17",
+                  "source": "landing page",
+                  "role": "Software developer",
+                  "company": "Convertkit",
+                  "postal_code": "83702",
+                  "website": "convertkit.com",
+                  "social_media": "https://www.linkedin.com/company/convertkit",
+                  "how_did_you_hear_about_us": "Social media",
+                  "interests": "Monetization",
+                  "coupon": ""
                 }
               }
             }
@@ -14232,10 +14591,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -14311,9 +14674,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                }
               },
-              "example": {}
+              "example": {
+              }
             }
           }
         },
@@ -14331,10 +14696,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -14365,7 +14734,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1060
+            "example": 1065
           }
         ],
         "responses": {
@@ -14448,7 +14817,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1060,
+                    "id": 1065,
                     "stats": {
                       "sent": 2,
                       "opened": 1,
@@ -14507,10 +14876,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -14558,7 +14931,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1094
+            "example": 1099
           }
         ],
         "responses": {
@@ -14714,10 +15087,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -14884,13 +15261,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "200": {
             "description": "Returns the tag if it already exists",
@@ -15060,10 +15443,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -15231,10 +15618,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -15342,10 +15733,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -15557,7 +15952,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 1097,
+                      "id": 1102,
                       "first_name": null,
                       "email_address": "subscriber613@kit.dev",
                       "state": "active",
@@ -15568,7 +15963,7 @@
                       }
                     },
                     {
-                      "id": 1096,
+                      "id": 1101,
                       "first_name": null,
                       "email_address": "subscriber612@kit.dev",
                       "state": "active",
@@ -15579,7 +15974,7 @@
                       }
                     },
                     {
-                      "id": 1095,
+                      "id": 1100,
                       "first_name": null,
                       "email_address": "subscriber611@kit.dev",
                       "state": "active",
@@ -15666,10 +16061,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -15722,7 +16121,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -15742,13 +16142,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1219,
+                    "id": 1224,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -15792,7 +16193,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -15812,13 +16214,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1220,
+                    "id": 1225,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -15936,10 +16339,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -15950,7 +16357,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1244
+            "example": 1249
           },
           {
             "name": "tag_id",
@@ -16031,10 +16438,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -16045,7 +16456,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1201
+            "example": 1206
           },
           {
             "name": "tag_id",
@@ -16096,7 +16507,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -16116,13 +16528,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1199,
+                    "id": 1204,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -16166,7 +16579,8 @@
                         },
                         "fields": {
                           "type": "object",
-                          "properties": {}
+                          "properties": {
+                          }
                         }
                       },
                       "required": [
@@ -16186,13 +16600,14 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1200,
+                    "id": 1205,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
                     "created_at": "2023-02-17T11:43:55Z",
                     "tagged_at": "2023-02-17T11:43:55Z",
-                    "fields": {}
+                    "fields": {
+                    }
                   }
                 }
               }
@@ -16256,9 +16671,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                }
               },
-              "example": {}
+              "example": {
+              }
             }
           }
         },
@@ -16276,10 +16693,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
@@ -16409,7 +16830,7 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1513,
+                      "account_id": 1521,
                       "event": {
                         "name": "tag_add",
                         "tag_id": 42
@@ -16418,7 +16839,7 @@
                     },
                     {
                       "id": 1,
-                      "account_id": 1513,
+                      "account_id": 1521,
                       "event": {
                         "name": "form_subscribe",
                         "form_id": 10
@@ -16476,13 +16897,19 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
-        "parameters": [],
+        "parameters": [
+
+        ],
         "responses": {
           "201": {
             "description": "Creates the webhook",
@@ -16535,7 +16962,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1539,
+                    "account_id": 1547,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
@@ -16676,10 +17103,14 @@
         ],
         "security": [
           {
-            "API Key": []
+            "API Key": [
+
+            ]
           },
           {
-            "OAuth2": []
+            "OAuth2": [
+
+            ]
           }
         ],
         "parameters": [
