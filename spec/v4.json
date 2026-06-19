@@ -3891,7 +3891,7 @@
                         "Subscriber does not exist"
                       ],
                       "subscription": {
-                        "form_id": 127,
+                        "form_id": 136,
                         "subscriber_id": null,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
@@ -4408,6 +4408,213 @@
       }
     },
     "/v4/bulk/tags": {
+      "delete": {
+        "summary": "Bulk delete tags",
+        "description": "See \"[Bulk & async processing](/api-reference/bulk-and-async-processing)\" for more information.",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "OAuth2": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Only deletes tags belonging to the authenticated account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "failures": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "errors": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "tag": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "errors",
+                          "tag"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "failures"
+                  ]
+                },
+                "example": {
+                  "failures": [
+                    {
+                      "errors": [
+                        "Tag does not exist"
+                      ],
+                      "tag": {
+                        "id": 91
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Deletes tags asynchronously when more than 100 tags are requested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "example": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Returns a 413 when the size of the request would exceed the account's data limit for enqueued bulk requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "This request exceeds your queued bulk requests limit. Please wait while we process your existing requests and try again later."
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns a 422 when `tags` is empty or not an array",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "No tags included for processing"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "tags"
+                ],
+                "properties": {
+                  "tags": {
+                    "type": "array",
+                    "description": "Tags to delete, identified by `id`. Batches of 100 or fewer are processed synchronously (200); larger batches are queued and processed asynchronously (202).",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "The id of the tag to delete."
+                        }
+                      }
+                    }
+                  },
+                  "callback_url": {
+                    "type": "string",
+                    "nullable": true,
+                    "description": "Optional. When the batch is processed asynchronously (more than 100 tags), the results are POSTed to this URL on completion."
+                  }
+                }
+              },
+              "example": {
+                "tags": [
+                  {
+                    "id": 91
+                  },
+                  {
+                    "id": 92
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Bulk create tags",
         "description": "See \"[Bulk & async processing](#bulk-amp-async-processing)\" for more information.",
@@ -6008,6 +6215,9 @@
                           },
                           "uid": {
                             "type": "string"
+                          },
+                          "subscriber_count": {
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -6067,7 +6277,8 @@
                       "embed_js": "https://kit-greetings.kit.com/f049e3d9ab/index.js",
                       "embed_url": "https://kit-greetings.kit.com/f049e3d9ab",
                       "archived": false,
-                      "uid": "f049e3d9ab"
+                      "uid": "f049e3d9ab",
+                      "subscriber_count": 0
                     },
                     {
                       "id": 52,
@@ -6078,7 +6289,8 @@
                       "embed_js": "https://kit-greetings.kit.com/ae7c1adaa1/index.js",
                       "embed_url": "https://kit-greetings.kit.com/ae7c1adaa1",
                       "archived": false,
-                      "uid": "ae7c1adaa1"
+                      "uid": "ae7c1adaa1",
+                      "subscriber_count": 0
                     }
                   ],
                   "pagination": {
@@ -6208,7 +6420,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 160
+            "example": 169
           },
           {
             "name": "include_total_count",
@@ -6536,7 +6748,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 225
+            "example": 234
           }
         ],
         "responses": {
@@ -6892,7 +7104,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 201
+            "example": 210
           },
           {
             "name": "id",
@@ -7384,7 +7596,7 @@
                     {
                       "id": 3,
                       "publication_id": 127,
-                      "created_at": "2026-06-08T16:45:54Z",
+                      "created_at": "2026-06-11T16:15:02Z",
                       "title": "Draft Post",
                       "slug": null,
                       "description": null,
@@ -7400,14 +7612,14 @@
                     {
                       "id": 2,
                       "publication_id": 126,
-                      "created_at": "2026-06-08T16:45:54Z",
+                      "created_at": "2026-06-11T16:15:02Z",
                       "title": "Email and Web Post",
                       "slug": "email-and-web-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-06-06T16:45:54Z",
-                      "sent_at": "2026-06-08T16:45:54Z",
+                      "published_at": "2026-06-09T16:15:02Z",
+                      "sent_at": "2026-06-11T16:15:02Z",
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
                       "is_paid": false,
@@ -7416,13 +7628,13 @@
                     {
                       "id": 1,
                       "publication_id": 125,
-                      "created_at": "2026-06-08T16:45:54Z",
+                      "created_at": "2026-06-11T16:15:02Z",
                       "title": "Web Only Post",
                       "slug": "web-only-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-06-07T16:45:54Z",
+                      "published_at": "2026-06-10T16:15:02Z",
                       "sent_at": null,
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
@@ -7557,13 +7769,13 @@
                   "post": {
                     "id": 25,
                     "publication_id": 149,
-                    "created_at": "2026-06-08T16:45:58Z",
+                    "created_at": "2026-06-11T16:15:07Z",
                     "title": "My Newsletter Post",
                     "slug": "my-newsletter-post",
                     "description": null,
                     "meta_description": null,
                     "status": "published",
-                    "published_at": "2026-06-07T16:45:58Z",
+                    "published_at": "2026-06-10T16:15:07Z",
                     "sent_at": null,
                     "thumbnail_alt": null,
                     "thumbnail_url": null,
@@ -9035,9 +9247,9 @@
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-06-08T16:46:45Z",
-                    "updated_at": "2026-06-08T16:46:45Z",
-                    "email_address": "joe976@ck.lol",
+                    "created_at": "2026-06-11T16:15:56Z",
+                    "updated_at": "2026-06-11T16:15:56Z",
+                    "email_address": "joe1010@ck.lol",
                     "email_template_id": 38,
                     "send_days": [
                       "monday",
@@ -9220,7 +9432,7 @@
               },
               "example": {
                 "name": "Full Series",
-                "email_address": "joe976@ck.lol",
+                "email_address": "joe1010@ck.lol",
                 "email_template_id": 38,
                 "send_days": [
                   "monday",
@@ -9666,9 +9878,9 @@
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-06-08T16:46:48Z",
-                    "updated_at": "2026-06-08T16:46:48Z",
-                    "email_address": "joe1006@ck.lol",
+                    "created_at": "2026-06-11T16:16:00Z",
+                    "updated_at": "2026-06-11T16:16:00Z",
+                    "email_address": "joe1040@ck.lol",
                     "email_template_id": 40,
                     "send_days": [
                       "tuesday",
@@ -9850,7 +10062,7 @@
               },
               "example": {
                 "name": "New Name",
-                "email_address": "joe1006@ck.lol",
+                "email_address": "joe1040@ck.lol",
                 "email_template_id": 40,
                 "send_days": [
                   "tuesday",
@@ -10061,7 +10273,7 @@
                       "sequence_id": 107,
                       "subject": "Welcome to the series",
                       "preview_text": "Here's what to expect",
-                      "email_address": "joe2429@ck.lol",
+                      "email_address": "joe2463@ck.lol",
                       "email_template_id": null,
                       "published": true,
                       "position": 0,
@@ -10248,7 +10460,7 @@
                     "sequence_id": 153,
                     "subject": "Welcome to the sequence",
                     "preview_text": null,
-                    "email_address": "joe2493@ck.lol",
+                    "email_address": "joe2527@ck.lol",
                     "email_template_id": null,
                     "published": false,
                     "position": null,
@@ -10635,7 +10847,7 @@
                     "sequence_id": 127,
                     "subject": "Welcome email",
                     "preview_text": "Thanks for signing up",
-                    "email_address": "joe2458@ck.lol",
+                    "email_address": "joe2492@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": 0,
@@ -10825,7 +11037,7 @@
                     "sequence_id": 187,
                     "subject": "Updated subject",
                     "preview_text": "Updated preview",
-                    "email_address": "joe2536@ck.lol",
+                    "email_address": "joe2570@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": null,
@@ -12044,7 +12256,7 @@
                       "updated_at": "2023-02-17T11:43:55Z",
                       "content": "Hello {{ subscriber.first_name }}",
                       "document": {
-                        "id": 120,
+                        "id": 152,
                         "value": null,
                         "value_html": "content",
                         "value_plain": null,
@@ -12196,11 +12408,11 @@
                     "snippet_type": "inline",
                     "archived": false,
                     "key": "cat-fact-of-the-day",
-                    "created_at": "2026-06-08T16:47:06Z",
-                    "updated_at": "2026-06-08T16:47:06Z",
+                    "created_at": "2026-06-11T16:16:17Z",
+                    "updated_at": "2026-06-11T16:16:17Z",
                     "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees.",
                     "document": {
-                      "id": 146,
+                      "id": 178,
                       "value": null,
                       "value_html": null,
                       "value_plain": null,
@@ -12462,7 +12674,7 @@
                     "updated_at": "2023-02-17T11:43:55Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
-                      "id": 139,
+                      "id": 171,
                       "value": null,
                       "value_html": "content",
                       "value_plain": null,
@@ -12643,10 +12855,10 @@
                     "archived": false,
                     "key": "welcome-message",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "updated_at": "2026-06-08T16:47:11Z",
+                    "updated_at": "2026-06-11T16:16:22Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
-                      "id": 174,
+                      "id": 206,
                       "value": null,
                       "value_html": "content",
                       "value_plain": null,
@@ -13837,6 +14049,156 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "attribution": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Returned when `include` contains `attribution`.",
+                            "properties": {
+                              "referrer": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_source": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_medium": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_campaign": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_term": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "utm_content": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_type": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_mechanism": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source_mechanism_id": {
+                                "type": "integer",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "tags": {
+                            "type": "array",
+                            "description": "Returned when `include` contains `tags`.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "location": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "Returned when `include` contains `location`.",
+                            "properties": {
+                              "city": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "state": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "country": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "latitude": {
+                                "type": "number",
+                                "format": "float",
+                                "nullable": true
+                              },
+                              "longitude": {
+                                "type": "number",
+                                "format": "float",
+                                "nullable": true
+                              },
+                              "timezone": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "canceled_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true,
+                            "description": "Returned when `include` contains `canceled_at`. Reflects the timestamp of the subscriber's most recent state transition."
+                          },
+                          "stats": {
+                            "type": "object",
+                            "description": "Returned when `include` contains `stats`. Per-subscriber email engagement over the requested date range (defaults to the last 90 days). Counts cover broadcasts, sequences, and email templates. Subscribers with no sends in the range come back with zeroed counts and null timestamps.",
+                            "properties": {
+                              "sent": {
+                                "type": "integer"
+                              },
+                              "opened": {
+                                "type": "integer"
+                              },
+                              "clicked": {
+                                "type": "integer"
+                              },
+                              "bounced": {
+                                "type": "integer"
+                              },
+                              "open_rate": {
+                                "type": "number",
+                                "format": "float",
+                                "description": "opened / sent, rounded to 3 decimals (0.0 when nothing was sent)."
+                              },
+                              "click_rate": {
+                                "type": "number",
+                                "format": "float",
+                                "description": "clicked / sent, rounded to 3 decimals (0.0 when nothing was sent)."
+                              },
+                              "last_sent": {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              },
+                              "last_opened": {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              },
+                              "last_clicked": {
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                              },
+                              "sends_since_last_open": {
+                                "type": "integer"
+                              },
+                              "sends_since_last_click": {
+                                "type": "integer"
+                              }
+                            }
                           }
                         },
                         "required": [
@@ -13996,6 +14358,24 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "type": "attribution",
+                    "any": [
+                      {
+                        "type": "forms",
+                        "ids": [
+                          789,
+                          1001
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "custom_field",
+                    "subscriber_custom_field_id": 42,
+                    "value": "premium",
+                    "comparison": "is"
                   }
                 ]
               }
@@ -15083,6 +15463,9 @@
                           },
                           "created_at": {
                             "type": "string"
+                          },
+                          "subscriber_count": {
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -15130,12 +15513,14 @@
                     {
                       "id": 11,
                       "name": "Tag B",
-                      "created_at": "2023-02-17T11:43:55Z"
+                      "created_at": "2023-02-17T11:43:55Z",
+                      "subscriber_count": 0
                     },
                     {
                       "id": 10,
                       "name": "Tag A",
-                      "created_at": "2023-02-17T11:43:55Z"
+                      "created_at": "2023-02-17T11:43:55Z",
+                      "subscriber_count": 0
                     }
                   ],
                   "pagination": {
@@ -16722,7 +17107,7 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1583,
+                      "account_id": 1617,
                       "event": {
                         "name": "tag_add",
                         "tag_id": 44
@@ -16731,7 +17116,7 @@
                     },
                     {
                       "id": 1,
-                      "account_id": 1583,
+                      "account_id": 1617,
                       "event": {
                         "name": "form_subscribe",
                         "form_id": 10
@@ -16848,7 +17233,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1609,
+                    "account_id": 1643,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
@@ -17124,11 +17509,70 @@
         "type": "object",
         "description": "Filter subscribers based on engagement and subscription criteria using the 'all' array with filter conditions that must all be met (AND logic).",
         "properties": {
+          "counting_mode": {
+            "type": "string",
+            "enum": [
+              "raw",
+              "unique_email"
+            ],
+            "description": "Controls how engagement-filter count thresholds are tallied. `raw` (default) counts every event — five opens of the same email = five. `unique_email` counts distinct emails on which the action occurred — five opens of the same email = one. Applies to every engagement filter (opens, clicks, sent, delivered) in the request; ignored for other filter types."
+          },
           "all": {
             "type": "array",
             "description": "Array of filter conditions where ALL must be met (AND logic)",
             "items": {
               "$ref": "#/components/schemas/FilterCondition"
+            }
+          },
+          "include": {
+            "type": "array",
+            "description": "Optional. Array of `{ type, ...config }` objects naming additional fields to embed on each subscriber row. Valid types: `attribution`, `tags`, `location`, `canceled_at`, `stats`. The `stats` type accepts an optional `range: { start, end }` (YYYY-MM-DD dates, defaulting to the last 90 days).",
+            "example": [
+              {
+                "type": "tags"
+              },
+              {
+                "type": "stats",
+                "range": {
+                  "start": "2026-05-01",
+                  "end": "2026-06-30"
+                }
+              },
+              {
+                "type": "location"
+              }
+            ],
+            "items": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "attribution",
+                    "tags",
+                    "location",
+                    "canceled_at",
+                    "stats"
+                  ]
+                },
+                "range": {
+                  "type": "object",
+                  "description": "Only used by the `stats` type. Date window for the engagement stats. Defaults to the last 90 days; clamped to the account's data-retention window.",
+                  "properties": {
+                    "start": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "end": {
+                      "type": "string",
+                      "format": "date"
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -17149,27 +17593,37 @@
               "delivered",
               "subscribed",
               "subscriber_state",
-              "tags"
+              "tags",
+              "attribution",
+              "custom_field"
             ],
-            "description": "Type of filter condition"
+            "description": "Type of filter condition. `attribution` matches subscribers by their *original signup attribution* — currently supports a `forms` sub-condition that matches by the form / landing-page id the subscriber signed up through. Attribution is the original signup source; it does not track current subscription state. `custom_field` matches subscribers by the value they have stored for a particular custom field, identified by `subscriber_custom_field_id`."
           },
           "count_greater_than": {
             "type": "integer",
             "description": "Minimum count (exclusive). Only applicable for engagement types ('opens', 'clicks', 'sent', 'delivered')."
           },
+          "count_greater_than_or_equal": {
+            "type": "integer",
+            "description": "Minimum count (inclusive). Only applicable for engagement types ('opens', 'clicks', 'sent', 'delivered')."
+          },
           "count_less_than": {
             "type": "integer",
             "description": "Maximum count (exclusive). Only applicable for engagement types ('opens', 'clicks', 'sent', 'delivered')."
           },
+          "count_less_than_or_equal": {
+            "type": "integer",
+            "description": "Maximum count (inclusive). Only applicable for engagement types ('opens', 'clicks', 'sent', 'delivered')."
+          },
           "after": {
             "type": "string",
             "format": "date",
-            "description": "Start date (YYYY-MM-DD). For 'subscribed' type, filters by subscriber_created_at. For engagement types, filters by event date. Not applicable for 'tags' or 'subscriber_state' types."
+            "description": "Start date (YYYY-MM-DD). For 'subscribed' type, filters by subscriber_created_at. For engagement types, filters by event date. Not applicable for 'tags', 'subscriber_state', 'attribution', or 'custom_field' types."
           },
           "before": {
             "type": "string",
             "format": "date",
-            "description": "End date (YYYY-MM-DD). For 'subscribed' type, filters by subscriber_created_at. For engagement types, filters by event date. Not applicable for 'tags' or 'subscriber_state' types."
+            "description": "End date (YYYY-MM-DD). For 'subscribed' type, filters by subscriber_created_at. For engagement types, filters by event date. Not applicable for 'tags', 'subscriber_state', 'attribution', or 'custom_field' types."
           },
           "states": {
             "type": "array",
@@ -17185,9 +17639,30 @@
             },
             "description": "Subscriber lifecycle states. Required for 'subscriber_state' type; ignored for other types. Subscribers matching any of the listed states pass the filter. Strongly recommended to use `['active']` unless you specifically need other states — most subscriber-facing queries elsewhere in the app scope to active subscribers by default."
           },
+          "subscriber_custom_field_id": {
+            "type": "integer",
+            "description": "Id of the `SubscriberCustomField` whose stored value is being filtered on. Required for 'custom_field' type; ignored for other types."
+          },
+          "value": {
+            "type": "string",
+            "description": "Value to compare against. Used by 'custom_field' type together with `comparison`. For the numeric comparisons (`greater_than`, `greater_than_or_equal`, `less_than`, `less_than_or_equal`) the value is parsed as a number; non-numeric stored values are excluded. Ignored when `comparison` is `has_value`."
+          },
+          "comparison": {
+            "type": "string",
+            "enum": [
+              "is",
+              "contains",
+              "has_value",
+              "greater_than",
+              "greater_than_or_equal",
+              "less_than",
+              "less_than_or_equal"
+            ],
+            "description": "How `value` is matched against the stored custom-field value. `is` is exact equality, `contains` is a case-insensitive substring (blank `value` matches any subscriber that has a value stored for the field), `has_value` matches any non-empty stored value (ignores `value`), `greater_than` / `greater_than_or_equal` / `less_than` / `less_than_or_equal` compare numerically. Only applicable for 'custom_field' type."
+          },
           "any": {
             "type": "array",
-            "description": "Array of OR conditions. Subscriber activity must match ANY of these conditions. Engagement types accept broadcasts/URLs; 'tags' accepts tag id matchers. Not applicable for 'subscribed' or 'subscriber_state' types.",
+            "description": "Array of OR conditions. Subscriber activity must match ANY of these conditions. Engagement types accept broadcasts/URLs; 'tags' accepts tag id matchers; 'attribution' accepts attribution sub-conditions (currently 'forms'). Not applicable for 'subscribed', 'subscriber_state', or 'custom_field' types.",
             "items": {
               "oneOf": [
                 {
@@ -17201,6 +17676,10 @@
                 {
                   "title": "Tag ids (tags only)",
                   "$ref": "#/components/schemas/IdsAnyCondition"
+                },
+                {
+                  "title": "Forms (attribution only)",
+                  "$ref": "#/components/schemas/FormsAnyCondition"
                 }
               ]
             }
@@ -17297,6 +17776,30 @@
         "required": [
           "type",
           "matching"
+        ]
+      },
+      "FormsAnyCondition": {
+        "type": "object",
+        "description": "Attribution sub-condition: matches subscribers whose original signup attribution points at one of the given form / landing-page ids. Ids may refer to either a form or a legacy landing page — the attribution source does not distinguish between the two.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "forms"
+            ],
+            "description": "Must be 'forms'"
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Form / landing-page ids the subscriber's attribution should match."
+          }
+        },
+        "required": [
+          "type",
+          "ids"
         ]
       }
     }
