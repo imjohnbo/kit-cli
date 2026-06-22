@@ -132,6 +132,16 @@ create [options] <targetUrl> <eventName>
 delete <id>
 ```
 
+### webhook-endpoints
+
+Webhooks 2.0 (`/v4/webhook_endpoints`), with the newer event names (e.g. `subscriber.created`, `subscriber.tag_added`). Requires the `webhooks_v2` feature flag on the account. A single endpoint can subscribe to multiple events. Run `create --help` for the full event list.
+
+```
+list [options]
+create [options] <url> --events <e1,e2,...> [--name <name>] [--description <desc>]
+delete <id>
+```
+
 ### segments · email-templates
 
 ```

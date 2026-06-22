@@ -12,6 +12,7 @@ import { broadcastsCommand } from '../src/commands/broadcasts.js';
 import { customFieldsCommand } from '../src/commands/custom-fields.js';
 import { purchasesCommand } from '../src/commands/purchases.js';
 import { webhooksCommand } from '../src/commands/webhooks.js';
+import { webhookEndpointsCommand } from '../src/commands/webhook-endpoints.js';
 import { segmentsCommand } from '../src/commands/segments.js';
 import { emailTemplatesCommand } from '../src/commands/email-templates.js';
 
@@ -35,6 +36,7 @@ program.addCommand(broadcastsCommand());
 program.addCommand(customFieldsCommand());
 program.addCommand(purchasesCommand());
 program.addCommand(webhooksCommand());
+program.addCommand(webhookEndpointsCommand());
 program.addCommand(segmentsCommand());
 program.addCommand(emailTemplatesCommand());
 program.addCommand(bulkCommand());
