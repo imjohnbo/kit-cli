@@ -1,7 +1,6 @@
-import { getApiKey, getAccessToken, isTokenExpired } from './config.js';
+import { getApiKey, getAccessToken, isTokenExpired, getBaseUrl } from './config.js';
 import { refreshAccessToken } from './auth.js';
 
-const BASE_URL = 'https://api.kit.com/v4';
 const MAX_PAGINATE_PAGES = 100;
 
 class KitApiError extends Error {
@@ -76,7 +75,7 @@ async function getAuthHeader() {
 }
 
 async function request(method, path, { body, query } = {}) {
-  const url = new URL(`${BASE_URL}${path}`);
+  const url = new URL(`${getBaseUrl()}${path}`);
 
   if (query) {
     for (const [k, v] of Object.entries(query)) {

@@ -5,6 +5,7 @@ const config = new Conf({
   projectName: 'kit-cli',
   schema: {
     apiKey:         { type: 'string', default: '' },
+    baseUrl:        { type: 'string', default: 'https://api.kit.com/v4' },
     defaultFormat:  { type: 'string', default: 'table', enum: ['table', 'json'] },
     perPage:        { type: 'number', default: 50, minimum: 1, maximum: 1000 },
     oauthClientId:  { type: 'string', default: '' },
@@ -20,6 +21,41 @@ try {
   chmodSync(config.path, 0o600);
 } catch {
   // May fail on Windows or if file doesn't exist yet — non-fatal
+}
+
+// --- API base URL ---
+//
+// Defaults to production. Override for other environments (e.g. QA) via the
+// KIT_API_BASE env var or `kit config set-base-url`. The env var wins so you
+// can target a different host for a single invocation without mutating stored
+// config. All API requests and OAuth endpoints derive from this value.
+
+const DEFAULT_BASE_URL = 'https://api.kit.com/v4';
+
+function normalizeBaseUrl(url) {
+  return url.trim().replace(/\/+$/, ''); // strip trailing slashes so path joins don't double up
+}
+
+export function getBaseUrl() {
+  const fromEnv = process.env.KIT_API_BASE;
+  const value = (fromEnv && fromEnv.trim()) || config.get('baseUrl') || DEFAULT_BASE_URL;
+  return normalizeBaseUrl(value);
+}
+
+export function setBaseUrl(url) {
+  if (!url || typeof url !== 'string' || url.trim().length === 0) {
+    throw new Error('Base URL must be a non-empty string.');
+  }
+  let parsed;
+  try {
+    parsed = new URL(url.trim());
+  } catch {
+    throw new Error(`Invalid base URL: "${url}". Must be a full URL like https://api.kit.com/v4.`);
+  }
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+    throw new Error('Base URL must use http or https.');
+  }
+  config.set('baseUrl', normalizeBaseUrl(url));
 }
 
 // --- API key ---
@@ -123,6 +159,7 @@ export function getAll() {
   }
 
   return {
+    baseUrl:         getBaseUrl(),
     apiKey:          getApiKey() ? '****' + getApiKey().slice(-4) : '(not set)',
     oauthClientId:   getOAuthClientId() || '(not set)',
     oauthRedirectUri: getOAuthRedirectUri(),

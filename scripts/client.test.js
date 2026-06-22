@@ -355,15 +355,25 @@ describe('safeJsonParse', () => {
 
 describe('HTTP client', () => {
   let _oauthSnap;
+  let _baseSnap;
 
   before(() => {
     process.env.KIT_API_KEY = TEST_API_KEY;
+    // Pin the base URL so URL assertions are independent of stored config
+    // (the base URL is configurable via KIT_API_BASE / `kit config set-base-url`).
+    _baseSnap = process.env.KIT_API_BASE;
+    process.env.KIT_API_BASE = 'https://api.kit.com/v4';
     _oauthSnap = oauthSnapshot();
     clearOAuth(); // force API-key auth path; avoids expired-token refresh
   });
 
   after(() => {
     delete process.env.KIT_API_KEY;
+    if (_baseSnap !== undefined) {
+      process.env.KIT_API_BASE = _baseSnap;
+    } else {
+      delete process.env.KIT_API_BASE;
+    }
     restoreOAuth(_oauthSnap);
     globalThis.fetch = _originalFetch;
   });

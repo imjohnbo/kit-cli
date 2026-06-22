@@ -35,6 +35,18 @@ kit config set-api-key <key>
 
 When both are present, OAuth takes priority.
 
+### Targeting a different environment
+
+By default the CLI talks to production (`https://api.kit.com/v4`). To point it at a different environment (e.g. a staging or test instance), override the API base URL:
+
+```
+kit config set-base-url https://api.example.com/v4
+# or, per-invocation without changing stored config:
+export KIT_API_BASE=https://api.example.com/v4
+```
+
+OAuth authorize/token endpoints derive from this base, so logging in targets the same environment. OAuth apps and credentials are environment-specific — register an app in that environment's developer settings and use its client ID.
+
 ## Commands
 
 ```

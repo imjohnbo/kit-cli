@@ -1,12 +1,16 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
-import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri } from './config.js';
+import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri, getBaseUrl } from './config.js';
 
 const REDIRECT_PORT = 9876;
-const AUTHORIZE_URL = 'https://api.kit.com/v4/oauth/authorize';
-const TOKEN_URL = 'https://api.kit.com/v4/oauth/token';
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
+
+// OAuth endpoints derive from the configured base URL so they target the same
+// environment as API calls. The API host redirects the authorize request to
+// its app host automatically.
+const authorizeUrl = () => `${getBaseUrl()}/oauth/authorize`;
+const tokenUrl = () => `${getBaseUrl()}/oauth/token`;
 
 function base64url(buf) {
   return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
@@ -68,7 +72,7 @@ function waitForCallback() {
 }
 
 async function exchangeCode(clientId, code, verifier) {
-  const res = await fetch(TOKEN_URL, {
+  const res = await fetch(tokenUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({
@@ -96,7 +100,7 @@ export async function refreshAccessToken() {
     throw new Error('No refresh token available. Run `kit login` to re-authenticate.');
   }
 
-  const res = await fetch(TOKEN_URL, {
+  const res = await fetch(tokenUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({
@@ -121,7 +125,7 @@ export async function login(clientId) {
   const challenge = generateCodeChallenge(verifier);
   const state = base64url(randomBytes(16));
 
-  const authUrl = new URL(AUTHORIZE_URL);
+  const authUrl = new URL(authorizeUrl());
   authUrl.searchParams.set('client_id', clientId);
   authUrl.searchParams.set('response_type', 'code');
   authUrl.searchParams.set('redirect_uri', getOAuthRedirectUri());

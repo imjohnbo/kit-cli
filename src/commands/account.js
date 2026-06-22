@@ -4,6 +4,7 @@ import { printDetail, printSuccess, addFormatOption, withErrorHandler } from '..
 import {
   getAll,
   setApiKey,
+  setBaseUrl,
   setOAuthClientId,
   setOAuthRedirectUri,
   setDefaultFormat,
@@ -48,6 +49,19 @@ export function configCommand() {
       const cfg = getAll();
       for (const [key, val] of Object.entries(cfg)) {
         console.log(`${chalk.cyan(key.padEnd(20))}${val}`);
+      }
+    });
+
+  cmd
+    .command('set-base-url <url>')
+    .description('Set the API base URL (default: https://api.kit.com/v4)')
+    .action((url) => {
+      try {
+        setBaseUrl(url);
+        console.log(chalk.green('✓ API base URL saved.'));
+      } catch (err) {
+        console.error(chalk.red(err.message));
+        process.exit(1);
       }
     });
 

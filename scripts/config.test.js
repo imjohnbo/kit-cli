@@ -7,7 +7,7 @@
  */
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri } from '../src/config.js';
+import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri, setBaseUrl, getBaseUrl } from '../src/config.js';
 
 // ── setApiKey – validation (throws before writing to disk) ─────────────────
 
@@ -99,6 +99,89 @@ describe('setApiKey validation', () => {
       () => setApiKey('key\x7fhere'),
       { message: 'API key contains invalid control characters.' }
     );
+  });
+});
+
+// ── setBaseUrl – validation (throws before writing to disk) ────────────────
+
+describe('setBaseUrl validation', () => {
+  test('throws for empty string', () => {
+    assert.throws(
+      () => setBaseUrl(''),
+      { message: 'Base URL must be a non-empty string.' }
+    );
+  });
+
+  test('throws for whitespace-only string', () => {
+    assert.throws(
+      () => setBaseUrl('   '),
+      { message: 'Base URL must be a non-empty string.' }
+    );
+  });
+
+  test('throws for null', () => {
+    assert.throws(
+      () => setBaseUrl(null),
+      { message: 'Base URL must be a non-empty string.' }
+    );
+  });
+
+  test('throws for non-string value (number)', () => {
+    assert.throws(
+      () => setBaseUrl(12345),
+      { message: 'Base URL must be a non-empty string.' }
+    );
+  });
+
+  test('throws for a value that is not a valid URL', () => {
+    assert.throws(
+      () => setBaseUrl('not-a-url'),
+      /Invalid base URL/
+    );
+  });
+
+  test('throws for a non-http(s) protocol', () => {
+    assert.throws(
+      () => setBaseUrl('ftp://api.kit.com/v4'),
+      { message: 'Base URL must use http or https.' }
+    );
+  });
+});
+
+// ── getBaseUrl – environment variable override + normalization ─────────────
+
+describe('getBaseUrl', () => {
+  let _saved;
+
+  before(() => {
+    _saved = process.env.KIT_API_BASE;
+    delete process.env.KIT_API_BASE;
+  });
+
+  after(() => {
+    if (_saved !== undefined) {
+      process.env.KIT_API_BASE = _saved;
+    } else {
+      delete process.env.KIT_API_BASE;
+    }
+  });
+
+  test('returns KIT_API_BASE env var when set', () => {
+    process.env.KIT_API_BASE = 'https://api.example.com/v4';
+    assert.equal(getBaseUrl(), 'https://api.example.com/v4');
+    delete process.env.KIT_API_BASE;
+  });
+
+  test('strips trailing slashes from the env var value', () => {
+    process.env.KIT_API_BASE = 'https://api.example.com/v4/';
+    assert.equal(getBaseUrl(), 'https://api.example.com/v4');
+    delete process.env.KIT_API_BASE;
+  });
+
+  test('returns an http(s) URL when neither env nor config overrides it', () => {
+    const val = getBaseUrl();
+    assert.equal(typeof val, 'string');
+    assert.match(val, /^https?:\/\//);
   });
 });
 
