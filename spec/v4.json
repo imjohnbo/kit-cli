@@ -13999,7 +13999,7 @@
     },
     "/v4/subscribers/filter": {
       "post": {
-        "summary": "Filter subscribers based on engagement",
+        "summary": "Filter subscribers by engagement, sign-up date, state, and tags",
         "tags": [
           "Subscribers"
         ],
@@ -14198,6 +14198,14 @@
                               "sends_since_last_click": {
                                 "type": "integer"
                               }
+                            }
+                          },
+                          "fields": {
+                            "type": "object",
+                            "description": "Returned when `include` contains `custom_fields`. All account custom field keys, with the subscriber's value or null for fields that have not been set.",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
                             }
                           }
                         },
@@ -17526,7 +17534,7 @@
           },
           "include": {
             "type": "array",
-            "description": "Optional. Array of `{ type, ...config }` objects naming additional fields to embed on each subscriber row. Valid types: `attribution`, `tags`, `location`, `canceled_at`, `stats`. The `stats` type accepts an optional `range: { start, end }` (YYYY-MM-DD dates, defaulting to the last 90 days).",
+            "description": "Optional. Array of `{ type, ...config }` objects naming additional fields to embed on each subscriber row. Valid types: `attribution`, `tags`, `location`, `canceled_at`, `stats`, `custom_fields`. The `stats` type accepts an optional `range: { start, end }` (YYYY-MM-DD dates, defaulting to the last 90 days). The `custom_fields` type adds a `fields` object with all account custom field values (null for fields the subscriber has not set).",
             "example": [
               {
                 "type": "tags"
@@ -17537,9 +17545,6 @@
                   "start": "2026-05-01",
                   "end": "2026-06-30"
                 }
-              },
-              {
-                "type": "location"
               }
             ],
             "items": {
@@ -17555,7 +17560,8 @@
                     "tags",
                     "location",
                     "canceled_at",
-                    "stats"
+                    "stats",
+                    "custom_fields"
                   ]
                 },
                 "range": {
@@ -17641,7 +17647,7 @@
           },
           "subscriber_custom_field_id": {
             "type": "integer",
-            "description": "Id of the `SubscriberCustomField` whose stored value is being filtered on. Required for 'custom_field' type; ignored for other types."
+            "description": "Id of the custom field whose stored value is being filtered on. Required for 'custom_field' type; ignored for other types."
           },
           "value": {
             "type": "string",
