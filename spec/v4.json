@@ -896,6 +896,22 @@
             },
             "example": false,
             "description": "When `true`, omits expensive optional fields from the response. Produces a faster, smaller response — useful when extra fields are not needed."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "scheduled",
+                "sending",
+                "completed",
+                "aborted"
+              ]
+            },
+            "description": "Filter broadcasts by lifecycle status. One of: `draft`, `scheduled`, `sending`, `completed`, `aborted`."
           }
         ],
         "responses": {
@@ -1723,6 +1739,22 @@
             "schema": {
               "nullable": true
             }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "scheduled",
+                "sending",
+                "completed",
+                "aborted"
+              ]
+            },
+            "description": "Filter broadcasts by lifecycle status. One of: `draft`, `scheduled`, `sending`, `completed`, `aborted`."
           }
         ],
         "responses": {
@@ -17601,9 +17633,10 @@
               "subscriber_state",
               "tags",
               "attribution",
-              "custom_field"
+              "custom_field",
+              "location"
             ],
-            "description": "Type of filter condition. `attribution` matches subscribers by their *original signup attribution* — currently supports a `forms` sub-condition that matches by the form / landing-page id the subscriber signed up through. Attribution is the original signup source; it does not track current subscription state. `custom_field` matches subscribers by the value they have stored for a particular custom field, identified by `subscriber_custom_field_id`."
+            "description": "Type of filter condition. `attribution` matches subscribers by their *original signup attribution* — currently supports a `forms` sub-condition that matches by the form / landing-page id the subscriber signed up through. Attribution is the original signup source; it does not track current subscription state. `custom_field` matches subscribers by the value they have stored for a particular custom field, identified by `subscriber_custom_field_id`. `location` matches subscribers whose primary location falls within a `radius` (miles) of (`latitude`, `longitude`). All three fields are required."
           },
           "count_greater_than": {
             "type": "integer",
@@ -17666,9 +17699,23 @@
             ],
             "description": "How `value` is matched against the stored custom-field value. `is` is exact equality, `contains` is a case-insensitive substring (blank `value` matches any subscriber that has a value stored for the field), `has_value` matches any non-empty stored value (ignores `value`), `greater_than` / `greater_than_or_equal` / `less_than` / `less_than_or_equal` compare numerically. Only applicable for 'custom_field' type."
           },
+          "latitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Center latitude (decimal degrees). Required for the 'location' type. Combined with `longitude` and `radius` to form a bounding box around the point."
+          },
+          "longitude": {
+            "type": "number",
+            "format": "float",
+            "description": "Center longitude (decimal degrees). Required for the 'location' type."
+          },
+          "radius": {
+            "type": "number",
+            "description": "Radius around (`latitude`, `longitude`) in miles. Required for the 'location' type. Subscribers whose primary location falls inside the bounding box pass the filter."
+          },
           "any": {
             "type": "array",
-            "description": "Array of OR conditions. Subscriber activity must match ANY of these conditions. Engagement types accept broadcasts/URLs; 'tags' accepts tag id matchers; 'attribution' accepts attribution sub-conditions (currently 'forms'). Not applicable for 'subscribed', 'subscriber_state', or 'custom_field' types.",
+            "description": "Array of OR conditions. Subscriber activity must match ANY of these conditions. Engagement types accept broadcasts/URLs; 'tags' accepts tag id matchers; 'attribution' accepts attribution sub-conditions (currently 'forms'). Not applicable for 'subscribed', 'subscriber_state', 'custom_field', or 'location' types.",
             "items": {
               "oneOf": [
                 {
