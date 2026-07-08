@@ -18,6 +18,7 @@
     "/v4/account": {
       "get": {
         "summary": "Get current account",
+        "description": "Returns the authenticated account and user: account `id`, `name`, `plan_type`, primary email address, timezone, and the account's sending addresses with their verification and DMARC status. For OAuth apps this is the standard way to identify which account authorized your app after the token exchange.\n\nFor subscriber-growth metrics, see [Get growth stats](/api-reference/accounts/get-growth-stats); for account-level email performance, see [Get email stats](/api-reference/accounts/get-email-stats).",
         "tags": [
           "Accounts"
         ],
@@ -206,6 +207,7 @@
     "/v4/account/colors": {
       "get": {
         "summary": "List colors",
+        "description": "Returns the account's saved brand color palette as an array of hex codes (up to 10). These are the colors available in Kit's editors for emails, forms, and landing pages. To change the palette, use [Update colors](/api-reference/accounts/update-colors).",
         "tags": [
           "Accounts"
         ],
@@ -279,6 +281,7 @@
       },
       "put": {
         "summary": "Update colors",
+        "description": "Replaces the account's brand color palette with the provided array of up to 10 hex codes and returns the updated list.\n\n**Note:** this overwrites the entire palette rather than appending — include every color you want to keep. Returns `422` when a color code is invalid.",
         "tags": [
           "Accounts"
         ],
@@ -407,6 +410,7 @@
     "/v4/account/creator_profile": {
       "get": {
         "summary": "Get Creator Profile",
+        "description": "Returns the account's Creator Profile — the public-facing identity shown on their Kit profile page and in the Creator Network: display `name`, `byline`, `bio`, `image_url`, and the public `profile_url`.\n\n**Note:** returns `404` when the account hasn't set up a Creator Profile, so handle that case rather than treating it as an error in your integration.",
         "tags": [
           "Accounts"
         ],
@@ -532,6 +536,7 @@
     "/v4/account/email_stats": {
       "get": {
         "summary": "Get email stats",
+        "description": "Returns account-level email performance for the last 90 days: `sent`, `opened`, and `clicked` counts plus open, click, unsubscribe, and bounce rates, with the exact reporting window in `starting`/`ending` (`email_stats_mode` is `last_90`).\n\nThe `open_tracking_enabled` and `click_tracking_enabled` flags indicate whether tracking is switched on for the account — open and click rates are only meaningful while tracking is enabled. For subscriber-growth metrics over a custom date range, use [Get growth stats](/api-reference/accounts/get-growth-stats); for per-broadcast performance, use [Get stats for a broadcast](/api-reference/broadcasts/get-stats-for-a-broadcast).",
         "tags": [
           "Accounts"
         ],
@@ -820,6 +825,7 @@
     "/v4/broadcasts": {
       "get": {
         "summary": "List broadcasts",
+        "description": "Returns a cursor-paginated list of broadcasts in the account with their content, targeting (`subscriber_filter`), email template, and web-publishing settings. Filter by lifecycle `status` (`draft`, `scheduled`, `sending`, `completed`, `aborted`) and by the `sent_after`/`sent_before` timestamps. Default 500 results per page, maximum 1000.\n\n**Tip:** set `slim=true` to omit the expensive fields (`content`, `public_url`, `email_address`, `email_template`, `subscriber_filter`) for a faster, smaller response — useful when you only need identifiers and subjects.\n\nDelivery and engagement stats are not included in this response; use [Get stats for a list of broadcasts](/api-reference/broadcasts/get-stats-for-a-list-of-broadcasts) for those. Broadcasts that are also published as posts share a `publication_id` with the matching post from [List posts](/api-reference/posts/list-posts).",
         "tags": [
           "Broadcasts"
         ],
@@ -2369,6 +2375,7 @@
     "/v4/broadcasts/{id}": {
       "delete": {
         "summary": "Delete a broadcast",
+        "description": "Permanently deletes a draft or scheduled broadcast and returns `204 No Content` on success. This is a hard delete and cannot be undone.\n\n**Note:** a broadcast that is currently sending or has already been sent cannot be deleted — the request returns a `422` with `Broadcast is already sending.` or `Broadcast has already been sent.` respectively. To keep a scheduled broadcast without sending it, unschedule it via [Update a broadcast](/api-reference/broadcasts/update-a-broadcast) instead.",
         "tags": [
           "Broadcasts"
         ],
@@ -2506,6 +2513,7 @@
       },
       "get": {
         "summary": "Get a broadcast",
+        "description": "Returns a single broadcast's full record: subject, `content` (HTML), preview text, targeting (`subscriber_filter`), email template, sending schedule (`send_at`), and web-publishing details (`public`, `public_url`, `published_at`).\n\nDelivery and engagement stats are not included; use [Get stats for a broadcast](/api-reference/broadcasts/get-stats-for-a-broadcast) for opens, clicks, and unsubscribes, or [Get link clicks for a broadcast](/api-reference/broadcasts/get-link-clicks-for-a-broadcast) for per-link detail. A broadcast that is also published as a post shares its `publication_id` with the matching post from [List posts](/api-reference/posts/list-posts).",
         "tags": [
           "Broadcasts"
         ],
@@ -3475,6 +3483,7 @@
     "/v4/bulk/custom_fields/subscribers": {
       "post": {
         "summary": "Bulk update subscriber custom field values",
+        "description": "Creates or updates custom field values for many subscribers in one request. Each entry in `custom_field_values` pairs a `subscriber_id` with a `subscriber_custom_field_id` and the `value` to set. Requires OAuth authentication.\n\nRequests with 100 or fewer values are processed synchronously (`200`); larger requests are processed asynchronously (`202`) — provide a `callback_url` to be notified on completion, and see [Bulk & async processing](/api-reference/bulk-and-async-processing) for how async requests behave. Returns `413` when the request would exceed the account's data limit for enqueued bulk requests.\n\nThe custom fields must already exist — entries referencing an unknown `subscriber_custom_field_id` are rejected individually with a `Custom field does not exist` error in the response's failures list, while the rest of the batch is still processed. See [List custom fields](/api-reference/custom-fields/list-custom-fields) and [Bulk create custom fields](/api-reference/custom-fields/bulk-create-custom-fields).",
         "tags": [
           "Custom Fields"
         ],
@@ -5931,6 +5940,7 @@
     "/v4/email_templates": {
       "get": {
         "summary": "List email templates",
+        "description": "Returns a cursor-paginated list of the account's email templates with each template's `id`, `name`, `is_default` flag, and `category` (for example `HTML` or `Starting point`).\n\nUse a template's `id` as the `email_template_id` when creating or updating a broadcast. **Note:** templates in the `Starting point` category are generally not supported when creating broadcasts via the API — using one returns a `Starting point email template is not supported` error unless your app has been enabled for it. See [Create a broadcast](/api-reference/broadcasts/create-a-broadcast).",
         "tags": [
           "Email Templates"
         ],
@@ -6133,6 +6143,7 @@
     "/v4/forms": {
       "get": {
         "summary": "List forms",
+        "description": "Returns a cursor-paginated list of forms and landing pages in the account. Both live on this endpoint — filter with `type=embed` for embedded forms or `type=hosted` for landing pages. By default only `active` forms are returned; use `status` (`active`, `archived`, `trashed`, or `all`) to widen the search. Add `include=subscriber_count` to embed each form's subscriber count.\n\nEach form includes its `uid`, `embed_js`, and `embed_url` for embedding on your site. To see who joined via a form, use [List subscribers for a form](/api-reference/forms/list-subscribers-for-a-form); to add an existing subscriber, use [Add subscriber to form](/api-reference/forms/add-subscriber-to-form).",
         "tags": [
           "Forms"
         ],
@@ -6380,6 +6391,7 @@
     "/v4/forms/{form_id}/subscribers": {
       "get": {
         "summary": "List subscribers for a form",
+        "description": "Returns a cursor-paginated list of subscribers who joined through (or were added to) the form. By default only `active` subscribers are returned — use `status` (`active`, `inactive`, `bounced`, `complained`, `cancelled`, or `all`) to widen the search.\n\nFilter by when they were added to the form with `added_after`/`added_before`, or by when the subscriber record was created with `created_after`/`created_before`. Set `slim=true` to omit expensive optional fields for a faster, smaller response.",
         "tags": [
           "Forms"
         ],
@@ -7460,6 +7472,7 @@
     "/v4/posts": {
       "get": {
         "summary": "List posts",
+        "description": "Returns a cursor-paginated list of the account's posts — content published to the creator's Kit site and/or sent by email — with each post's `status` (e.g. `draft`, `scheduled`, `published`), `slug`, `public_url`, `is_paid` flag, and timestamps for publishing and sending.\n\nPost bodies are omitted by default; set `include_content=true` to embed the `content` HTML on each post (this significantly increases response size and latency for large collections — prefer [Get a post](/api-reference/posts/get-a-post) for a single body). A post that was also sent as a broadcast shares its `publication_id` with the matching broadcast from [List broadcasts](/api-reference/broadcasts/list-broadcasts).",
         "tags": [
           "Posts"
         ],
@@ -7703,6 +7716,7 @@
     "/v4/posts/{id}": {
       "get": {
         "summary": "Get a post",
+        "description": "Returns a single post's full record, including its `content` HTML, `status` (e.g. `draft`, `scheduled`, `published`), `slug`, SEO fields (`description`, `meta_description`), thumbnail, `is_paid` flag, and the `public_url` where it's published on the creator's Kit site.\n\nA post that was also sent as a broadcast shares its `publication_id` with the matching broadcast — see [List broadcasts](/api-reference/broadcasts/list-broadcasts).",
         "tags": [
           "Posts"
         ],
@@ -7863,6 +7877,7 @@
     "/v4/purchases": {
       "get": {
         "summary": "List purchases",
+        "description": "Returns a cursor-paginated list of purchases recorded in the account, typically imported from e-commerce platforms. Each purchase includes its `transaction_id`, `status`, `source` (e.g. the originating platform), the buyer's `email_address` and `subscriber_id`, monetary breakdown (`subtotal`, `discount`, `tax`, `total`, `currency`), and the purchased `products`.\n\nTo record a new purchase, use [Create a purchase](/api-reference/purchases/create-a-purchase).",
         "tags": [
           "Purchases"
         ],
@@ -8181,6 +8196,7 @@
       },
       "post": {
         "summary": "Create a purchase",
+        "description": "Records a purchase against a subscriber, identified by `email_address` — use this to sync order data from your e-commerce platform into Kit so it appears on the subscriber's profile and can drive purchase-based automations. If no subscriber with that email address exists, one is created (in the `active` state) as part of the request.\n\nProvide the external `transaction_id` (required), monetary breakdown (`subtotal`, `tax`, `shipping`, `discount`, `total`), a 3-letter `currency` code (e.g. `USD`), `transaction_time`, and the purchased `products` — each product needs a `pid` (your platform's product identifier); products that don't exist yet are created automatically.\n\n**Note:** purchases are idempotent on `transaction_id` — submitting the same `transaction_id` again updates the existing purchase rather than creating a duplicate. Returns `422` when required parameters are missing or invalid.",
         "tags": [
           "Purchases"
         ],
@@ -8558,6 +8574,7 @@
     "/v4/purchases/{id}": {
       "get": {
         "summary": "Get a purchase",
+        "description": "Returns a single purchase's details: `transaction_id`, `status`, `source`, the buyer's `email_address` and `subscriber_id`, monetary breakdown (`subtotal`, `discount`, `tax`, `total`, `currency`), `transaction_time`, and the purchased `products` with quantities and unit prices.",
         "tags": [
           "Purchases"
         ],
@@ -8784,6 +8801,7 @@
     "/v4/segments": {
       "get": {
         "summary": "List segments",
+        "description": "Returns a cursor-paginated list of all segments in the account with their `id`, `name`, and creation date.\n\nSegments are created and managed in the Kit app — the API doesn't currently support creating or updating them. Use segment ids for targeting, for example in a broadcast's `subscriber_filter` (see [Create a broadcast](/api-reference/broadcasts/create-a-broadcast)).",
         "tags": [
           "Segments"
         ],
@@ -11270,6 +11288,7 @@
     "/v4/sequences/{sequence_id}/subscribers": {
       "get": {
         "summary": "List subscribers for a sequence",
+        "description": "Returns a cursor-paginated list of subscribers in the sequence, each with an `added_at` timestamp for when they entered it. By default only `active` subscribers are returned — use `status` (`active`, `inactive`, `bounced`, `complained`, `cancelled`, or `all`) to widen the search.\n\nFilter by when subscribers entered the sequence with `added_after`/`added_before`, or by when the subscriber record was created with `created_after`/`created_before`. To add a subscriber to the sequence, use [Add subscriber to sequence](/api-reference/sequences/add-subscriber-to-sequence).",
         "tags": [
           "Sequences"
         ],
@@ -13077,6 +13096,7 @@
     "/v4/subscribers": {
       "get": {
         "summary": "List subscribers",
+        "description": "Returns a cursor-paginated list of subscribers in the account. By default only `active` subscribers are returned — use `status` (`active`, `inactive`, `bounced`, `complained`, `cancelled`, or `all`) to widen the search. Look a subscriber up by exact `email_address`, filter by `created_after`/`created_before` and `updated_after`/`updated_before`, and sort with `sort_field` (`id`, `updated_at`, or `cancelled_at`) and `sort_order`.\n\nUse `include` (comma-separated: `attribution`, `tags`, `location`, `canceled_at`) to embed extra fields on each subscriber — including `canceled_at` without `status=cancelled` returns a `422`. Set `slim=true` to omit the `fields` object (custom field values) for a faster, smaller response.\n\nFor engagement-based searches (opens, clicks, sends), use [Filter subscribers by engagement](/api-reference/subscribers/filter-subscribers-by-engagement-sign-up-date-state-and-tags) instead.",
         "tags": [
           "Subscribers"
         ],
@@ -14431,6 +14451,20 @@
                           789,
                           1001
                         ]
+                      },
+                      {
+                        "type": "kit_source",
+                        "source_type": "api_subscription",
+                        "source_ids": [
+                          555
+                        ],
+                        "source_names": [
+                          "Welcome"
+                        ],
+                        "mechanism": "import",
+                        "mechanism_ids": [
+                          9
+                        ]
                       }
                     ]
                   },
@@ -14453,6 +14487,7 @@
     "/v4/subscribers/{id}": {
       "get": {
         "summary": "Get a subscriber",
+        "description": "Returns a single subscriber's record: first name, email address, `state` (e.g. `active` or `cancelled`), creation date, and their custom field values under `fields`.\n\nTo look a subscriber up by email address instead of id, use [List subscribers](/api-reference/subscribers/list-subscribers) with the `email_address` parameter. For their email engagement history, see [List stats for a subscriber](/api-reference/subscribers/list-stats-for-a-subscriber); for their tags, see [List tags for a subscriber](/api-reference/subscribers/list-tags-for-a-subscriber).",
         "tags": [
           "Subscribers"
         ],
@@ -14973,6 +15008,7 @@
     "/v4/subscribers/{id}/unsubscribe": {
       "post": {
         "summary": "Unsubscribe subscriber",
+        "description": "Unsubscribes the subscriber from all future emails, moving them to the `cancelled` state. Returns `204 No Content` on success. The subscriber record, history, and tags are retained — they are not deleted from the account.\n\n**Note:** this is the API equivalent of the subscriber clicking unsubscribe. Treat it as consent-revoking and effectively permanent — only re-subscribe someone with their explicit permission.",
         "tags": [
           "Subscribers"
         ],
@@ -15248,6 +15284,7 @@
     "/v4/subscribers/{subscriber_id}/tags": {
       "get": {
         "summary": "List tags for a subscriber",
+        "description": "Returns a cursor-paginated list of the tags currently applied to a subscriber, including when each was applied (`tagged_at`).\n\nTo see every tag in the account, use [List tags](/api-reference/tags/list-tags). To add or remove a tag for this subscriber, use [Tag a subscriber](/api-reference/tags/tag-a-subscriber) and [Remove tag from subscriber](/api-reference/tags/remove-tag-from-subscriber).",
         "tags": [
           "Subscribers"
         ],
@@ -15455,6 +15492,7 @@
     "/v4/tags": {
       "get": {
         "summary": "List tags",
+        "description": "Returns a cursor-paginated list of all tags in the account with their `id`, `name`, and creation date. Add `include=subscriber_count` to embed each tag's subscriber count.\n\nTags are the main building block for segmenting your list: apply one with [Tag a subscriber](/api-reference/tags/tag-a-subscriber), and see who has one with [List subscribers for a tag](/api-reference/tags/list-subscribers-for-a-tag).",
         "tags": [
           "Tags"
         ],
@@ -15639,6 +15677,7 @@
       },
       "post": {
         "summary": "Create a tag",
+        "description": "Creates a tag with the given `name`. Creation is idempotent on name (matched case-insensitively): if a tag with that name already exists, the endpoint returns `200` with the existing tag instead of creating a duplicate (a newly created tag returns `201`). Returns `422` if `name` is missing.\n\nTo create many tags in one request, use [Bulk create tags](/api-reference/tags/bulk-create-tags).",
         "tags": [
           "Tags"
         ],
@@ -15815,6 +15854,7 @@
     "/v4/tags/{id}": {
       "put": {
         "summary": "Update tag name",
+        "description": "Renames a tag. The tag keeps its `id` and all of its subscribers — only the `name` changes, and the new name is reflected everywhere the tag is used (forms, automations, filters). Returns `422` when the new name is blank or already used by another tag in the account (names are unique, case-insensitive).",
         "tags": [
           "Tags"
         ],
@@ -15986,6 +16026,7 @@
     "/v4/tags/{tag_id}/subscribers": {
       "delete": {
         "summary": "Remove tag from subscriber by email address",
+        "description": "Removes the tag from a subscriber identified by the `email_address` query parameter, returning `204 No Content`. The subscriber stays in your account and keeps their other tags — only this tag association is removed.\n\nThis is the email-address variant of [Remove tag from subscriber](/api-reference/tags/remove-tag-from-subscriber) — use it when you have the subscriber's email but not their `id`. Returns `404` when the tag doesn't exist or no subscriber matches the email address.",
         "tags": [
           "Tags"
         ],
@@ -16006,6 +16047,16 @@
               "type": "integer"
             },
             "example": 250
+          },
+          {
+            "name": "email_address",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "subscriber@example.com",
+            "description": "Email address of the subscriber to remove the tag from"
           }
         ],
         "responses": {
@@ -16097,6 +16148,7 @@
       },
       "get": {
         "summary": "List subscribers for a tag",
+        "description": "Returns a cursor-paginated list of subscribers who have this tag. By default only `active` subscribers are returned — use `status` (`active`, `inactive`, `bounced`, `complained`, `cancelled`, or `all`) to widen the search.\n\nFilter by when the tag was applied with `tagged_after`/`tagged_before` (format `yyyy-mm-dd`), or by when the subscriber joined with `created_after`/`created_before`. Set `slim=true` to omit expensive optional fields for a faster, smaller response.",
         "tags": [
           "Tags"
         ],
@@ -16701,6 +16753,7 @@
     "/v4/tags/{tag_id}/subscribers/{id}": {
       "delete": {
         "summary": "Remove tag from subscriber",
+        "description": "Removes the tag from the subscriber and returns `204 No Content`. The subscriber stays in your account and keeps their other tags — only this tag association is removed. Returns `404` when the tag or subscriber id doesn't exist.\n\nTo identify the subscriber by email address instead of id, use [Remove tag from subscriber by email address](/api-reference/tags/remove-tag-from-subscriber-by-email-address). To remove tags from many subscribers at once, use [Bulk remove tags from subscribers](/api-reference/tags/bulk-remove-tags-from-subscribers).",
         "tags": [
           "Tags"
         ],
@@ -17441,6 +17494,7 @@
     "/v4/webhooks/{id}": {
       "delete": {
         "summary": "Delete a webhook",
+        "description": "Deletes the webhook and stops all future deliveries of its subscribed events to the target URL. Returns `204 No Content` on success, `404` when the id doesn't exist, and `422` when the webhook cannot be deleted.\n\nFind webhook ids with [List webhooks](/api-reference/webhooks/list-webhooks); register a replacement with [Create a webhook](/api-reference/webhooks/create-a-webhook).",
         "tags": [
           "Webhooks"
         ],
@@ -17668,7 +17722,7 @@
               "custom_field",
               "location"
             ],
-            "description": "Type of filter condition. `attribution` matches subscribers by their *original signup attribution* — currently supports a `forms` sub-condition that matches by the form / landing-page id the subscriber signed up through. Attribution is the original signup source; it does not track current subscription state. `custom_field` matches subscribers by the value they have stored for a particular custom field, identified by `subscriber_custom_field_id`. `location` matches subscribers whose primary location falls within a `radius` (miles) of (`latitude`, `longitude`). All three fields are required."
+            "description": "Type of filter condition. `attribution` matches subscribers by their *original signup attribution* — supports two sub-conditions: `forms` matches by the form / landing-page id the subscriber signed up through, and `kit_source` matches by any combination of the underlying Kit source fields (source type, source id, source name, mechanism, mechanism id). Attribution is the original signup source; it does not track current subscription state. `custom_field` matches subscribers by the value they have stored for a particular custom field, identified by `subscriber_custom_field_id`. `location` matches subscribers whose primary location falls within a `radius` (miles) of (`latitude`, `longitude`). All three fields are required."
           },
           "count_greater_than": {
             "type": "integer",
@@ -17747,7 +17801,7 @@
           },
           "any": {
             "type": "array",
-            "description": "Array of OR conditions. Subscriber activity must match ANY of these conditions. Engagement types accept broadcasts/URLs; 'tags' accepts tag id matchers; 'attribution' accepts attribution sub-conditions (currently 'forms'). Not applicable for 'subscribed', 'subscriber_state', 'custom_field', or 'location' types.",
+            "description": "Array of OR conditions. Subscriber activity must match ANY of these conditions. Engagement types accept broadcasts/URLs; 'tags' accepts tag id matchers; 'attribution' accepts attribution sub-conditions ('forms' or 'kit_source'). Not applicable for 'subscribed', 'subscriber_state', 'custom_field', or 'location' types.",
             "items": {
               "oneOf": [
                 {
@@ -17765,6 +17819,10 @@
                 {
                   "title": "Forms (attribution only)",
                   "$ref": "#/components/schemas/FormsAnyCondition"
+                },
+                {
+                  "title": "Kit source (attribution only)",
+                  "$ref": "#/components/schemas/KitSourceAnyCondition"
                 }
               ]
             }
@@ -17885,6 +17943,51 @@
         "required": [
           "type",
           "ids"
+        ]
+      },
+      "KitSourceAnyCondition": {
+        "type": "object",
+        "description": "Attribution sub-condition: matches subscribers whose original signup attribution row matches any combination of the supplied Kit source fields. All fields are optional; supplied fields are ANDed together against the same attribution row, and array fields (`source_ids`, `source_names`, `mechanism_ids`) match any value in the array. Known `source_type` values include `form_subscription` (form / landing-page signup), `api_subscription` (added via the API), and `manual` (added by the creator). Multiple entries in the parent `attribution` filter's `any` array are OR-ed together (consistent with `any` semantics elsewhere in this endpoint), so use separate entries to express \"kit_source A OR kit_source B\".",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "kit_source"
+            ],
+            "description": "Must be 'kit_source'"
+          },
+          "source_type": {
+            "type": "string",
+            "description": "Match attribution rows whose `kit_source_type` equals this value."
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Match attribution rows whose `kit_source_id` is in this list."
+          },
+          "source_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Match attribution rows whose `kit_source_name` is in this list."
+          },
+          "mechanism": {
+            "type": "string",
+            "description": "Match attribution rows whose `kit_source_mechanism` equals this value."
+          },
+          "mechanism_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Match attribution rows whose `kit_source_mechanism_id` is in this list."
+          }
+        },
+        "required": [
+          "type"
         ]
       }
     }
