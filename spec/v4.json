@@ -124,6 +124,44 @@
                               "is_dmarc_configured"
                             ]
                           }
+                        },
+                        "plan": {
+                          "type": "object",
+                          "properties": {
+                            "plan_type": {
+                              "type": "string"
+                            },
+                            "interval": {
+                              "type": "string"
+                            },
+                            "subscriber_limit": {
+                              "type": "integer"
+                            },
+                            "on_trial": {
+                              "type": "boolean"
+                            },
+                            "trial_lapse_date": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "renews_at": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "cancels_at": {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "plan_type",
+                            "interval",
+                            "subscriber_limit",
+                            "on_trial",
+                            "trial_lapse_date",
+                            "renews_at",
+                            "cancels_at"
+                          ]
                         }
                       },
                       "required": [
@@ -144,10 +182,10 @@
                 "example": {
                   "user": {
                     "email": "test@kit.dev",
-                    "id": 27
+                    "id": 29
                   },
                   "account": {
-                    "id": 27,
+                    "id": 29,
                     "name": "Kit Greetings",
                     "plan_type": "creator",
                     "primary_email_address": "test@kit.dev",
@@ -159,14 +197,23 @@
                     },
                     "sending_addresses": [
                       {
-                        "email_address": "joe27@ck.lol",
+                        "email_address": "joe29@ck.lol",
                         "from_name": "Joe",
                         "status": "pending",
                         "is_default": true,
                         "is_verified": false,
                         "is_dmarc_configured": false
                       }
-                    ]
+                    ],
+                    "plan": {
+                      "plan_type": "creator",
+                      "interval": "month",
+                      "subscriber_limit": 1000,
+                      "on_trial": false,
+                      "trial_lapse_date": null,
+                      "renews_at": "2023-03-17T11:43:55Z",
+                      "cancels_at": null
+                    }
                   }
                 }
               }
@@ -627,8 +674,8 @@
                     "click_tracking_enabled": true,
                     "starting": "2022-11-19T11:43:55Z",
                     "ending": "2023-02-17T11:43:55Z",
-                    "open_rate": 100,
-                    "click_rate": 50,
+                    "open_rate": 100.0,
+                    "click_rate": 50.0,
                     "unsubscribe_rate": 16.67,
                     "bounce_rate": 16.67
                   }
@@ -1892,15 +1939,15 @@
                       "send_at": null,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0,
+                        "open_rate": 0.0,
                         "emails_opened": 0,
-                        "click_rate": 0,
-                        "unsubscribe_rate": 0,
+                        "click_rate": 0.0,
+                        "unsubscribe_rate": 0.0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0,
+                        "progress": 0.0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
@@ -1911,15 +1958,15 @@
                       "send_at": null,
                       "stats": {
                         "recipients": 0,
-                        "open_rate": 0,
+                        "open_rate": 0.0,
                         "emails_opened": 0,
-                        "click_rate": 0,
-                        "unsubscribe_rate": 0,
+                        "click_rate": 0.0,
+                        "unsubscribe_rate": 0.0,
                         "unsubscribes": 0,
                         "total_clicks": 0,
                         "show_total_clicks": false,
                         "status": "draft",
-                        "progress": 0,
+                        "progress": 0.0,
                         "open_tracking_disabled": false,
                         "click_tracking_disabled": false
                       }
@@ -2297,15 +2344,15 @@
                     "id": 276,
                     "stats": {
                       "recipients": 0,
-                      "open_rate": 0,
+                      "open_rate": 0.0,
                       "emails_opened": 0,
-                      "click_rate": 0,
-                      "unsubscribe_rate": 0,
+                      "click_rate": 0.0,
+                      "unsubscribe_rate": 0.0,
                       "unsubscribes": 0,
                       "total_clicks": 0,
                       "show_total_clicks": false,
                       "status": "draft",
-                      "progress": 0,
+                      "progress": 0.0,
                       "open_tracking_disabled": false,
                       "click_tracking_disabled": false
                     }
@@ -3312,24 +3359,24 @@
                 "example": {
                   "custom_fields": [
                     {
-                      "id": 143,
+                      "id": 144,
                       "key": "existing_custom_field",
                       "label": "Existing Custom Field",
-                      "name": "ck_field_143_existing_custom_field",
+                      "name": "ck_field_144_existing_custom_field",
+                      "created_at": "2023-02-17T11:43:55Z"
+                    },
+                    {
+                      "id": 146,
+                      "key": "interests",
+                      "label": "Interests",
+                      "name": "ck_field_146_interests",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
                       "id": 145,
-                      "key": "interests",
-                      "label": "Interests",
-                      "name": "ck_field_145_interests",
-                      "created_at": "2023-02-17T11:43:55Z"
-                    },
-                    {
-                      "id": 144,
                       "key": "last_name",
                       "label": "Last name",
-                      "name": "ck_field_144_last_name",
+                      "name": "ck_field_145_last_name",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
                   ],
@@ -3570,13 +3617,13 @@
                 "example": {
                   "custom_field_values": [
                     {
-                      "subscriber_id": 615,
-                      "subscriber_custom_field_id": 156,
+                      "subscriber_id": 620,
+                      "subscriber_custom_field_id": 157,
                       "value": "Smith"
                     },
                     {
-                      "subscriber_id": 615,
-                      "subscriber_custom_field_id": 157,
+                      "subscriber_id": 620,
+                      "subscriber_custom_field_id": 158,
                       "value": "Acme Inc"
                     }
                   ],
@@ -3587,7 +3634,7 @@
                       ],
                       "custom_field_value": {
                         "subscriber_id": null,
-                        "subscriber_custom_field_id": 156,
+                        "subscriber_custom_field_id": 157,
                         "value": "Jones"
                       }
                     },
@@ -3596,7 +3643,7 @@
                         "Custom field does not exist"
                       ],
                       "custom_field_value": {
-                        "subscriber_id": 615,
+                        "subscriber_id": 620,
                         "subscriber_custom_field_id": 999999,
                         "value": "Test"
                       }
@@ -3896,7 +3943,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 633,
+                      "id": 638,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3911,7 +3958,7 @@
                       }
                     },
                     {
-                      "id": 633,
+                      "id": 638,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3932,7 +3979,7 @@
                         "Subscriber does not exist"
                       ],
                       "subscription": {
-                        "form_id": 136,
+                        "form_id": 206,
                         "subscriber_id": null,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
@@ -3943,7 +3990,7 @@
                       ],
                       "subscription": {
                         "form_id": null,
-                        "subscriber_id": 633,
+                        "subscriber_id": 638,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
                     }
@@ -4225,21 +4272,21 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 596,
+                      "id": 601,
                       "first_name": null,
                       "email_address": "brooke@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 597,
+                      "id": 602,
                       "first_name": "Camille",
                       "email_address": "camille@convertkit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 595,
+                      "id": 600,
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
                       "state": "active",
@@ -4510,7 +4557,7 @@
                         "Tag does not exist"
                       ],
                       "tag": {
-                        "id": 91
+                        "id": 92
                       }
                     }
                   ]
@@ -4711,22 +4758,22 @@
                 "example": {
                   "tags": [
                     {
-                      "id": 68,
+                      "id": 74,
                       "name": "Existing Tag",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 69,
+                      "id": 75,
                       "name": "Attended Event",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 70,
+                      "id": 76,
                       "name": "Newsletter",
                       "created_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 71,
+                      "id": 77,
                       "name": "Re-engage",
                       "created_at": "2023-02-17T11:43:55Z"
                     }
@@ -5100,14 +5147,14 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 649,
+                      "id": 654,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 649,
+                      "id": 654,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -5120,7 +5167,7 @@
                         "Subscriber does not exist"
                       ],
                       "tagging": {
-                        "tag_id": 83,
+                        "tag_id": 112,
                         "subscriber_id": null
                       }
                     },
@@ -5130,7 +5177,7 @@
                       ],
                       "tagging": {
                         "tag_id": null,
-                        "subscriber_id": 649
+                        "subscriber_id": 654
                       }
                     }
                   ]
@@ -6473,7 +6520,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 169
+            "example": 239
           },
           {
             "name": "include_total_count",
@@ -6654,9 +6701,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 673,
+                      "id": 678,
                       "first_name": null,
-                      "email_address": "subscriber357@kit.dev",
+                      "email_address": "subscriber359@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6673,9 +6720,9 @@
                       }
                     },
                     {
-                      "id": 672,
+                      "id": 677,
                       "first_name": null,
-                      "email_address": "subscriber356@kit.dev",
+                      "email_address": "subscriber358@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6692,9 +6739,9 @@
                       }
                     },
                     {
-                      "id": 671,
+                      "id": 676,
                       "first_name": null,
-                      "email_address": "subscriber355@kit.dev",
+                      "email_address": "subscriber357@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -6714,8 +6761,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzY3M10=",
-                    "end_cursor": "WzY3MV0=",
+                    "start_cursor": "WzY3OF0=",
+                    "end_cursor": "WzY3Nl0=",
                     "per_page": 500
                   }
                 }
@@ -6801,7 +6848,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 234
+            "example": 302
           }
         ],
         "responses": {
@@ -6895,7 +6942,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 785,
+                    "id": 788,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7005,7 +7052,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 786,
+                    "id": 789,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7157,7 +7204,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 210
+            "example": 278
           },
           {
             "name": "id",
@@ -7166,7 +7213,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 767
+            "example": 770
           }
         ],
         "responses": {
@@ -7260,7 +7307,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 760,
+                    "id": 765,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7371,7 +7418,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 762,
+                    "id": 766,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7650,7 +7697,7 @@
                     {
                       "id": 3,
                       "publication_id": 127,
-                      "created_at": "2026-06-11T16:15:02Z",
+                      "created_at": "2026-07-13T18:10:34Z",
                       "title": "Draft Post",
                       "slug": null,
                       "description": null,
@@ -7666,14 +7713,14 @@
                     {
                       "id": 2,
                       "publication_id": 126,
-                      "created_at": "2026-06-11T16:15:02Z",
+                      "created_at": "2026-07-13T18:10:34Z",
                       "title": "Email and Web Post",
                       "slug": "email-and-web-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-06-09T16:15:02Z",
-                      "sent_at": "2026-06-11T16:15:02Z",
+                      "published_at": "2026-07-11T18:10:34Z",
+                      "sent_at": "2026-07-13T18:10:34Z",
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
                       "is_paid": false,
@@ -7682,13 +7729,13 @@
                     {
                       "id": 1,
                       "publication_id": 125,
-                      "created_at": "2026-06-11T16:15:02Z",
+                      "created_at": "2026-07-13T18:10:34Z",
                       "title": "Web Only Post",
                       "slug": "web-only-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-06-10T16:15:02Z",
+                      "published_at": "2026-07-12T18:10:34Z",
                       "sent_at": null,
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
@@ -7824,13 +7871,13 @@
                   "post": {
                     "id": 25,
                     "publication_id": 149,
-                    "created_at": "2026-06-11T16:15:07Z",
+                    "created_at": "2026-07-13T18:10:36Z",
                     "title": "My Newsletter Post",
                     "slug": "my-newsletter-post",
                     "description": null,
                     "meta_description": null,
                     "status": "published",
-                    "published_at": "2026-06-10T16:15:07Z",
+                    "published_at": "2026-07-12T18:10:36Z",
                     "sent_at": null,
                     "thumbnail_alt": null,
                     "thumbnail_url": null,
@@ -8083,10 +8130,10 @@
                       "subscriber_id": 13,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 5,
-                      "discount": 0,
-                      "tax": 0,
-                      "total": 5,
+                      "subtotal": 5.0,
+                      "discount": 0.0,
+                      "tax": 0.0,
+                      "total": 5.0,
                       "products": [
                         {
                           "quantity": 1,
@@ -8107,8 +8154,8 @@
                       "subscriber_id": 13,
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
-                      "subtotal": 10,
-                      "discount": 0,
+                      "subtotal": 10.0,
+                      "discount": 0.0,
                       "tax": 1.05,
                       "total": 11.05,
                       "products": [
@@ -8132,7 +8179,7 @@
                       "currency": "USD",
                       "transaction_time": "2023-02-17T11:43:55Z",
                       "subtotal": 78.66,
-                      "discount": 5,
+                      "discount": 5.0,
                       "tax": 7.87,
                       "total": 81.53,
                       "products": [
@@ -8331,7 +8378,7 @@
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5,
+                    "discount": 5.0,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -8360,7 +8407,7 @@
                         "pid": "217-99-4325"
                       }
                     ],
-                    "source": "Fancy App 371"
+                    "source": "Fancy App 438"
                   }
                 }
               }
@@ -8534,7 +8581,7 @@
                   "subtotal": 78.66,
                   "tax": 7.87,
                   "shipping": 0,
-                  "discount": 5,
+                  "discount": 5.0,
                   "total": 81.53,
                   "currency": "USD",
                   "transaction_time": "2023-02-17T11:43:55Z",
@@ -8716,7 +8763,7 @@
                     "currency": "USD",
                     "transaction_time": "2023-02-17T11:43:55Z",
                     "subtotal": 78.66,
-                    "discount": 5,
+                    "discount": 5.0,
                     "tax": 7.87,
                     "total": 81.53,
                     "products": [
@@ -9023,6 +9070,16 @@
             "schema": {
               "nullable": true
             }
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "stats",
+            "description": "Comma-separated list of additional data to include on each sequence. Valid options: `stats`. `stats` adds a `stats` object with deliverability counts and rates (opens, clicks, bounces, complaints, unsubscribes) plus the unsubscriber count, matching the numbers shown on the sequences dashboard."
           }
         ],
         "responses": {
@@ -9086,6 +9143,76 @@
                           },
                           "subscriber_count": {
                             "type": "integer"
+                          },
+                          "stats": {
+                            "type": "object",
+                            "description": "Returned only when `include` contains `stats`. Performance stats matching the sequences dashboard. All deliverability fields (everything except `unsubscribers`) are null when the sequence has no deliverability data.",
+                            "properties": {
+                              "unsubscribers": {
+                                "type": "integer",
+                                "description": "Number of subscribers who have unsubscribed from (cancelled) this sequence. Reflects current subscription state (distinct from the email-event `email_unsubscribes` count)."
+                              },
+                              "recipients": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of emails sent across the sequence. Denominator for the rate fields."
+                              },
+                              "opens": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of sent emails that were opened."
+                              },
+                              "clicks": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of sent emails that had a link clicked."
+                              },
+                              "email_unsubscribes": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of unsubscribe events on emails sent by this sequence (email-level events, not current subscription state)."
+                              },
+                              "bounces": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of sent emails that bounced."
+                              },
+                              "complaints": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of sent emails that were marked as spam."
+                              },
+                              "open_rate": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Percentage of sent emails that were opened."
+                              },
+                              "click_rate": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Percentage of sent emails that had a link clicked."
+                              },
+                              "click_to_open_rate": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Percentage of opened emails that had a link clicked."
+                              },
+                              "unsubscribe_rate": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Percentage of sent emails that resulted in an unsubscribe."
+                              },
+                              "bounce_rate": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Percentage of sent emails that bounced."
+                              },
+                              "complaint_rate": {
+                                "type": "number",
+                                "nullable": true,
+                                "description": "Percentage of sent emails marked as spam."
+                              }
+                            }
                           }
                         },
                         "required": [
@@ -9316,13 +9443,13 @@
                 },
                 "example": {
                   "sequence": {
-                    "id": 30,
+                    "id": 31,
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-06-11T16:15:56Z",
-                    "updated_at": "2026-06-11T16:15:56Z",
-                    "email_address": "joe1010@ck.lol",
+                    "created_at": "2026-07-13T18:11:09Z",
+                    "updated_at": "2026-07-13T18:11:09Z",
+                    "email_address": "joe1152@ck.lol",
                     "email_template_id": 38,
                     "send_days": [
                       "monday",
@@ -9336,13 +9463,13 @@
                       {
                         "type": "sequence",
                         "ids": [
-                          29
+                          30
                         ]
                       },
                       {
                         "type": "tag",
                         "ids": [
-                          2
+                          3
                         ]
                       }
                     ],
@@ -9505,7 +9632,7 @@
               },
               "example": {
                 "name": "Full Series",
-                "email_address": "joe1010@ck.lol",
+                "email_address": "joe1152@ck.lol",
                 "email_template_id": 38,
                 "send_days": [
                   "monday",
@@ -9521,13 +9648,13 @@
                   {
                     "type": "tag",
                     "ids": [
-                      2
+                      3
                     ]
                   },
                   {
                     "type": "sequence",
                     "ids": [
-                      29
+                      30
                     ]
                   }
                 ]
@@ -9563,7 +9690,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 81
+            "example": 82
           }
         ],
         "responses": {
@@ -9649,7 +9776,17 @@
             "schema": {
               "type": "integer"
             },
-            "example": 23
+            "example": 24
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "stats",
+            "description": "Comma-separated list of additional data to include on each sequence. Valid options: `stats`. `stats` adds a `stats` object with deliverability counts and rates (opens, clicks, bounces, complaints, unsubscribes) plus the unsubscriber count, matching the numbers shown on the sequences dashboard."
           }
         ],
         "responses": {
@@ -9711,6 +9848,76 @@
                         },
                         "subscriber_count": {
                           "type": "integer"
+                        },
+                        "stats": {
+                          "type": "object",
+                          "description": "Returned only when `include` contains `stats`. Performance stats matching the sequences dashboard. All deliverability fields (everything except `unsubscribers`) are null when the sequence has no deliverability data.",
+                          "properties": {
+                            "unsubscribers": {
+                              "type": "integer",
+                              "description": "Number of subscribers who have unsubscribed from (cancelled) this sequence. Reflects current subscription state (distinct from the email-event `email_unsubscribes` count)."
+                            },
+                            "recipients": {
+                              "type": "integer",
+                              "nullable": true,
+                              "description": "Number of emails sent across the sequence. Denominator for the rate fields."
+                            },
+                            "opens": {
+                              "type": "integer",
+                              "nullable": true,
+                              "description": "Number of sent emails that were opened."
+                            },
+                            "clicks": {
+                              "type": "integer",
+                              "nullable": true,
+                              "description": "Number of sent emails that had a link clicked."
+                            },
+                            "email_unsubscribes": {
+                              "type": "integer",
+                              "nullable": true,
+                              "description": "Number of unsubscribe events on emails sent by this sequence (email-level events, not current subscription state)."
+                            },
+                            "bounces": {
+                              "type": "integer",
+                              "nullable": true,
+                              "description": "Number of sent emails that bounced."
+                            },
+                            "complaints": {
+                              "type": "integer",
+                              "nullable": true,
+                              "description": "Number of sent emails that were marked as spam."
+                            },
+                            "open_rate": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Percentage of sent emails that were opened."
+                            },
+                            "click_rate": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Percentage of sent emails that had a link clicked."
+                            },
+                            "click_to_open_rate": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Percentage of opened emails that had a link clicked."
+                            },
+                            "unsubscribe_rate": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Percentage of sent emails that resulted in an unsubscribe."
+                            },
+                            "bounce_rate": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Percentage of sent emails that bounced."
+                            },
+                            "complaint_rate": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Percentage of sent emails marked as spam."
+                            }
+                          }
                         }
                       },
                       "required": [
@@ -9736,7 +9943,7 @@
                 },
                 "example": {
                   "sequence": {
-                    "id": 22,
+                    "id": 23,
                     "name": "Welcome sequence",
                     "hold": false,
                     "repeat": false,
@@ -9843,7 +10050,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 60
+            "example": 61
           }
         ],
         "responses": {
@@ -9947,13 +10154,13 @@
                 },
                 "example": {
                   "sequence": {
-                    "id": 49,
+                    "id": 50,
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-06-11T16:16:00Z",
-                    "updated_at": "2026-06-11T16:16:00Z",
-                    "email_address": "joe1040@ck.lol",
+                    "created_at": "2026-07-13T18:11:11Z",
+                    "updated_at": "2026-07-13T18:11:11Z",
+                    "email_address": "joe1182@ck.lol",
                     "email_template_id": 40,
                     "send_days": [
                       "tuesday",
@@ -9966,13 +10173,13 @@
                       {
                         "type": "sequence",
                         "ids": [
-                          48
+                          49
                         ]
                       },
                       {
                         "type": "tag",
                         "ids": [
-                          3
+                          4
                         ]
                       }
                     ],
@@ -10135,7 +10342,7 @@
               },
               "example": {
                 "name": "New Name",
-                "email_address": "joe1040@ck.lol",
+                "email_address": "joe1182@ck.lol",
                 "email_template_id": 40,
                 "send_days": [
                   "tuesday",
@@ -10150,13 +10357,13 @@
                   {
                     "type": "tag",
                     "ids": [
-                      3
+                      4
                     ]
                   },
                   {
                     "type": "sequence",
                     "ids": [
-                      48
+                      49
                     ]
                   }
                 ]
@@ -10238,7 +10445,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 108
+            "example": 109
           }
         ],
         "responses": {
@@ -10343,10 +10550,10 @@
                   "emails": [
                     {
                       "id": 6,
-                      "sequence_id": 107,
+                      "sequence_id": 108,
                       "subject": "Welcome to the series",
                       "preview_text": "Here's what to expect",
-                      "email_address": "joe2463@ck.lol",
+                      "email_address": "joe2689@ck.lol",
                       "email_template_id": null,
                       "published": true,
                       "position": 0,
@@ -10453,7 +10660,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 154
+            "example": 155
           }
         ],
         "responses": {
@@ -10489,7 +10696,8 @@
                           "type": "boolean"
                         },
                         "position": {
-                          "nullable": true
+                          "nullable": true,
+                          "type": "integer"
                         },
                         "delay_value": {
                           "type": "integer"
@@ -10530,13 +10738,13 @@
                 "example": {
                   "email": {
                     "id": 35,
-                    "sequence_id": 153,
+                    "sequence_id": 154,
                     "subject": "Welcome to the sequence",
                     "preview_text": null,
-                    "email_address": "joe2527@ck.lol",
+                    "email_address": "joe2753@ck.lol",
                     "email_template_id": null,
                     "published": false,
-                    "position": null,
+                    "position": 0,
                     "delay_value": 1,
                     "delay_unit": "days",
                     "send_days": [
@@ -10736,7 +10944,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 91
+            "example": 100
           },
           {
             "name": "sequence_id",
@@ -10745,7 +10953,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 212
+            "example": 219
           }
         ],
         "responses": {
@@ -10840,7 +11048,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 129
+            "example": 130
           }
         ],
         "responses": {
@@ -10917,10 +11125,10 @@
                 "example": {
                   "email": {
                     "id": 24,
-                    "sequence_id": 127,
+                    "sequence_id": 128,
                     "subject": "Welcome email",
                     "preview_text": "Thanks for signing up",
-                    "email_address": "joe2492@ck.lol",
+                    "email_address": "joe2718@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": 0,
@@ -11020,7 +11228,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 67
+            "example": 76
           },
           {
             "name": "sequence_id",
@@ -11029,7 +11237,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 188
+            "example": 195
           }
         ],
         "responses": {
@@ -11106,11 +11314,11 @@
                 },
                 "example": {
                   "email": {
-                    "id": 66,
-                    "sequence_id": 187,
+                    "id": 75,
+                    "sequence_id": 194,
                     "subject": "Updated subject",
                     "preview_text": "Updated preview",
-                    "email_address": "joe2570@ck.lol",
+                    "email_address": "joe2802@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": null,
@@ -11121,7 +11329,7 @@
                       "wednesday",
                       "friday"
                     ],
-                    "content": "Content 37"
+                    "content": "Content 42"
                   }
                 }
               }
@@ -11389,7 +11597,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 255
+            "example": 266
           },
           {
             "name": "status",
@@ -11509,9 +11717,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 917,
+                      "id": 921,
                       "first_name": null,
-                      "email_address": "subscriber492@kit.dev",
+                      "email_address": "subscriber494@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -11520,9 +11728,9 @@
                       }
                     },
                     {
-                      "id": 916,
+                      "id": 920,
                       "first_name": null,
-                      "email_address": "subscriber491@kit.dev",
+                      "email_address": "subscriber493@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -11531,9 +11739,9 @@
                       }
                     },
                     {
-                      "id": 915,
+                      "id": 919,
                       "first_name": null,
-                      "email_address": "subscriber490@kit.dev",
+                      "email_address": "subscriber492@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "added_at": "2023-02-17T11:43:55Z",
@@ -11545,8 +11753,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzkxN10=",
-                    "end_cursor": "WzkxNV0=",
+                    "start_cursor": "WzkyMV0=",
+                    "end_cursor": "WzkxOV0=",
                     "per_page": 500
                   }
                 }
@@ -11632,7 +11840,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 324
+            "example": 345
           }
         ],
         "responses": {
@@ -11694,7 +11902,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1028,
+                    "id": 1038,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -11764,7 +11972,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1029,
+                    "id": 1039,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -11903,7 +12111,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1006
+            "example": 1008
           },
           {
             "name": "sequence_id",
@@ -11912,7 +12120,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 293
+            "example": 302
           }
         ],
         "responses": {
@@ -11974,7 +12182,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1002,
+                    "id": 1006,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12044,7 +12252,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1003,
+                    "id": 1007,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12330,7 +12538,7 @@
                       "updated_at": "2023-02-17T11:43:55Z",
                       "content": "Hello {{ subscriber.first_name }}",
                       "document": {
-                        "id": 152,
+                        "id": 282,
                         "value": null,
                         "value_html": "content",
                         "value_plain": null,
@@ -12482,11 +12690,11 @@
                     "snippet_type": "inline",
                     "archived": false,
                     "key": "cat-fact-of-the-day",
-                    "created_at": "2026-06-11T16:16:17Z",
-                    "updated_at": "2026-06-11T16:16:17Z",
+                    "created_at": "2026-07-13T18:11:23Z",
+                    "updated_at": "2026-07-13T18:11:23Z",
                     "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees.",
                     "document": {
-                      "id": 178,
+                      "id": 308,
                       "value": null,
                       "value_html": null,
                       "value_plain": null,
@@ -12748,7 +12956,7 @@
                     "updated_at": "2023-02-17T11:43:55Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
-                      "id": 171,
+                      "id": 301,
                       "value": null,
                       "value_html": "content",
                       "value_plain": null,
@@ -12929,10 +13137,10 @@
                     "archived": false,
                     "key": "welcome-message",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "updated_at": "2026-06-11T16:16:22Z",
+                    "updated_at": "2026-07-13T18:11:26Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
-                      "id": 206,
+                      "id": 336,
                       "value": null,
                       "value_html": "content",
                       "value_plain": null,
@@ -13156,7 +13364,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "subscriber89@kit.dev,subscriber90@kit.dev,subscriber91@kit.dev"
+            "example": "subscriber90@kit.dev,subscriber91@kit.dev,subscriber92@kit.dev"
           },
           {
             "name": "include",
@@ -13475,7 +13683,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 200,
+                      "id": 204,
                       "state": "active",
                       "first_name": "Alice",
                       "email_address": "alice@convertkit.dev",
@@ -13511,7 +13719,7 @@
                       }
                     },
                     {
-                      "id": 201,
+                      "id": 205,
                       "state": "active",
                       "first_name": "Benito",
                       "email_address": "benito@convertkit.dev",
@@ -13545,7 +13753,7 @@
                       }
                     },
                     {
-                      "id": 202,
+                      "id": 206,
                       "state": "active",
                       "first_name": "Camille",
                       "email_address": "camille@convertkit.dev",
@@ -13567,7 +13775,7 @@
                       "location": null
                     },
                     {
-                      "id": 203,
+                      "id": 207,
                       "state": "active",
                       "first_name": "Elliot",
                       "email_address": "elliot@convertkit.dev",
@@ -13739,7 +13947,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 353,
+                    "id": 357,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "inactive",
@@ -13814,7 +14022,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 349,
+                    "id": 353,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -13930,7 +14138,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 351,
+                    "id": 355,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -14507,7 +14715,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 325
+            "example": 329
           }
         ],
         "responses": {
@@ -14576,7 +14784,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 324,
+                    "id": 328,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -14669,7 +14877,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 387
+            "example": 391
           }
         ],
         "responses": {
@@ -14737,7 +14945,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 378,
+                    "id": 382,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -14853,7 +15061,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 380,
+                    "id": 384,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -15028,7 +15236,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 344
+            "example": 348
           }
         ],
         "responses": {
@@ -15147,7 +15355,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1097
+            "example": 1111
           }
         ],
         "responses": {
@@ -15230,7 +15438,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1097,
+                    "id": 1111,
                     "stats": {
                       "sent": 2,
                       "opened": 1,
@@ -15341,7 +15549,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1131
+            "example": 1145
           }
         ],
         "responses": {
@@ -15410,12 +15618,12 @@
                 "example": {
                   "tags": [
                     {
-                      "id": 111,
+                      "id": 140,
                       "name": "Tag B",
                       "tagged_at": "2023-02-17T10:43:55Z"
                     },
                     {
-                      "id": 112,
+                      "id": 141,
                       "name": "Tag A",
                       "tagged_at": "2023-02-17T10:43:55Z"
                     }
@@ -15423,8 +15631,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzExXQ==",
-                    "end_cursor": "WzEwXQ==",
+                    "start_cursor": "WzEyXQ==",
+                    "end_cursor": "WzExXQ==",
                     "per_page": 500
                   }
                 }
@@ -15724,7 +15932,7 @@
                 },
                 "example": {
                   "tag": {
-                    "id": 20,
+                    "id": 26,
                     "name": "Completed",
                     "created_at": "2023-02-17T11:43:55Z"
                   }
@@ -15765,7 +15973,7 @@
                 },
                 "example": {
                   "tag": {
-                    "id": 19,
+                    "id": 25,
                     "name": "Completed",
                     "created_at": "2023-02-17T11:43:55Z"
                   }
@@ -15874,7 +16082,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 40
+            "example": 46
           }
         ],
         "responses": {
@@ -15911,7 +16119,7 @@
                 },
                 "example": {
                   "tag": {
-                    "id": 38,
+                    "id": 44,
                     "name": "signed up",
                     "created_at": "2023-02-17T11:43:55Z"
                   }
@@ -16046,17 +16254,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 250
-          },
-          {
-            "name": "email_address",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "subscriber@example.com",
-            "description": "Email address of the subscriber to remove the tag from"
+            "example": 284
           }
         ],
         "responses": {
@@ -16255,7 +16453,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 141
+            "example": 170
           },
           {
             "name": "tagged_after",
@@ -16379,9 +16577,9 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 1134,
+                      "id": 1148,
                       "first_name": null,
-                      "email_address": "subscriber632@kit.dev",
+                      "email_address": "subscriber634@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -16390,9 +16588,9 @@
                       }
                     },
                     {
-                      "id": 1133,
+                      "id": 1147,
                       "first_name": null,
-                      "email_address": "subscriber631@kit.dev",
+                      "email_address": "subscriber633@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -16401,9 +16599,9 @@
                       }
                     },
                     {
-                      "id": 1132,
+                      "id": 1146,
                       "first_name": null,
-                      "email_address": "subscriber630@kit.dev",
+                      "email_address": "subscriber632@kit.dev",
                       "state": "active",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z",
@@ -16415,8 +16613,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WyIyMDIzLTAyLTE3VDExOjQzOjU1LjAwMFoiLDE2XQ==",
-                    "end_cursor": "WyIyMDIzLTAyLTE3VDExOjQzOjU1LjAwMFoiLDE0XQ==",
+                    "start_cursor": "WyIyMDIzLTAyLTE3VDExOjQzOjU1LjAwMFoiLDE3XQ==",
+                    "end_cursor": "WyIyMDIzLTAyLTE3VDExOjQzOjU1LjAwMFoiLDE1XQ==",
                     "per_page": 500
                   }
                 }
@@ -16502,7 +16700,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 207
+            "example": 241
           }
         ],
         "responses": {
@@ -16564,7 +16762,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1265,
+                    "id": 1284,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -16634,7 +16832,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1266,
+                    "id": 1285,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -16773,7 +16971,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1290
+            "example": 1309
           },
           {
             "name": "tag_id",
@@ -16782,7 +16980,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 228
+            "example": 262
           }
         ],
         "responses": {
@@ -16868,7 +17066,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1247
+            "example": 1266
           },
           {
             "name": "tag_id",
@@ -16877,7 +17075,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 184
+            "example": 218
           }
         ],
         "responses": {
@@ -16939,7 +17137,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1245,
+                    "id": 1264,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -17009,7 +17207,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1246,
+                    "id": 1265,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -17232,19 +17430,19 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1617,
+                      "account_id": 1762,
                       "event": {
                         "name": "tag_add",
-                        "tag_id": 44
+                        "tag_id": 50
                       },
                       "target_url": "http://example.convertkit.dev/tags"
                     },
                     {
                       "id": 1,
-                      "account_id": 1617,
+                      "account_id": 1762,
                       "event": {
                         "name": "form_subscribe",
-                        "form_id": 10
+                        "form_id": 15
                       },
                       "target_url": "http://example.convertkit.dev/"
                     }
@@ -17358,7 +17556,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1643,
+                    "account_id": 1788,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
