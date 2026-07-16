@@ -10445,7 +10445,17 @@
             "schema": {
               "type": "integer"
             },
-            "example": 109
+            "example": 110
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "stats",
+            "description": "Comma-separated list of additional data to include on each email. Valid options: `stats`. `stats` adds a `stats` object with per-email deliverability counts and rates (opens, clicks, bounces, complaints, unsubscribes), matching the numbers shown on the sequence report."
           }
         ],
         "responses": {
@@ -10495,6 +10505,60 @@
                             "type": "array",
                             "items": {
                               "type": "string"
+                            }
+                          },
+                          "stats": {
+                            "type": "object",
+                            "description": "Returned only when `include` contains `stats`. Deliverability counts and rates for this email, matching the numbers shown on the sequence report. All fields are 0 when the email has no deliverability data.",
+                            "properties": {
+                              "recipients": {
+                                "type": "integer",
+                                "description": "Number of times this email was sent. Denominator for the rate fields."
+                              },
+                              "opens": {
+                                "type": "integer",
+                                "description": "Number of sent emails that were opened."
+                              },
+                              "clicks": {
+                                "type": "integer",
+                                "description": "Number of sent emails that had a link clicked."
+                              },
+                              "email_unsubscribes": {
+                                "type": "integer",
+                                "description": "Number of unsubscribe events on this email (email-level events, not current subscription state)."
+                              },
+                              "bounces": {
+                                "type": "integer",
+                                "description": "Number of sent emails that bounced."
+                              },
+                              "complaints": {
+                                "type": "integer",
+                                "description": "Number of sent emails that were marked as spam."
+                              },
+                              "open_rate": {
+                                "type": "number",
+                                "description": "Percentage of sent emails that were opened."
+                              },
+                              "click_rate": {
+                                "type": "number",
+                                "description": "Percentage of sent emails that had a link clicked."
+                              },
+                              "click_to_open_rate": {
+                                "type": "number",
+                                "description": "Percentage of opened emails that had a link clicked."
+                              },
+                              "unsubscribe_rate": {
+                                "type": "number",
+                                "description": "Percentage of sent emails that resulted in an unsubscribe."
+                              },
+                              "bounce_rate": {
+                                "type": "number",
+                                "description": "Percentage of sent emails that bounced."
+                              },
+                              "complaint_rate": {
+                                "type": "number",
+                                "description": "Percentage of sent emails marked as spam."
+                              }
                             }
                           }
                         },
@@ -11039,7 +11103,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 26
+            "example": 29
           },
           {
             "name": "sequence_id",
@@ -11048,7 +11112,17 @@
             "schema": {
               "type": "integer"
             },
-            "example": 130
+            "example": 133
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "stats",
+            "description": "Comma-separated list of additional data to include on each email. Valid options: `stats`. `stats` adds a `stats` object with per-email deliverability counts and rates (opens, clicks, bounces, complaints, unsubscribes), matching the numbers shown on the sequence report."
           }
         ],
         "responses": {
@@ -11100,6 +11174,60 @@
                         },
                         "content": {
                           "type": "string"
+                        },
+                        "stats": {
+                          "type": "object",
+                          "description": "Returned only when `include` contains `stats`. Deliverability counts and rates for this email, matching the numbers shown on the sequence report. All fields are 0 when the email has no deliverability data.",
+                          "properties": {
+                            "recipients": {
+                              "type": "integer",
+                              "description": "Number of times this email was sent. Denominator for the rate fields."
+                            },
+                            "opens": {
+                              "type": "integer",
+                              "description": "Number of sent emails that were opened."
+                            },
+                            "clicks": {
+                              "type": "integer",
+                              "description": "Number of sent emails that had a link clicked."
+                            },
+                            "email_unsubscribes": {
+                              "type": "integer",
+                              "description": "Number of unsubscribe events on this email (email-level events, not current subscription state)."
+                            },
+                            "bounces": {
+                              "type": "integer",
+                              "description": "Number of sent emails that bounced."
+                            },
+                            "complaints": {
+                              "type": "integer",
+                              "description": "Number of sent emails that were marked as spam."
+                            },
+                            "open_rate": {
+                              "type": "number",
+                              "description": "Percentage of sent emails that were opened."
+                            },
+                            "click_rate": {
+                              "type": "number",
+                              "description": "Percentage of sent emails that had a link clicked."
+                            },
+                            "click_to_open_rate": {
+                              "type": "number",
+                              "description": "Percentage of opened emails that had a link clicked."
+                            },
+                            "unsubscribe_rate": {
+                              "type": "number",
+                              "description": "Percentage of sent emails that resulted in an unsubscribe."
+                            },
+                            "bounce_rate": {
+                              "type": "number",
+                              "description": "Percentage of sent emails that bounced."
+                            },
+                            "complaint_rate": {
+                              "type": "number",
+                              "description": "Percentage of sent emails marked as spam."
+                            }
+                          }
                         }
                       },
                       "required": [
@@ -11124,11 +11252,11 @@
                 },
                 "example": {
                   "email": {
-                    "id": 24,
-                    "sequence_id": 128,
+                    "id": 26,
+                    "sequence_id": 130,
                     "subject": "Welcome email",
                     "preview_text": "Thanks for signing up",
-                    "email_address": "joe2718@ck.lol",
+                    "email_address": "joe2720@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": 0,
