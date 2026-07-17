@@ -1728,6 +1728,7 @@
     "/v4/broadcasts/stats": {
       "get": {
         "summary": "Get stats for a list of broadcasts",
+        "description": "Returns delivery and engagement stats — recipients, opens, clicks, unsubscribes, and their corresponding rates — for a page of broadcasts in a single request, avoiding a call per broadcast. Narrow the results with the `status` filter and the `sent_after`/`sent_before` timestamps; results are cursor-paginated with up to 1000 broadcasts per page (default 500).\n\nFor a single broadcast, use [Get stats for a broadcast](/api-reference/broadcasts/get-stats-for-a-broadcast).\n\n**Data retention:** Starting October 15, 2026, email stats (opens, clicks, sends, bounces, and unsubscribes) are available via the API for the last 5 years — broadcasts sent before that window are omitted from this list. Older data is archived and can no longer be retrieved via the API; creators can [contact Kit support](https://help.kit.com) to request an export of their archived data. See [Email data retention](/api-reference/email-data-retention) for the full policy.",
         "tags": [
           "Broadcasts"
         ],
@@ -2033,7 +2034,7 @@
     "/v4/broadcasts/{broadcast_id}/clicks": {
       "get": {
         "summary": "Get link clicks for a broadcast",
-        "description": "NOTE: Pagination parameters control the list of clicks for the top level broadcast.",
+        "description": "Returns click performance for each link in a broadcast: the link `url`, its `unique_clicks`, and its click-to-delivery and click-to-open rates. Useful for seeing which calls to action actually drove engagement.\n\n**Note:** Pagination parameters control the list of links returned for the top-level broadcast; results are cursor-paginated.\n\n**Data retention:** Starting October 15, 2026, email stats (opens, clicks, sends, bounces, and unsubscribes) are available via the API for the last 5 years — click data for broadcasts older than that window is no longer available. Older data is archived and can no longer be retrieved via the API; creators can [contact Kit support](https://help.kit.com) to request an export of their archived data. See [Email data retention](/api-reference/email-data-retention) for the full policy.",
         "tags": [
           "Broadcasts"
         ],
@@ -2233,6 +2234,7 @@
     "/v4/broadcasts/{broadcast_id}/stats": {
       "get": {
         "summary": "Get stats for a broadcast",
+        "description": "Returns delivery and engagement stats for a single broadcast: recipients, opens, clicks, unsubscribes, their corresponding rates, plus the sending `status` and `progress`. The `open_tracking_disabled` and `click_tracking_disabled` flags indicate whether tracking was enabled when the broadcast was sent — interpret open and click counts accordingly.\n\nTo fetch stats for many broadcasts at once, use [Get stats for a list of broadcasts](/api-reference/broadcasts/get-stats-for-a-list-of-broadcasts); for per-link click detail, use [Get link clicks for a broadcast](/api-reference/broadcasts/get-link-clicks-for-a-broadcast).\n\n**Data retention:** Starting October 15, 2026, email stats (opens, clicks, sends, bounces, and unsubscribes) are available via the API for the last 5 years — requesting stats for a broadcast sent before that window returns a `400` error. Older data is archived and can no longer be retrieved via the API; creators can [contact Kit support](https://help.kit.com) to request an export of their archived data. See [Email data retention](/api-reference/email-data-retention) for the full policy.",
         "tags": [
           "Broadcasts"
         ],
@@ -8243,7 +8245,7 @@
       },
       "post": {
         "summary": "Create a purchase",
-        "description": "Records a purchase against a subscriber, identified by `email_address` — use this to sync order data from your e-commerce platform into Kit so it appears on the subscriber's profile and can drive purchase-based automations. If no subscriber with that email address exists, one is created (in the `active` state) as part of the request.\n\nProvide the external `transaction_id` (required), monetary breakdown (`subtotal`, `tax`, `shipping`, `discount`, `total`), a 3-letter `currency` code (e.g. `USD`), `transaction_time`, and the purchased `products` — each product needs a `pid` (your platform's product identifier); products that don't exist yet are created automatically.\n\n**Note:** purchases are idempotent on `transaction_id` — submitting the same `transaction_id` again updates the existing purchase rather than creating a duplicate. Returns `422` when required parameters are missing or invalid.",
+        "description": "Records a purchase against a subscriber, identified by `email_address` — use this to sync order data from your e-commerce platform into Kit so it appears on the subscriber's profile and can drive purchase-based automations. If no subscriber with that email address exists, one is created (in the `active` state) as part of the request.\n\nProvide the external `transaction_id` (required), monetary breakdown (`subtotal`, `tax`, `shipping`, `discount`, `total`), a 3-letter `currency` code (e.g. `USD`), `transaction_time`, and the purchased `products` — each product needs a `pid` (your platform's product identifier); products that don't exist yet are created automatically.\n\n**Note:** purchases are matched on `transaction_id`, so submitting one that already exists updates the existing purchase instead of creating a duplicate. The `products` in your request are *added* to that purchase as additional line items — they don't replace the ones already recorded — so resending the same products will duplicate the line items. Only include `products` you haven't already synced for that `transaction_id`.\n\nReturns `422` when required parameters are missing or invalid.",
         "tags": [
           "Purchases"
         ],
@@ -14411,6 +14413,7 @@
     "/v4/subscribers/filter": {
       "post": {
         "summary": "Filter subscribers by engagement, sign-up date, state, and tags",
+        "description": "Searches your subscriber list with compound conditions: email engagement (opens, clicks, sends, deliveries — with count thresholds and date ranges), sign-up date, subscriber state, and tags. Every condition in the `all` array must match (AND logic).\n\nUse `counting_mode` to control how engagement thresholds are tallied — `raw` (default) counts every event, `unique_email` counts distinct emails — and the `include` array to embed extra fields (tags, stats, custom fields, location, attribution, canceled_at) on each returned subscriber.\n\n**Data retention:** Starting October 15, 2026, email stats (opens, clicks, sends, bounces, and unsubscribes) are available via the API for the last 5 years — engagement-condition date bounds are clamped to that window, and a `stats` include range outside it returns a `400` error. See [Email data retention](/api-reference/email-data-retention) for the full policy.",
         "tags": [
           "Subscribers"
         ],
@@ -15443,7 +15446,7 @@
     "/v4/subscribers/{subscriber_id}/stats": {
       "get": {
         "summary": "List stats for a subscriber",
-        "description": "Retrieve email stats for a specific subscriber. You can filter the stats by providing `email_sent_after` and/or `email_sent_before` query parameters to limit the stats to emails sent within a specific date range.\nNote: Only data for events in the last 5 years will be included.",
+        "description": "Retrieve email stats for a specific subscriber: totals for sent, opened, clicked, and bounced emails, open and click rates, and recency signals (`last_sent`, `last_opened`, `last_clicked`, and sends since the last open/click). Filter the stats with the `email_sent_after` and/or `email_sent_before` query parameters to limit them to emails sent within a specific date range.\n\n**Data retention:** Starting October 15, 2026, email stats (opens, clicks, sends, bounces, and unsubscribes) are available via the API for the last 5 years — `email_sent_after`/`email_sent_before` are clamped to that window, and dates outside it return a `400` error indicating the earliest available date. Older data is archived and can no longer be retrieved via the API; creators can [contact Kit support](https://help.kit.com) to request an export of their archived data. See [Email data retention](/api-reference/email-data-retention) for the full policy.",
         "tags": [
           "Subscribers"
         ],
