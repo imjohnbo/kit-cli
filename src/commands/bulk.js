@@ -94,6 +94,18 @@ export function bulkCommand() {
     printResult(result, 'failures');
   }));
 
+  addBulkOptions(
+    tags
+      .command('delete')
+      .description('Delete multiple tags. JSON: [{id}, ...] (sync ≤100, async >100)')
+  ).action(withErrorHandler(async (opts) => {
+    const items = readJsonFile(opts.file);
+    const body = { tags: items };
+    if (opts.callbackUrl) body.callback_url = opts.callbackUrl;
+    const result = await del('/bulk/tags', body);
+    printResult(result, 'tags');
+  }));
+
   bulk.addCommand(tags);
 
   // --- forms ---
