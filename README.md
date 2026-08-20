@@ -5,10 +5,27 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 ## Install
 
 ```
-npm i && npm link
+npm install -g kit-cli
 ```
 
 Requires Node.js 18+.
+
+Update it later with `kit upgrade`. That hands the work to whichever package
+manager installed the CLI, so npm keeps verifying the download.
+
+To work on the CLI itself, clone the repo and run `npm i && npm link`.
+
+### Verifying what you installed
+
+Every release carries a provenance attestation that links the package to the
+commit and workflow that built it:
+
+```
+npm audit signatures
+```
+
+CI also proves the published tarball is byte-for-byte the source tree before it
+publishes. See [`docs/RELEASING.md`](docs/RELEASING.md).
 
 ## Authentication
 
@@ -34,6 +51,16 @@ kit config set-api-key <key>
 ```
 
 When both are present, OAuth takes priority.
+
+### Separate profiles
+
+`KIT_CONFIG_DIR` moves the config file. Point it at one directory per Kit account
+to keep credentials apart:
+
+```
+KIT_CONFIG_DIR=~/.kit/work kit login
+KIT_CONFIG_DIR=~/.kit/personal kit login
+```
 
 ### Targeting a different environment
 
@@ -198,6 +225,23 @@ update [options] <id>         --name, --content, --html, --archive, --restore
 An inline snippet holds Liquid text, passed with `--content`. A block snippet
 holds HTML, passed with `--html`.
 
+### upgrade
+
+```
+upgrade                       Upgrade to the newest published version
+upgrade --check               Report the newest version, install nothing
+upgrade --dry-run             Show the command that would run
+```
+
+`kit upgrade` detects how the CLI was installed and delegates to that package
+manager. It never downloads or unpacks a release itself.
+
+The CLI also prints a one-line notice on stderr when a newer version exists. It
+reads a cached version number, so it never delays a command. A background request
+refreshes the cache at most once a day. Turn it off with
+`kit config set-update-check false`, or with `KIT_NO_UPDATE_CHECK=1`. It stays off
+whenever `CI` is set.
+
 ### segments · email-templates
 
 ```
@@ -258,6 +302,11 @@ Installs the `/kit` skill to `~/.claude/skills/kit/`. Then in Claude Code:
 - OAuth tokens auto-refresh 5 minutes before expiry. Run `kit logout` to clear.
 - All IDs are validated before URL interpolation to prevent path traversal.
 - Auto-pagination is capped at 100 pages.
+- Releases publish only from a tagged commit, and only after a manual approval.
+- Published packages carry npm provenance. CI proves the tarball equals the
+  source before publishing. See [`docs/RELEASING.md`](docs/RELEASING.md).
+- `kit upgrade` delegates to your package manager. It never fetches and executes
+  code on its own.
 
 ## License
 

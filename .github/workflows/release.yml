@@ -1,0 +1,207 @@
+name: Release
+
+# What makes this publish to npm: pushing a version tag, and nothing else.
+#
+#   npm version patch      # bumps package.json, commits, creates the v1.0.1 tag
+#   git push --follow-tags # pushing the tag starts this workflow
+#
+# The publish job then waits for a manual approval on the `npm-publish`
+# environment. A push alone cannot ship a release.
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+
+# Nothing gets written unless a job asks for it.
+permissions:
+  contents: read
+
+jobs:
+  # ── Gate 1: the tag has to describe a package that passes its own tests ────
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18', '20', '22']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+  # ── Gate 2: the tag matches package.json, and the tarball matches the source ─
+  verify-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Tag must match the package version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p 'require("./package.json").version')"
+          echo "tag=$tag package.json=$pkg"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $pkg."
+            exit 1
+          fi
+
+      - name: CLI must report the package version
+        run: |
+          pkg="$(node -p 'require("./package.json").version')"
+          cli="$(node bin/kit.js --version)"
+          echo "package.json=$pkg cli=$cli"
+          if [ "$cli" != "$pkg" ]; then
+            echo "::error::kit --version reports $cli but package.json says $pkg."
+            exit 1
+          fi
+
+      # This is the check that makes the security claim real. npm provenance
+      # proves which workflow and commit built the tarball. It does not prove the
+      # tarball matches the source. kit-cli has no build step, so we can prove
+      # that directly: pack it, unpack it, and diff it against the checkout.
+      - name: Published tarball must equal the source tree
+        run: |
+          npm pack --silent
+          mkdir -p /tmp/packed
+          tar -xzf kit-cli-*.tgz -C /tmp/packed --strip-components=1
+          status=0
+          for dir in bin src skills; do
+            if ! diff -r "$dir" "/tmp/packed/$dir"; then
+              echo "::error::$dir differs between the source tree and the tarball."
+              status=1
+            fi
+          done
+          if ! diff <(git show "HEAD:package.json") /tmp/packed/package.json; then
+            echo "::error::package.json differs between the source tree and the tarball."
+            status=1
+          fi
+          exit $status
+
+      - name: Record the tarball checksum
+        run: sha256sum kit-cli-*.tgz | tee checksum.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tarball
+          path: |
+            kit-cli-*.tgz
+            checksum.txt
+
+  # ── Publish. Needs a human to approve the environment. ────────────────────
+  publish:
+    needs: [verify, verify-package]
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      contents: write      # create the GitHub Release
+      id-token: write      # OIDC, for npm provenance and trusted publishing
+      attestations: write  # GitHub artifact attestation
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - run: npm ci
+
+      # The tarball that verify-package already diffed against the source tree.
+      - uses: actions/download-artifact@v4
+        with:
+          name: tarball
+          path: verified
+
+      # publishConfig.provenance in package.json turns provenance on, so a local
+      # `npm publish` fails rather than shipping an unattested build.
+      #
+      # With trusted publishing configured for this package on npmjs.com, the
+      # OIDC token above is the whole credential and NODE_AUTH_TOKEN goes unused.
+      # Until then, put an automation token in the npm-publish environment as
+      # NPM_TOKEN and this still works.
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # npm normalizes file metadata when it packs, so packing the same tree
+      # twice gives the same bytes. Assert it rather than assume it. If this ever
+      # fails, the release stops and the three copies are not interchangeable.
+      - name: Repacked tarball must match the verified one
+        run: |
+          npm pack --silent
+          new_sha="$(sha256sum kit-cli-*.tgz | cut -d' ' -f1)"
+          old_sha="$(cut -d' ' -f1 verified/checksum.txt)"
+          echo "verified=$old_sha repacked=$new_sha"
+          if [ "$new_sha" != "$old_sha" ]; then
+            echo "::error::npm pack is not reproducible here. The release asset would differ from the verified tarball."
+            exit 1
+          fi
+
+      # Signed, verifiable with: gh attestation verify kit-cli-<v>.tgz --repo imjohnbo/kit-cli
+      - name: Attest the tarball
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: kit-cli-*.tgz
+
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          sha="$(sha256sum kit-cli-*.tgz | cut -d' ' -f1)"
+          integrity="$(npm view "kit-cli@$version" dist.integrity 2>/dev/null || true)"
+          [ -n "$integrity" ] || integrity="(not yet propagated)"
+
+          cat > notes.md <<EOF
+          ## Install
+
+          \`\`\`
+          npm install -g kit-cli@$version
+          \`\`\`
+
+          Already installed? Run \`kit upgrade\`.
+
+          ## Verify this release
+
+          npm provenance, which links the package to this workflow and commit:
+
+          \`\`\`
+          npm audit signatures
+          \`\`\`
+
+          The release tarball attestation:
+
+          \`\`\`
+          gh attestation verify kit-cli-$version.tgz --repo $REPO
+          \`\`\`
+
+          | | |
+          |---|---|
+          | Commit | \`$COMMIT\` |
+          | Tarball SHA-256 | \`$sha\` |
+          | npm integrity | \`$integrity\` |
+
+          Before publishing, CI proved this tarball equals the source tree at that
+          commit. The npm package, the attested artifact, and the asset below are
+          the same bytes.
+          EOF
+
+          gh release create "$GITHUB_REF_NAME" \
+            --title "v$version" \
+            --notes-file notes.md \
+            kit-cli-*.tgz

@@ -15,6 +15,7 @@ import { buildProgram } from '../src/program.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const spec = JSON.parse(readFileSync(join(__dirname, '..', 'spec', 'v4.json'), 'utf8'));
+const spec_pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
 
 const OPERATIONS = specOperations(spec);
 
@@ -119,7 +120,9 @@ describe('command tree', () => {
     assert.deepEqual(walk(buildProgram()), []);
   });
 
-  test('the program reports its version', () => {
-    assert.match(buildProgram().version(), /^\d+\.\d+\.\d+$/);
+  test('the CLI version matches package.json', () => {
+    // A format check would pass while the CLI reported a stale version. This
+    // compares the real values, so the two cannot drift apart again.
+    assert.equal(buildProgram().version(), spec_pkg.version);
   });
 });

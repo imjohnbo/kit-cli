@@ -14,8 +14,12 @@ import { segmentsCommand } from './commands/segments.js';
 import { emailTemplatesCommand } from './commands/email-templates.js';
 import { postsCommand } from './commands/posts.js';
 import { snippetsCommand } from './commands/snippets.js';
+import { upgradeCommand } from './commands/upgrade.js';
 
-export const VERSION = '1.0.0';
+// Imported, not just re-exported, because buildProgram() below uses it.
+import { VERSION } from './version.js';
+
+export { VERSION };
 
 /**
  * Builds the whole command tree.
@@ -48,6 +52,7 @@ export function buildProgram() {
   program.addCommand(postsCommand());
   program.addCommand(snippetsCommand());
   program.addCommand(bulkCommand());
+  program.addCommand(upgradeCommand());
 
   return program;
 }
