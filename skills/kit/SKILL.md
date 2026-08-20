@@ -1,6 +1,6 @@
 ---
 name: kit
-description: Manage your Kit (ConvertKit) email marketing account. Use this skill when the user wants to manage subscribers, tags, forms, sequences, broadcasts, custom fields, purchases, webhooks, segments, email templates, or bulk operations via the Kit API. Examples - "list my subscribers", "create a broadcast", "tag a subscriber", "show my account", "check broadcast stats", "bulk import subscribers".
+description: Manage your Kit (ConvertKit) email marketing account. Use this skill when the user wants to manage subscribers, tags, forms, sequences, sequence emails, broadcasts, posts, snippets, custom fields, purchases, webhooks, segments, email templates, or bulk operations via the Kit API. Examples - "list my subscribers", "create a broadcast", "tag a subscriber", "show my account", "check broadcast stats", "bulk import subscribers".
 argument-hint: "[action or question about your Kit account]"
 allowed-tools: Bash
 ---
@@ -58,7 +58,12 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 **Auth & Config:**
 - `kit login` — Authenticate via OAuth (PKCE) — opens browser
 - `kit logout` — Clear stored OAuth tokens
-- `kit account` — View account info (name, plan, email)
+- `kit account` — View account info (name, plan, sending addresses, time zone)
+- `kit account colors` — List brand colors
+- `kit account set-colors <hex...>` — Replace brand colors (up to 10, e.g. `#ff0000`)
+- `kit account creator-profile` — Show the creator profile
+- `kit account email-stats` — Lifetime email stats
+- `kit account growth-stats [--starting <date>] [--ending <date>]` — Subscriber growth stats
 - `kit config show` — Show full config and auth status
 - `kit config set-client-id <id>` — Save OAuth client ID
 - `kit config set-redirect-uri <uri>` — Save OAuth redirect URI
@@ -67,21 +72,24 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 - `kit config set-per-page <n>` — Change default page size
 
 **Subscribers:**
-- `kit subscribers list` — List subscribers (filters: `-e/--email`, `-s/--state`, `--created-after`, `--created-before`, `--sort-field`, `--sort-order`)
+- `kit subscribers list` — List subscribers (filters: `-e/--email`, `-s/--state`, `--created-after`, `--created-before`, `--sort-field`, `--sort-order`, `--slim`)
 - `kit subscribers get <id>` — Get subscriber details
 - `kit subscribers create <email>` — Create/upsert subscriber (`-n/--first-name`, `--fields '{"key":"val"}'`)
 - `kit subscribers update <id>` — Update subscriber (`-e/--email`, `-n/--first-name`, `--fields`)
 - `kit subscribers unsubscribe <id>` — Unsubscribe a subscriber
 - `kit subscribers tags <id>` — List tags for a subscriber
 - `kit subscribers stats <id>` — Get engagement stats
+- `kit subscribers filter --json '<conditions>'` — Filter by engagement, sign-up date, state, and tags. Also takes `--file <path>`, `--counting-mode <raw|unique_email>`, `--include <types>`, `--stats-start`, `--stats-end`
 
 **Tags:**
 - `kit tags list` — List all tags
 - `kit tags create <name>` — Create a tag
-- `kit tags subscribers <tagId>` — List subscribers with a tag
+- `kit tags subscribers <tagId>` — List subscribers with a tag (filters: `-s/--state`, `--created-after`, `--created-before`, `--tagged-after`, `--tagged-before`)
 - `kit tags add <tagId> <subscriberId>` — Tag a subscriber by ID
 - `kit tags add-by-email <tagId> <email>` — Tag a subscriber by email
 - `kit tags remove <tagId> <subscriberId>` — Remove a tag from a subscriber
+- `kit tags remove-by-email <tagId> <email>` — Remove a tag from a subscriber by email
+- `kit tags update <id> <name>` — Rename a tag
 
 **Forms:**
 - `kit forms list` — List all forms (filters: `-s/--status`, `-t/--type`)
@@ -90,18 +98,31 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 - `kit forms add-by-email <formId> <email>` — Add subscriber by email
 
 **Sequences:**
-- `kit sequences list` — List all sequences
+- `kit sequences list [--include stats]` — List all sequences
+- `kit sequences get <id> [--include stats]` — Get sequence details
+- `kit sequences create --name "..."` — Create a sequence (`--send-days`, `--send-hour`, `--time-zone`, `--active/--no-active`, `--repeat`, `--hold`, `--exclude-tag-ids`, `--exclude-sequence-ids`, `--exclude-form-ids`, `--exclude-segment-ids`, `--email-address`, `--email-template-id`)
+- `kit sequences update <id>` — Update a sequence (same flags as create)
+- `kit sequences delete <id>` — Delete a sequence
 - `kit sequences subscribers <seqId>` — List subscribers for a sequence
 - `kit sequences add <seqId> <subscriberId>` — Add subscriber to sequence
 - `kit sequences add-by-email <seqId> <email>` — Add subscriber by email
 
+**Sequence Emails:**
+- `kit sequences emails list <seqId> [--include-content] [--include stats]` — List the emails in a sequence
+- `kit sequences emails get <seqId> <id> [--include stats]` — Get one sequence email
+- `kit sequences emails create <seqId> --subject "..." --delay-value <n> --delay-unit <days|hours>` — Add an email (`--content`, `--preview-text`, `--published/--no-published`, `--send-days`, `--position`, `--email-template-id`)
+- `kit sequences emails update <seqId> <id>` — Update an email (same flags as create)
+- `kit sequences emails delete <seqId> <id>` — Delete an email
+
 **Broadcasts:**
-- `kit broadcasts list` — List all broadcasts
+- `kit broadcasts list` — List all broadcasts (filters: `-s/--status <draft|scheduled|sending|completed|aborted>`, `--sent-after`, `--sent-before`)
 - `kit broadcasts get <id>` — Get broadcast details
 - `kit broadcasts create --subject "..." --content "..." [--send-at ISO8601] [--public] [--tag-ids 1,2] [--segment-ids 1,2]` — Create broadcast
 - `kit broadcasts update <id> [--subject] [--content] [--send-at] [--public/--no-public]` — Update broadcast
 - `kit broadcasts delete <id>` — Delete a draft/scheduled broadcast
-- `kit broadcasts stats <id>` — Get broadcast engagement stats
+- `kit broadcasts stats <id>` — Get engagement stats for one broadcast
+- `kit broadcasts stats` — Get stats for every broadcast (filters: `-s/--status`, `--sent-after`, `--sent-before`, `--include-total-count`)
+- `kit broadcasts clicks <id>` — Get link click stats for a broadcast
 
 **Custom Fields:**
 - `kit custom-fields list` — List all custom fields
@@ -112,6 +133,7 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 **Purchases:**
 - `kit purchases list` — List all purchases
 - `kit purchases get <id>` — Get purchase details
+- `kit purchases create --file <path>` — Record a purchase from JSON
 
 **Webhooks:**
 - `kit webhooks list` — List all webhooks
@@ -124,12 +146,24 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 **Email Templates:**
 - `kit email-templates list` — List all email templates
 
+**Posts:**
+- `kit posts list [--include-content]` — List published posts
+- `kit posts get <id>` — Get post details
+
+**Snippets:**
+- `kit snippets list [--snippet-type <inline|block>] [--archived] [--include-content]` — List snippets
+- `kit snippets get <id>` — Get snippet details
+- `kit snippets create <name> --type inline --content "..."` — Create an inline (Liquid text) snippet
+- `kit snippets create <name> --type block --html "..."` — Create a block (HTML) snippet
+- `kit snippets update <id>` — Update a snippet (`--name`, `--content`, `--html`, `--archive`, `--restore`)
+
 **Bulk (requires OAuth):**
 
 All bulk commands take `--file <path>` (a JSON file containing an array) and optional `--callback-url <url>`. Batches of ≤100 are synchronous; larger batches are queued and POSTed to the callback URL when done.
 
 - `kit bulk subscribers create --file <path>` — Upsert many subscribers. Array of `{email_address, first_name?, state?}`
 - `kit bulk tags create --file <path>` — Create many tags. Array of `{name}`
+- `kit bulk tags delete --file <path>` — Delete many tags. Array of `{id}`
 - `kit bulk tags add --file <path>` — Tag many subscribers. Array of `{tag_id, subscriber_id}`
 - `kit bulk tags remove --file <path>` — Remove tags from many subscribers. Array of `{tag_id, subscriber_id}`
 - `kit bulk forms add --file <path>` — Add many subscribers to forms. Array of `{form_id, subscriber_id, referrer?}`
@@ -152,4 +186,5 @@ All list commands support:
 4. **Confirm destructive actions.** Before deleting broadcasts, webhooks, custom fields, or unsubscribing users, confirm with the user.
 5. **Use JSON format for piping.** When you need to process data programmatically (e.g., to extract IDs for a follow-up command), use `-f json` and parse with `jq` or node.
 6. **Show pagination info.** When results are paginated, let the user know there are more results and offer to fetch the next page.
-7. **Handle errors gracefully.** If a command fails, explain what went wrong and suggest a fix. If a bulk command fails with 401, remind the user that bulk requires OAuth.
+7. **Watch for warnings.** `kit subscribers create` and `kit subscribers update` print warnings on stderr when the API ignores a custom field key. Custom field keys are the field's `key`, not its label, so `last_name` rather than `Last Name`. If you see a warning, check the key with `kit custom-fields list`.
+8. **Handle errors gracefully.** If a command fails, explain what went wrong and suggest a fix. If a bulk command fails with 401, remind the user that bulk requires OAuth.

@@ -52,8 +52,18 @@ OAuth authorize/token endpoints derive from this base, so logging in targets the
 ```
 kit login                     Authenticate via OAuth (PKCE)
 kit logout                    Clear stored OAuth tokens
-kit account                   View account info
 kit config show               Show all config and auth status
+```
+
+### account
+
+```
+account                       View account info
+account colors
+account set-colors <hex...>   Replace brand colors (up to 10)
+account creator-profile
+account email-stats
+account growth-stats [options]
 ```
 
 ### subscribers
@@ -61,6 +71,7 @@ kit config show               Show all config and auth status
 ```
 list [options]
 get [options] <id>
+filter [options]              Filter by engagement, sign-up date, state, tags
 create [options] <email>
 update [options] <id>
 unsubscribe <id>
@@ -68,16 +79,35 @@ tags [options] <id>
 stats [options] <id>
 ```
 
+`list` takes `--slim` to drop the expensive optional fields.
+
+`filter` reads its conditions from `--json <json>` or `--file <path>`, as either a
+bare conditions array or a full body with an `all` key:
+
+```
+kit subscribers filter --json '[{"type":"subscriber_state","states":["active"]}]'
+kit subscribers filter --file conditions.json --include tags,stats --stats-start 2026-05-01
+```
+
+`create` and `update` print a warning on stderr when the API ignores a custom
+field key. Keys are the field's `key`, not its label, so `last_name` rather than
+`Last Name`.
+
 ### tags
 
 ```
 list [options]
 create <name>
+update <id> <name>            Rename a tag
 subscribers [options] <tagId>
 add <tagId> <subscriberId>
 add-by-email <tagId> <email>
 remove <tagId> <subscriberId>
+remove-by-email <tagId> <email>
 ```
+
+`subscribers` filters on `--state`, `--created-after`, `--created-before`,
+`--tagged-after`, and `--tagged-before`.
 
 ### forms
 
@@ -92,10 +122,22 @@ add-by-email <formId> <email>
 
 ```
 list [options]
+get [options] <id>
+create [options] --name <name>
+update [options] <id>
+delete <id>
 subscribers [options] <sequenceId>
 add <sequenceId> <subscriberId>
 add-by-email <sequenceId> <email>
+emails list [options] <sequenceId>
+emails get [options] <sequenceId> <id>
+emails create [options] <sequenceId> --subject <s> --delay-value <n> --delay-unit <days|hours>
+emails update [options] <sequenceId> <id>
+emails delete <sequenceId> <id>
 ```
+
+`list` and `get` take `--include stats`. `emails list` also takes
+`--include-content`.
 
 ### broadcasts
 
@@ -105,8 +147,12 @@ get [options] <id>
 create [options]
 update [options] <id>
 delete <id>
-stats [options] <id>
+stats [options] [id]          One broadcast, or every broadcast with no ID
+clicks [options] <id>         Link click stats
 ```
+
+`list` and `stats` filter on `--status <draft|scheduled|sending|completed|aborted>`,
+`--sent-after`, and `--sent-before`.
 
 ### custom-fields
 
@@ -122,6 +168,7 @@ delete <id>
 ```
 list [options]
 get [options] <id>
+create --file <path>          Record a purchase from JSON
 ```
 
 ### webhooks
@@ -131,6 +178,25 @@ list [options]
 create [options] <targetUrl> <eventName>
 delete <id>
 ```
+
+### posts
+
+```
+list [options]                --include-content for post bodies
+get [options] <id>
+```
+
+### snippets
+
+```
+list [options]                --snippet-type <inline|block>, --archived
+get [options] <id>
+create [options] <name> --type <inline|block>
+update [options] <id>         --name, --content, --html, --archive, --restore
+```
+
+An inline snippet holds Liquid text, passed with `--content`. A block snippet
+holds HTML, passed with `--html`.
 
 ### segments · email-templates
 
@@ -145,6 +211,7 @@ All bulk commands take `--file <path>` (JSON array) and optional `--callback-url
 ```
 bulk subscribers create --file <path>           [{email_address, first_name?, state?}, ...]
 bulk tags create        --file <path>           [{name}, ...]
+bulk tags delete        --file <path>           [{id}, ...]
 bulk tags add           --file <path>           [{tag_id, subscriber_id}, ...]
 bulk tags remove        --file <path>           [{tag_id, subscriber_id}, ...]
 bulk forms add          --file <path>           [{form_id, subscriber_id, referrer?}, ...]
@@ -162,6 +229,14 @@ bulk custom-fields update-values --file <path>  [{subscriber_id, subscriber_cust
 ```
 
 Run `kit <command> --help` for full flag details on any command.
+
+## API coverage
+
+[`spec/coverage.js`](spec/coverage.js) maps every operation in the stored API spec
+to the command that reaches it. A test holds the map to the spec and to the
+command tree, so a spec change that adds or drops an endpoint fails the suite
+until someone triages it, and the map can never name a command that no longer
+exists. Today it covers all 73 operations.
 
 ## Claude Code Skill
 
