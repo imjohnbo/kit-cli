@@ -51,7 +51,14 @@ export function printDetail(data, fields, opts = {}) {
   }
 }
 
-export function printSuccess(msg) {
+/**
+ * Prints a confirmation line.
+ *
+ * Pass the command's options to stay quiet under --format json, so piping the
+ * output into a JSON parser keeps working.
+ */
+export function printSuccess(msg, opts) {
+  if (opts && (opts.format || getDefaultFormat()) === 'json') return;
   console.log(chalk.green(`\u2713 ${msg}`));
 }
 

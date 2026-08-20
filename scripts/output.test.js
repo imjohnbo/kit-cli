@@ -418,3 +418,29 @@ describe('printWarnings', () => {
     assert.equal(c.logs.length, 0);
   });
 });
+
+// ── printSuccess under --format json ───────────────────────────────────────
+
+describe('printSuccess with options', () => {
+  test('prints the message for table format', () => {
+    const c = capture();
+    printSuccess('Created', { format: 'table' });
+    c.restore();
+    assert.equal(c.logs.length, 1);
+    assert.ok(c.logs[0].includes('Created'));
+  });
+
+  test('stays quiet for json format so output stays parseable', () => {
+    const c = capture();
+    printSuccess('Created', { format: 'json' });
+    c.restore();
+    assert.equal(c.logs.length, 0);
+  });
+
+  test('still prints when called without options', () => {
+    const c = capture();
+    printSuccess('Created');
+    c.restore();
+    assert.equal(c.logs.length, 1);
+  });
+});
