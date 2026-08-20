@@ -38,6 +38,30 @@ export function validateNumericId(value, label = 'ID') {
 }
 
 /**
+ * Validates that a value is an integer within an inclusive range.
+ * Unlike validateNumericId, zero is allowed when it is inside the range.
+ */
+export function validateIntInRange(value, min, max, label = 'value') {
+  const num = Number(value);
+  if (!Number.isInteger(num) || num < min || num > max) {
+    console.error(`Invalid ${label}: "${value}". Must be an integer between ${min} and ${max}.`);
+    process.exit(1);
+  }
+  return num;
+}
+
+/**
+ * Validates that a value is one of an allowed set, case-sensitively.
+ */
+export function validateEnum(value, allowed, label = 'value') {
+  if (!allowed.includes(value)) {
+    console.error(`Invalid ${label}: "${value}". Must be one of: ${allowed.join(', ')}.`);
+    process.exit(1);
+  }
+  return value;
+}
+
+/**
  * Parses a comma-separated list of numeric IDs into an array of numbers.
  * Exits with a message if any entry is not a positive integer.
  */
