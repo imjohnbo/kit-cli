@@ -17,6 +17,8 @@ import {
   put,
   del,
   paginate,
+  parseIdList,
+  parseCsvList,
 } from '../src/client.js';
 import config from '../src/config.js';
 
@@ -618,5 +620,122 @@ describe('paginate', () => {
     };
     await paginate('/subscribers', { email_address: 'test@example.com' }, 'subscribers');
     assert.equal(capturedParams[0].email_address, 'test@example.com');
+  });
+});
+
+// ── parseIdList ────────────────────────────────────────────────────────────
+
+describe('parseIdList', () => {
+  test('parses a single ID', () => {
+    assert.deepEqual(parseIdList('7'), [7]);
+  });
+
+  test('parses a comma-separated list', () => {
+    assert.deepEqual(parseIdList('1,2,3'), [1, 2, 3]);
+  });
+
+  test('trims whitespace around entries', () => {
+    assert.deepEqual(parseIdList(' 4 , 5 '), [4, 5]);
+  });
+
+  test('ignores empty entries from trailing commas', () => {
+    assert.deepEqual(parseIdList('8,9,'), [8, 9]);
+  });
+
+  test('returns numbers, not strings', () => {
+    assert.equal(typeof parseIdList('12')[0], 'number');
+  });
+
+  test('exits on a non-numeric entry', () => {
+    const exit = mockExit();
+    const err = captureConsoleError();
+    assert.throws(() => parseIdList('1,abc', 'tag ID'), /process.exit\(1\)/);
+    err.restore();
+    exit.restore();
+    assert.ok(err.lines.join(' ').includes('tag ID'));
+  });
+
+  test('exits on a zero or negative entry', () => {
+    const exit = mockExit();
+    const err = captureConsoleError();
+    assert.throws(() => parseIdList('0'), /process.exit\(1\)/);
+    err.restore();
+    exit.restore();
+  });
+});
+
+// ── parseCsvList ───────────────────────────────────────────────────────────
+
+describe('parseCsvList', () => {
+  test('splits on commas', () => {
+    assert.deepEqual(parseCsvList('monday,friday'), ['monday', 'friday']);
+  });
+
+  test('trims whitespace', () => {
+    assert.deepEqual(parseCsvList(' monday , friday '), ['monday', 'friday']);
+  });
+
+  test('drops empty entries', () => {
+    assert.deepEqual(parseCsvList('monday,,friday,'), ['monday', 'friday']);
+  });
+
+  test('returns an empty array for an empty string', () => {
+    assert.deepEqual(parseCsvList(''), []);
+  });
+});
+
+// ── query support on put and del ───────────────────────────────────────────
+
+describe('put and del query parameters', () => {
+  let snap;
+  before(() => {
+    snap = oauthSnapshot();
+    clearOAuth();
+    process.env.KIT_API_KEY = TEST_API_KEY;
+  });
+  after(() => {
+    restoreOAuth(snap);
+    delete process.env.KIT_API_KEY;
+    globalThis.fetch = _originalFetch;
+  });
+
+  test('del appends query parameters to the URL', async () => {
+    let captured;
+    globalThis.fetch = async (url) => {
+      captured = url;
+      return { ok: true, status: 204, statusText: 'No Content', json: async () => null };
+    };
+    await del('/tags/5/subscribers', undefined, { email_address: 'a@b.com' });
+    assert.equal(new URL(captured).searchParams.get('email_address'), 'a@b.com');
+  });
+
+  test('del still sends a JSON body when given one', async () => {
+    let opts;
+    globalThis.fetch = async (_url, o) => {
+      opts = o;
+      return { ok: true, status: 200, statusText: 'OK', json: async () => ({}) };
+    };
+    await del('/bulk/tags', { tags: [{ id: 1 }] });
+    assert.deepEqual(JSON.parse(opts.body), { tags: [{ id: 1 }] });
+  });
+
+  test('put appends query parameters to the URL', async () => {
+    let captured;
+    globalThis.fetch = async (url) => {
+      captured = url;
+      return { ok: true, status: 200, statusText: 'OK', json: async () => ({}) };
+    };
+    await put('/snippets/3', { name: 'x' }, { include: 'content' });
+    assert.equal(new URL(captured).searchParams.get('include'), 'content');
+  });
+
+  test('omits undefined query values', async () => {
+    let captured;
+    globalThis.fetch = async (url) => {
+      captured = url;
+      return { ok: true, status: 204, statusText: 'No Content', json: async () => null };
+    };
+    await del('/tags/5/subscribers', undefined, { email_address: undefined });
+    assert.equal(new URL(captured).search, '');
   });
 });

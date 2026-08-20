@@ -55,6 +55,19 @@ export function printSuccess(msg) {
   console.log(chalk.green(`\u2713 ${msg}`));
 }
 
+/**
+ * Prints any `warnings` the API returned alongside a successful response.
+ * The Kit API uses this to report ignored input, such as unknown custom
+ * field keys on subscriber create and update.
+ */
+export function printWarnings(res) {
+  const warnings = res?.warnings;
+  if (!Array.isArray(warnings) || warnings.length === 0) return;
+  for (const w of warnings) {
+    console.error(chalk.yellow(`! ${typeof w === 'string' ? w : JSON.stringify(w)}`));
+  }
+}
+
 export function printError(err) {
   if (err.errors) {
     console.error(chalk.red(`Error (${err.status}): ${err.errors.join('; ')}`));

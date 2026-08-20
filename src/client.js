@@ -38,6 +38,28 @@ export function validateNumericId(value, label = 'ID') {
 }
 
 /**
+ * Parses a comma-separated list of numeric IDs into an array of numbers.
+ * Exits with a message if any entry is not a positive integer.
+ */
+export function parseIdList(value, label = 'ID') {
+  return String(value)
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
+    .map((s) => validateNumericId(s, label));
+}
+
+/**
+ * Parses a comma-separated list into an array of trimmed, non-empty strings.
+ */
+export function parseCsvList(value) {
+  return String(value)
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
+/**
  * Safely parses a JSON string with a user-friendly error message.
  */
 export function safeJsonParse(str, label = 'JSON') {
@@ -124,12 +146,12 @@ export async function post(path, body, query) {
   return request('POST', path, { body, query });
 }
 
-export async function put(path, body) {
-  return request('PUT', path, { body });
+export async function put(path, body, query) {
+  return request('PUT', path, { body, query });
 }
 
-export async function del(path, body) {
-  return request('DELETE', path, { body });
+export async function del(path, body, query) {
+  return request('DELETE', path, { body, query });
 }
 
 export async function paginate(path, query = {}, dataKey) {
