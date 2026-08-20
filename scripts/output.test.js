@@ -9,6 +9,7 @@ import {
   printSuccess,
   printError,
   printPagination,
+  printWarnings,
   withErrorHandler,
 } from '../src/output.js';
 import { KitApiError } from '../src/client.js';
@@ -358,5 +359,88 @@ describe('printDetail', () => {
     const firstLabelEnd = c.logs[0].indexOf('1');
     const secondLabelEnd = c.logs[1].indexOf('a@');
     assert.equal(firstLabelEnd, secondLabelEnd);
+  });
+});
+
+// ── printWarnings ──────────────────────────────────────────────────────────
+
+describe('printWarnings', () => {
+  test('prints each warning string', () => {
+    const c = capture();
+    printWarnings({ warnings: ['Unknown field: nickname', 'Unknown field: age'] });
+    c.restore();
+    assert.equal(c.errors.length, 2);
+    assert.ok(c.errors[0].includes('Unknown field: nickname'));
+    assert.ok(c.errors[1].includes('Unknown field: age'));
+  });
+
+  test('prints nothing when there are no warnings', () => {
+    const c = capture();
+    printWarnings({ subscriber: { id: 1 } });
+    c.restore();
+    assert.equal(c.errors.length, 0);
+  });
+
+  test('prints nothing for an empty warnings array', () => {
+    const c = capture();
+    printWarnings({ warnings: [] });
+    c.restore();
+    assert.equal(c.errors.length, 0);
+  });
+
+  test('tolerates a null or undefined response', () => {
+    const c = capture();
+    printWarnings(null);
+    printWarnings(undefined);
+    c.restore();
+    assert.equal(c.errors.length, 0);
+  });
+
+  test('ignores a non-array warnings value', () => {
+    const c = capture();
+    printWarnings({ warnings: 'something went wrong' });
+    c.restore();
+    assert.equal(c.errors.length, 0);
+  });
+
+  test('serializes object warnings as JSON', () => {
+    const c = capture();
+    printWarnings({ warnings: [{ field: 'nickname', reason: 'unknown' }] });
+    c.restore();
+    assert.ok(c.errors[0].includes('nickname'));
+    assert.ok(c.errors[0].includes('unknown'));
+  });
+
+  test('writes to stderr so it does not corrupt --format json output', () => {
+    const c = capture();
+    printWarnings({ warnings: ['Unknown field: nickname'] });
+    c.restore();
+    assert.equal(c.logs.length, 0);
+  });
+});
+
+// ── printSuccess under --format json ───────────────────────────────────────
+
+describe('printSuccess with options', () => {
+  test('prints the message for table format', () => {
+    const c = capture();
+    printSuccess('Created', { format: 'table' });
+    c.restore();
+    assert.equal(c.logs.length, 1);
+    assert.ok(c.logs[0].includes('Created'));
+  });
+
+  test('stays quiet for json format so output stays parseable', () => {
+    const c = capture();
+    printSuccess('Created', { format: 'json' });
+    c.restore();
+    assert.equal(c.logs.length, 0);
+  });
+
+  test('still prints when called without options', () => {
+    const c = capture();
+    printSuccess('Created');
+    c.restore();
+    assert.equal(c.logs.length, 1);
   });
 });

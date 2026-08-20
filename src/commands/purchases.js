@@ -1,8 +1,10 @@
 import { Command } from 'commander';
-import { get, validatePathSegment } from '../client.js';
+import { readFileSync } from 'node:fs';
+import { get, post, validatePathSegment, safeJsonParse } from '../client.js';
 import {
   formatOutput,
   printDetail,
+  printSuccess,
   printPagination,
   addFormatOption,
   addPaginationOptions,
@@ -33,8 +35,58 @@ const DETAIL_FIELDS = [
   { label: 'Created At', accessor: (d) => d.created_at },
 ];
 
+// Every field the API requires on a new purchase. A purchase carries a line
+// item array, so it comes in as JSON rather than as a flag apiece.
+const REQUIRED_PURCHASE_FIELDS = [
+  'email_address',
+  'transaction_id',
+  'status',
+  'subtotal',
+  'tax',
+  'shipping',
+  'discount',
+  'total',
+  'currency',
+  'transaction_time',
+  'products',
+];
+
+/**
+ * Reads a purchase from a JSON file. Accepts the full request body
+ * (`{ "purchase": {...} }`) or a bare purchase object.
+ */
+function readPurchase(file) {
+  let raw;
+  try {
+    raw = readFileSync(file, 'utf8');
+  } catch (err) {
+    console.error(`Failed to read ${file}: ${err.message}`);
+    process.exit(1);
+  }
+
+  const parsed = safeJsonParse(raw, 'purchase JSON');
+  const purchase = parsed && parsed.purchase ? parsed.purchase : parsed;
+
+  if (!purchase || typeof purchase !== 'object' || Array.isArray(purchase)) {
+    console.error('Purchase JSON must be an object, or an object with a "purchase" key.');
+    process.exit(1);
+  }
+
+  const missing = REQUIRED_PURCHASE_FIELDS.filter((f) => purchase[f] === undefined);
+  if (missing.length > 0) {
+    console.error(`Purchase JSON is missing required field(s): ${missing.join(', ')}.`);
+    process.exit(1);
+  }
+  if (!Array.isArray(purchase.products) || purchase.products.length === 0) {
+    console.error('Purchase JSON needs a non-empty "products" array.');
+    process.exit(1);
+  }
+
+  return purchase;
+}
+
 export function purchasesCommand() {
-  const cmd = new Command('purchases').description('View purchases');
+  const cmd = new Command('purchases').description('View and record purchases');
 
   // List purchases
   const list = cmd.command('list').description('List all purchases');
@@ -57,6 +109,21 @@ export function purchasesCommand() {
       const safeId = validatePathSegment(id, 'purchase ID');
       const res = await get(`/purchases/${safeId}`);
       printDetail(res.purchase || res, DETAIL_FIELDS, opts);
+    })
+  );
+
+  // Create purchase
+  const create = cmd
+    .command('create')
+    .description('Record a purchase from a JSON file')
+    .requiredOption('--file <path>', 'JSON file holding the purchase');
+  addFormatOption(create);
+  create.action(
+    withErrorHandler(async (opts) => {
+      const res = await post('/purchases', { purchase: readPurchase(opts.file) });
+      const purchase = res.purchase || res;
+      printSuccess(`Purchase recorded: ${purchase.id}`, opts);
+      printDetail(purchase, DETAIL_FIELDS, opts);
     })
   );
 

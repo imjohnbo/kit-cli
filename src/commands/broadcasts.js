@@ -1,5 +1,14 @@
 import { Command } from 'commander';
-import { get, post, put, del, validatePathSegment, validateNumericId } from '../client.js';
+import {
+  get,
+  post,
+  put,
+  del,
+  validatePathSegment,
+  validateNumericId,
+  validateEnum,
+  parseIdList,
+} from '../client.js';
 import {
   formatOutput,
   printDetail,
@@ -9,6 +18,8 @@ import {
   addPaginationOptions,
   withErrorHandler,
 } from '../output.js';
+
+const BROADCAST_STATUSES = ['draft', 'scheduled', 'sending', 'completed', 'aborted'];
 
 const BROADCAST_COLUMNS = [
   { header: 'ID', accessor: (d) => d.id },
@@ -32,6 +43,48 @@ const DETAIL_FIELDS = [
   { label: 'Created At', accessor: (d) => d.created_at },
 ];
 
+// Mirrors the stats object the API documents for a single broadcast. The
+// accessors read through `stats` so the response shape stays intact under
+// --format json.
+const STATS_FIELDS = [
+  { label: 'ID', accessor: (d) => d.id },
+  { label: 'Recipients', accessor: (d) => d.stats?.recipients },
+  { label: 'Opens', accessor: (d) => d.stats?.emails_opened },
+  { label: 'Open Rate', accessor: (d) => d.stats?.open_rate },
+  { label: 'Total Clicks', accessor: (d) => d.stats?.total_clicks },
+  { label: 'Click Rate', accessor: (d) => d.stats?.click_rate },
+  { label: 'Unsubscribes', accessor: (d) => d.stats?.unsubscribes },
+  { label: 'Unsubscribe Rate', accessor: (d) => d.stats?.unsubscribe_rate },
+  { label: 'Status', accessor: (d) => d.stats?.status },
+  { label: 'Progress', accessor: (d) => d.stats?.progress },
+  { label: 'Open Tracking', accessor: (d) => negate(d.stats?.open_tracking_disabled) },
+  { label: 'Click Tracking', accessor: (d) => negate(d.stats?.click_tracking_disabled) },
+];
+
+/** Reports tracking as enabled or disabled, leaving an absent value absent. */
+function negate(value) {
+  return value === undefined || value === null ? value : !value;
+}
+
+const STATS_COLUMNS = [
+  { header: 'ID', accessor: (d) => d.id },
+  { header: 'Subject', accessor: (d) => truncate(d.subject, 30) },
+  { header: 'Status', accessor: (d) => d.stats?.status },
+  { header: 'Recipients', accessor: (d) => d.stats?.recipients },
+  { header: 'Opens', accessor: (d) => d.stats?.emails_opened },
+  { header: 'Open Rate', accessor: (d) => d.stats?.open_rate },
+  { header: 'Clicks', accessor: (d) => d.stats?.total_clicks },
+  { header: 'Click Rate', accessor: (d) => d.stats?.click_rate },
+  { header: 'Unsubs', accessor: (d) => d.stats?.unsubscribes },
+];
+
+const CLICK_COLUMNS = [
+  { header: 'URL', accessor: (d) => d.url },
+  { header: 'Unique Clicks', accessor: (d) => d.unique_clicks },
+  { header: 'Click To Delivery', accessor: (d) => d.click_to_delivery_rate },
+  { header: 'Click To Open', accessor: (d) => d.click_to_open_rate },
+];
+
 function truncate(str, len) {
   if (!str) return null;
   return str.length > len ? str.slice(0, len) + '...' : str;
@@ -44,14 +97,26 @@ export function broadcastsCommand() {
   const list = cmd.command('list').description('List broadcasts');
   addFormatOption(list);
   addPaginationOptions(list);
-  list.action(
-    withErrorHandler(async (opts) => {
-      const query = { per_page: opts.perPage, after: opts.after, before: opts.before };
-      const res = await get('/broadcasts', query);
-      formatOutput(res.broadcasts, BROADCAST_COLUMNS, opts);
-      printPagination(res.pagination);
-    })
-  );
+  list
+    .option('-s, --status <status>', `filter by status (${BROADCAST_STATUSES.join(', ')})`)
+    .option('--sent-after <date>', 'only broadcasts sent after this date (yyyy-mm-dd)')
+    .option('--sent-before <date>', 'only broadcasts sent before this date (yyyy-mm-dd)')
+    .action(
+      withErrorHandler(async (opts) => {
+        if (opts.status) validateEnum(opts.status, BROADCAST_STATUSES, 'status');
+        const query = {
+          per_page: opts.perPage,
+          after: opts.after,
+          before: opts.before,
+          status: opts.status,
+          sent_after: opts.sentAfter,
+          sent_before: opts.sentBefore,
+        };
+        const res = await get('/broadcasts', query);
+        formatOutput(res.broadcasts, BROADCAST_COLUMNS, opts);
+        printPagination(res.pagination);
+      })
+    );
 
   // Get broadcast
   const show = cmd.command('get <id>').description('Get a broadcast by ID');
@@ -87,9 +152,9 @@ export function broadcastsCommand() {
         };
         if (opts.emailTemplateId) body.email_template_id = validateNumericId(opts.emailTemplateId, 'email template ID');
         if (opts.segmentIds)
-          body.subscriber_filter = [{ type: 'segment', ids: opts.segmentIds.split(',').map((s) => validateNumericId(s.trim(), 'segment ID')) }];
+          body.subscriber_filter = [{ type: 'segment', ids: parseIdList(opts.segmentIds, 'segment ID') }];
         if (opts.tagIds)
-          body.subscriber_filter = [{ type: 'tag', ids: opts.tagIds.split(',').map((s) => validateNumericId(s.trim(), 'tag ID')) }];
+          body.subscriber_filter = [{ type: 'tag', ids: parseIdList(opts.tagIds, 'tag ID') }];
 
         const res = await post('/broadcasts', body);
         const bc = res.broadcast || res;
@@ -139,24 +204,54 @@ export function broadcastsCommand() {
       })
     );
 
-  // Get broadcast stats
-  const stats = cmd.command('stats <id>').description('Get stats for a broadcast');
+  // Broadcast stats, for one broadcast or across the account
+  const stats = cmd
+    .command('stats [id]')
+    .description('Get stats for one broadcast, or for every broadcast when no ID is given');
   addFormatOption(stats);
-  stats.action(
+  addPaginationOptions(stats);
+  stats
+    .option('-s, --status <status>', `filter by status (${BROADCAST_STATUSES.join(', ')})`)
+    .option('--sent-after <date>', 'only broadcasts sent after this date (yyyy-mm-dd)')
+    .option('--sent-before <date>', 'only broadcasts sent before this date (yyyy-mm-dd)')
+    .option('--include-total-count', 'include total_count in the response (slower)')
+    .action(
+      withErrorHandler(async (id, opts) => {
+        if (id !== undefined) {
+          const safeId = validatePathSegment(id, 'broadcast ID');
+          const res = await get(`/broadcasts/${safeId}/stats`);
+          printDetail(res.broadcast || res, STATS_FIELDS, opts);
+          return;
+        }
+
+        if (opts.status) validateEnum(opts.status, BROADCAST_STATUSES, 'status');
+        const query = {
+          per_page: opts.perPage,
+          after: opts.after,
+          before: opts.before,
+          status: opts.status,
+          sent_after: opts.sentAfter,
+          sent_before: opts.sentBefore,
+          include_total_count: opts.includeTotalCount ? 'true' : undefined,
+        };
+        const res = await get('/broadcasts/stats', query);
+        formatOutput(res.broadcasts, STATS_COLUMNS, opts);
+        printPagination(res.pagination);
+      })
+    );
+
+  // Link clicks for a broadcast
+  const clicks = cmd
+    .command('clicks <id>')
+    .description('Get link click stats for a broadcast');
+  addFormatOption(clicks);
+  clicks.action(
     withErrorHandler(async (id, opts) => {
       const safeId = validatePathSegment(id, 'broadcast ID');
-      const res = await get(`/broadcasts/${safeId}/stats`);
+      const res = await get(`/broadcasts/${safeId}/clicks`);
       const data = res.broadcast || res;
-      printDetail(data, [
-        { label: 'ID', accessor: (d) => d.id },
-        { label: 'Recipients', accessor: (d) => d.stats?.recipients },
-        { label: 'Opens', accessor: (d) => d.stats?.emails_opened },
-        { label: 'Open Rate', accessor: (d) => d.stats?.open_rate },
-        { label: 'Total Clicks', accessor: (d) => d.stats?.total_clicks },
-        { label: 'Click Rate', accessor: (d) => d.stats?.click_rate },
-        { label: 'Unsubscribes', accessor: (d) => d.stats?.unsubscribes },
-        { label: 'Status', accessor: (d) => d.stats?.status },
-      ], opts);
+      formatOutput(data.clicks, CLICK_COLUMNS, opts);
+      printPagination(res.pagination);
     })
   );
 

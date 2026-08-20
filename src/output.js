@@ -51,8 +51,28 @@ export function printDetail(data, fields, opts = {}) {
   }
 }
 
-export function printSuccess(msg) {
+/**
+ * Prints a confirmation line.
+ *
+ * Pass the command's options to stay quiet under --format json, so piping the
+ * output into a JSON parser keeps working.
+ */
+export function printSuccess(msg, opts) {
+  if (opts && (opts.format || getDefaultFormat()) === 'json') return;
   console.log(chalk.green(`\u2713 ${msg}`));
+}
+
+/**
+ * Prints any `warnings` the API returned alongside a successful response.
+ * The Kit API uses this to report ignored input, such as unknown custom
+ * field keys on subscriber create and update.
+ */
+export function printWarnings(res) {
+  const warnings = res?.warnings;
+  if (!Array.isArray(warnings) || warnings.length === 0) return;
+  for (const w of warnings) {
+    console.error(chalk.yellow(`! ${typeof w === 'string' ? w : JSON.stringify(w)}`));
+  }
 }
 
 export function printError(err) {
