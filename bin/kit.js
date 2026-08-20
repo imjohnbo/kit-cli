@@ -14,6 +14,8 @@ import { purchasesCommand } from '../src/commands/purchases.js';
 import { webhooksCommand } from '../src/commands/webhooks.js';
 import { segmentsCommand } from '../src/commands/segments.js';
 import { emailTemplatesCommand } from '../src/commands/email-templates.js';
+import { postsCommand } from '../src/commands/posts.js';
+import { snippetsCommand } from '../src/commands/snippets.js';
 
 const program = new Command();
 
@@ -37,6 +39,8 @@ program.addCommand(purchasesCommand());
 program.addCommand(webhooksCommand());
 program.addCommand(segmentsCommand());
 program.addCommand(emailTemplatesCommand());
+program.addCommand(postsCommand());
+program.addCommand(snippetsCommand());
 program.addCommand(bulkCommand());
 
 program.parse();
