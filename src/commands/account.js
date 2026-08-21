@@ -15,6 +15,7 @@ import {
   setOAuthRedirectUri,
   setDefaultFormat,
   setPerPage,
+  setUpdateCheckEnabled,
 } from '../config.js';
 import chalk from 'chalk';
 import { cpSync, mkdirSync, existsSync } from 'node:fs';
@@ -249,6 +250,18 @@ export function configCommand() {
       }
       setPerPage(num);
       console.log(chalk.green(`\u2713 Default per_page set to ${num}.`));
+    });
+
+  cmd
+    .command('set-update-check <enabled>')
+    .description('Turn the update notice on or off (true, false)')
+    .action((enabled) => {
+      if (!['true', 'false'].includes(enabled)) {
+        console.error(chalk.red('Value must be "true" or "false".'));
+        process.exit(1);
+      }
+      setUpdateCheckEnabled(enabled === 'true');
+      console.log(chalk.green(`\u2713 Update check ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
     });
 
   return cmd;

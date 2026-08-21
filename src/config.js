@@ -1,8 +1,14 @@
 import Conf from 'conf';
 import { chmodSync } from 'node:fs';
 
+// KIT_CONFIG_DIR moves the config file somewhere else. Point it at a directory
+// per Kit account to keep separate profiles, or at a throwaway directory to keep
+// a script from touching your real credentials. The test suite uses it for that.
 const config = new Conf({
+  // Deliberately a fixed string, not the package name. This names the directory
+  // that holds a user's credentials. Renaming the package must not orphan it.
   projectName: 'kit-cli',
+  cwd: process.env.KIT_CONFIG_DIR || undefined,
   schema: {
     apiKey:         { type: 'string', default: '' },
     baseUrl:        { type: 'string', default: 'https://api.kit.com/v4' },
@@ -13,6 +19,9 @@ const config = new Conf({
     accessToken:    { type: 'string', default: '' },
     refreshToken:   { type: 'string', default: '' },
     tokenExpiresAt: { type: 'number', default: 0 }, // unix ms
+    updateCheck:    { type: 'boolean', default: true },
+    updateCheckedAt: { type: 'number', default: 0 }, // unix ms
+    updateLatestVersion: { type: 'string', default: '' },
   },
 });
 
@@ -147,6 +156,33 @@ export function setPerPage(n) {
   config.set('perPage', n);
 }
 
+// --- Update checks ---
+//
+// The CLI keeps the newest published version in config and prints a notice when
+// the running version is older. Set `updateCheck` to false, or set the
+// KIT_NO_UPDATE_CHECK env var, to stop the check and the request it makes.
+
+export function getUpdateCheckEnabled() {
+  return config.get('updateCheck');
+}
+
+export function setUpdateCheckEnabled(enabled) {
+  config.set('updateCheck', Boolean(enabled));
+}
+
+export function getCachedLatestVersion() {
+  return config.get('updateLatestVersion');
+}
+
+export function getUpdateCheckedAt() {
+  return config.get('updateCheckedAt');
+}
+
+export function setCachedLatestVersion(version) {
+  config.set('updateLatestVersion', version);
+  config.set('updateCheckedAt', Date.now());
+}
+
 // --- Misc ---
 
 export function getAll() {
@@ -166,6 +202,7 @@ export function getAll() {
     oauthToken:      oauthStatus,
     defaultFormat:   getDefaultFormat(),
     perPage:         getPerPage(),
+    updateCheck:     getUpdateCheckEnabled(),
     configPath:      config.path,
   };
 }

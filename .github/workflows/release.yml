@@ -1,0 +1,227 @@
+name: Release
+
+# What makes this publish: pushing a version tag, and nothing else.
+#
+#   npm version patch      # bumps package.json, commits, creates the tag
+#   git push --follow-tags # pushing the tag starts this workflow
+#
+# The publish job then waits for a manual approval on the `npm-publish`
+# environment. A push on its own cannot ship a release.
+#
+# Third-party and first-party actions alike are pinned to a commit SHA. A tag is
+# mutable, so `@v7` is a promise, not a guarantee. The comment names the version
+# so Dependabot can still bump it.
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'   # prereleases, e.g. v0.1.0-rc.1
+
+# Nothing gets written unless a job asks for it.
+permissions:
+  contents: read
+
+jobs:
+  # ── Gate 1: the tests pass on every supported Node ────────────────────────
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18', '20', '22']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+  # ── Gate 2: the version is legal, and the tarball equals the source ───────
+  verify-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0   # the semver gate reads the previous tag's snapshot
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Valid semver, tag matches package.json, newer than what npm serves, and
+      # a breaking CLI surface change carries a big enough bump.
+      - name: Semantic versioning gate
+        run: node scripts/check-semver.js --tag "$GITHUB_REF_NAME"
+
+      - name: CLI must report the package version
+        run: |
+          pkg="$(node -p 'require("./package.json").version')"
+          cli="$(node bin/kit.js --version)"
+          echo "package.json=$pkg cli=$cli"
+          if [ "$cli" != "$pkg" ]; then
+            echo "::error::kit --version reports $cli but package.json says $pkg."
+            exit 1
+          fi
+
+      # npm provenance proves which workflow and commit built the tarball. It does
+      # not prove the tarball matches the source. kit-cli has no build step, so we
+      # prove that directly: pack it, unpack it, diff it against the checkout.
+      - name: Published tarball must equal the source tree
+        run: |
+          npm pack --silent
+          mkdir -p /tmp/packed
+          tar -xzf ./*.tgz -C /tmp/packed --strip-components=1
+          status=0
+          for dir in bin src skills; do
+            if ! diff -r "$dir" "/tmp/packed/$dir"; then
+              echo "::error::$dir differs between the source tree and the tarball."
+              status=1
+            fi
+          done
+          if ! diff <(git show "HEAD:package.json") /tmp/packed/package.json; then
+            echo "::error::package.json differs between the source tree and the tarball."
+            status=1
+          fi
+          exit $status
+
+      - name: Record the tarball checksum
+        run: sha256sum ./*.tgz | tee checksum.txt
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: tarball
+          path: |
+            ./*.tgz
+            checksum.txt
+
+  # ── Publish. Needs a human to approve the environment. ────────────────────
+  publish:
+    needs: [verify, verify-package]
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      contents: write      # create the GitHub Release
+      id-token: write      # OIDC, for npm provenance and trusted publishing
+      attestations: write  # GitHub artifact attestation
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - run: npm ci
+
+      # The tarball that verify-package already diffed against the source tree.
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: tarball
+          path: verified
+
+      # publishConfig.provenance in package.json turns provenance on, so a local
+      # `npm publish` fails rather than shipping an unattested build.
+      #
+      # With trusted publishing configured for this package on npmjs.com, the OIDC
+      # token above is the whole credential and NODE_AUTH_TOKEN goes unused. Until
+      # then, put an automation token in the npm-publish environment as NPM_TOKEN.
+      #
+      # A prerelease publishes under the `next` dist-tag. Publishing it as `latest`
+      # would push every `kit upgrade` onto an unstable version.
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          if [ "$version" != "${version%%-*}" ]; then
+            echo "Prerelease $version, publishing under the next tag."
+            npm publish --tag next
+          else
+            npm publish
+          fi
+
+      # npm normalizes file metadata when it packs, so packing the same tree twice
+      # gives the same bytes. Assert it rather than assume it. If this ever fails,
+      # the release stops and the three copies are not interchangeable.
+      - name: Repacked tarball must match the verified one
+        run: |
+          npm pack --silent
+          new_sha="$(sha256sum ./*.tgz | cut -d' ' -f1)"
+          old_sha="$(cut -d' ' -f1 verified/checksum.txt)"
+          echo "verified=$old_sha repacked=$new_sha"
+          if [ "$new_sha" != "$old_sha" ]; then
+            echo "::error::npm pack is not reproducible here. The release asset would differ from the verified tarball."
+            exit 1
+          fi
+
+      - name: Attest the tarball
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ./*.tgz
+
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          name="$(node -p 'require("./package.json").name')"
+          tarball="$(ls ./*.tgz | head -1)"
+          sha="$(sha256sum "$tarball" | cut -d' ' -f1)"
+          integrity="$(npm view "$name@$version" dist.integrity 2>/dev/null || true)"
+          [ -n "$integrity" ] || integrity="(not yet propagated)"
+
+          prerelease_flag=""
+          install_tag=""
+          if [ "$version" != "${version%%-*}" ]; then
+            prerelease_flag="--prerelease"
+            install_tag=" (prerelease, published under the next tag)"
+          fi
+
+          cat > notes.md <<EOF
+          ## Install$install_tag
+
+          \`\`\`
+          npm install -g $name@$version
+          \`\`\`
+
+          Already installed? Run \`kit upgrade\`.
+
+          ## Verify this release
+
+          npm provenance, which links the package to this workflow and commit:
+
+          \`\`\`
+          npm audit signatures
+          \`\`\`
+
+          The release tarball attestation:
+
+          \`\`\`
+          gh attestation verify $(basename "$tarball") --repo $REPO
+          \`\`\`
+
+          | | |
+          |---|---|
+          | Commit | \`$COMMIT\` |
+          | Tarball SHA-256 | \`$sha\` |
+          | npm integrity | \`$integrity\` |
+
+          Before publishing, CI proved this tarball equals the source tree at that
+          commit. The npm package, the attested artifact, and the asset below are
+          the same bytes.
+          EOF
+
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file notes.md \
+            $prerelease_flag \
+            "$tarball"

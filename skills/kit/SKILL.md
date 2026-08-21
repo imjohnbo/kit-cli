@@ -22,10 +22,11 @@ Current auth status:
 If the status above shows `NOT_INSTALLED`, install the CLI:
 
 ```
-npm install -g kit-cli
+npm install -g @imjohnbo/kit-cli
 ```
 
-After installing, verify with `kit --version`.
+After installing, verify with `kit --version`. If the CLI reports that an update
+is available, run `kit upgrade`.
 
 ## Step 2: Ensure Authentication is Configured
 
@@ -70,6 +71,8 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 - `kit config set-api-key <key>` — Save API key
 - `kit config set-format <table|json>` — Change output format
 - `kit config set-per-page <n>` — Change default page size
+- `kit config set-update-check <true|false>` — Turn the update notice on or off
+- `kit upgrade` — Upgrade the CLI (`--check` to look without installing)
 
 **Subscribers:**
 - `kit subscribers list` — List subscribers (filters: `-e/--email`, `-s/--state`, `--created-after`, `--created-before`, `--sort-field`, `--sort-order`, `--slim`)
