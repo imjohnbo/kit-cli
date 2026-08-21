@@ -3,10 +3,10 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import { printSuccess, withErrorHandler } from '../output.js';
-import { VERSION } from '../version.js';
-import { refreshLatest, isNewer } from '../update-check.js';
+import { VERSION, PACKAGE_NAME } from '../package-info.js';
+import { refreshLatest } from '../update-check.js';
+import { isNewer } from '../semver.js';
 
-const PACKAGE_NAME = 'kit-cli';
 
 /**
  * The upgrade command for each package manager, as an argv array.

@@ -1,6 +1,6 @@
 {
   "name": "kit-cli",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A fully featured CLI for the Kit (ConvertKit) email marketing API",
   "type": "module",
   "license": "MIT",
@@ -23,7 +23,9 @@
   "scripts": {
     "start": "node bin/kit.js",
     "test": "node scripts/run-tests.js",
-    "test:file": "node --test"
+    "test:file": "node --test",
+    "surface": "node scripts/cli-surface.js --write",
+    "check:semver": "node scripts/check-semver.js"
   },
   "keywords": [
     "kit",

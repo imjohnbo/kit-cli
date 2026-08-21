@@ -1,0 +1,1095 @@
+{
+  "commands": {
+    "login": {
+      "arguments": [],
+      "options": [
+        "--client-id"
+      ]
+    },
+    "logout": {
+      "arguments": [],
+      "options": []
+    },
+    "account": {
+      "arguments": [],
+      "options": [
+        "--format"
+      ]
+    },
+    "account colors": {
+      "arguments": [],
+      "options": [
+        "--format"
+      ]
+    },
+    "account set-colors": {
+      "arguments": [
+        {
+          "name": "colors",
+          "required": true,
+          "variadic": true
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "account creator-profile": {
+      "arguments": [],
+      "options": [
+        "--format"
+      ]
+    },
+    "account email-stats": {
+      "arguments": [],
+      "options": [
+        "--format"
+      ]
+    },
+    "account growth-stats": {
+      "arguments": [],
+      "options": [
+        "--ending",
+        "--format",
+        "--starting"
+      ]
+    },
+    "config": {
+      "arguments": [],
+      "options": []
+    },
+    "config show": {
+      "arguments": [],
+      "options": []
+    },
+    "config set-base-url": {
+      "arguments": [
+        {
+          "name": "url",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "config set-api-key": {
+      "arguments": [
+        {
+          "name": "key",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "config set-client-id": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "config set-redirect-uri": {
+      "arguments": [
+        {
+          "name": "uri",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "config set-format": {
+      "arguments": [
+        {
+          "name": "format",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "config set-per-page": {
+      "arguments": [
+        {
+          "name": "n",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "config set-update-check": {
+      "arguments": [
+        {
+          "name": "enabled",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "setup-skill": {
+      "arguments": [],
+      "options": []
+    },
+    "subscribers": {
+      "arguments": [],
+      "options": []
+    },
+    "subscribers list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--created-after",
+        "--created-before",
+        "--email",
+        "--format",
+        "--per-page",
+        "--slim",
+        "--sort-field",
+        "--sort-order",
+        "--state",
+        "--updated-after",
+        "--updated-before"
+      ]
+    },
+    "subscribers get": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "subscribers filter": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--counting-mode",
+        "--file",
+        "--format",
+        "--include",
+        "--json",
+        "--per-page",
+        "--stats-end",
+        "--stats-start"
+      ]
+    },
+    "subscribers create": {
+      "arguments": [
+        {
+          "name": "email",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--fields",
+        "--first-name",
+        "--format",
+        "--state"
+      ]
+    },
+    "subscribers update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--email",
+        "--fields",
+        "--first-name",
+        "--format"
+      ]
+    },
+    "subscribers unsubscribe": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "subscribers tags": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "subscribers stats": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format",
+        "--sent-after",
+        "--sent-before"
+      ]
+    },
+    "tags": {
+      "arguments": [],
+      "options": []
+    },
+    "tags list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "tags create": {
+      "arguments": [
+        {
+          "name": "name",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "tags update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "name",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "tags subscribers": {
+      "arguments": [
+        {
+          "name": "tagId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--after",
+        "--before",
+        "--created-after",
+        "--created-before",
+        "--format",
+        "--per-page",
+        "--state",
+        "--tagged-after",
+        "--tagged-before"
+      ]
+    },
+    "tags add": {
+      "arguments": [
+        {
+          "name": "tagId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "subscriberId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "tags add-by-email": {
+      "arguments": [
+        {
+          "name": "tagId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "email",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "tags remove": {
+      "arguments": [
+        {
+          "name": "tagId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "subscriberId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "tags remove-by-email": {
+      "arguments": [
+        {
+          "name": "tagId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "email",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "forms": {
+      "arguments": [],
+      "options": []
+    },
+    "forms list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page",
+        "--status",
+        "--type"
+      ]
+    },
+    "forms subscribers": {
+      "arguments": [
+        {
+          "name": "formId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "forms add": {
+      "arguments": [
+        {
+          "name": "formId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "subscriberId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "forms add-by-email": {
+      "arguments": [
+        {
+          "name": "formId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "email",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "sequences": {
+      "arguments": [],
+      "options": []
+    },
+    "sequences list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--include",
+        "--per-page"
+      ]
+    },
+    "sequences get": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format",
+        "--include"
+      ]
+    },
+    "sequences create": {
+      "arguments": [],
+      "options": [
+        "--active",
+        "--email-address",
+        "--email-template-id",
+        "--exclude-form-ids",
+        "--exclude-segment-ids",
+        "--exclude-sequence-ids",
+        "--exclude-tag-ids",
+        "--format",
+        "--hold",
+        "--name",
+        "--no-active",
+        "--no-hold",
+        "--no-repeat",
+        "--repeat",
+        "--send-days",
+        "--send-hour",
+        "--time-zone"
+      ]
+    },
+    "sequences update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--active",
+        "--email-address",
+        "--email-template-id",
+        "--exclude-form-ids",
+        "--exclude-segment-ids",
+        "--exclude-sequence-ids",
+        "--exclude-tag-ids",
+        "--format",
+        "--hold",
+        "--name",
+        "--no-active",
+        "--no-hold",
+        "--no-repeat",
+        "--repeat",
+        "--send-days",
+        "--send-hour",
+        "--time-zone"
+      ]
+    },
+    "sequences delete": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "sequences subscribers": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "sequences add": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "subscriberId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "sequences add-by-email": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "email",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "sequences emails": {
+      "arguments": [],
+      "options": []
+    },
+    "sequences emails list": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--include",
+        "--include-content",
+        "--per-page"
+      ]
+    },
+    "sequences emails get": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format",
+        "--include"
+      ]
+    },
+    "sequences emails create": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--content",
+        "--delay-unit",
+        "--delay-value",
+        "--email-template-id",
+        "--format",
+        "--no-published",
+        "--position",
+        "--preview-text",
+        "--published",
+        "--send-days",
+        "--subject"
+      ]
+    },
+    "sequences emails update": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--content",
+        "--delay-unit",
+        "--delay-value",
+        "--email-template-id",
+        "--format",
+        "--no-published",
+        "--position",
+        "--preview-text",
+        "--published",
+        "--send-days",
+        "--subject"
+      ]
+    },
+    "sequences emails delete": {
+      "arguments": [
+        {
+          "name": "sequenceId",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "broadcasts": {
+      "arguments": [],
+      "options": []
+    },
+    "broadcasts list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page",
+        "--sent-after",
+        "--sent-before",
+        "--status"
+      ]
+    },
+    "broadcasts get": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "broadcasts create": {
+      "arguments": [],
+      "options": [
+        "--content",
+        "--description",
+        "--email-template-id",
+        "--public",
+        "--segment-ids",
+        "--send-at",
+        "--subject",
+        "--tag-ids"
+      ]
+    },
+    "broadcasts update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--content",
+        "--description",
+        "--email-template-id",
+        "--no-public",
+        "--public",
+        "--send-at",
+        "--subject"
+      ]
+    },
+    "broadcasts delete": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "broadcasts stats": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": false,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--include-total-count",
+        "--per-page",
+        "--sent-after",
+        "--sent-before",
+        "--status"
+      ]
+    },
+    "broadcasts clicks": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "custom-fields": {
+      "arguments": [],
+      "options": []
+    },
+    "custom-fields list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "custom-fields create": {
+      "arguments": [
+        {
+          "name": "label",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "custom-fields update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "label",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "custom-fields delete": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "purchases": {
+      "arguments": [],
+      "options": []
+    },
+    "purchases list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "purchases get": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "purchases create": {
+      "arguments": [],
+      "options": [
+        "--file",
+        "--format"
+      ]
+    },
+    "webhooks": {
+      "arguments": [],
+      "options": []
+    },
+    "webhooks list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "webhooks create": {
+      "arguments": [
+        {
+          "name": "targetUrl",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "eventName",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--custom-field-id",
+        "--form-id",
+        "--initiator-value",
+        "--product-id",
+        "--sequence-id",
+        "--tag-id"
+      ]
+    },
+    "webhooks delete": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "segments": {
+      "arguments": [],
+      "options": []
+    },
+    "segments list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "email-templates": {
+      "arguments": [],
+      "options": []
+    },
+    "email-templates list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--per-page"
+      ]
+    },
+    "posts": {
+      "arguments": [],
+      "options": []
+    },
+    "posts list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--before",
+        "--format",
+        "--include-content",
+        "--per-page"
+      ]
+    },
+    "posts get": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "snippets": {
+      "arguments": [],
+      "options": []
+    },
+    "snippets list": {
+      "arguments": [],
+      "options": [
+        "--after",
+        "--archived",
+        "--before",
+        "--format",
+        "--include-content",
+        "--per-page",
+        "--snippet-type"
+      ]
+    },
+    "snippets get": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
+    },
+    "snippets create": {
+      "arguments": [
+        {
+          "name": "name",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--content",
+        "--format",
+        "--html",
+        "--type"
+      ]
+    },
+    "snippets update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--archive",
+        "--content",
+        "--format",
+        "--html",
+        "--name",
+        "--restore"
+      ]
+    },
+    "bulk": {
+      "arguments": [],
+      "options": []
+    },
+    "bulk subscribers": {
+      "arguments": [],
+      "options": []
+    },
+    "bulk subscribers create": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk tags": {
+      "arguments": [],
+      "options": []
+    },
+    "bulk tags create": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk tags add": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk tags remove": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk tags delete": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk forms": {
+      "arguments": [],
+      "options": []
+    },
+    "bulk forms add": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk custom-fields": {
+      "arguments": [],
+      "options": []
+    },
+    "bulk custom-fields create": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "bulk custom-fields update-values": {
+      "arguments": [],
+      "options": [
+        "--callback-url",
+        "--file"
+      ]
+    },
+    "upgrade": {
+      "arguments": [],
+      "options": [
+        "--check",
+        "--dry-run"
+      ]
+    }
+  }
+}

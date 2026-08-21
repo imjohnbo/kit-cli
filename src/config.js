@@ -5,6 +5,8 @@ import { chmodSync } from 'node:fs';
 // per Kit account to keep separate profiles, or at a throwaway directory to keep
 // a script from touching your real credentials. The test suite uses it for that.
 const config = new Conf({
+  // Deliberately a fixed string, not the package name. This names the directory
+  // that holds a user's credentials. Renaming the package must not orphan it.
   projectName: 'kit-cli',
   cwd: process.env.KIT_CONFIG_DIR || undefined,
   schema: {

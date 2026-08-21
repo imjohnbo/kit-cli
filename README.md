@@ -4,6 +4,10 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 
 ## Install
 
+> **Pre-release.** The version is `0.0.x`. The command surface may still change,
+> and the npm package name is not settled yet. See
+> [`docs/RELEASING.md`](docs/RELEASING.md).
+
 ```
 npm install -g kit-cli
 ```

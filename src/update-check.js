@@ -14,10 +14,10 @@ import {
   getUpdateCheckedAt,
   setCachedLatestVersion,
 } from './config.js';
-import { VERSION } from './version.js';
+import { VERSION, PACKAGE_NAME } from './package-info.js';
+import { isNewer } from './semver.js';
 
 const DEFAULT_REGISTRY = 'https://registry.npmjs.org';
-const PACKAGE_NAME = 'kit-cli';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 2000;
 
@@ -38,31 +38,8 @@ function registryBase(env = process.env) {
   return (value || DEFAULT_REGISTRY).replace(/\/+$/, '');
 }
 
-/**
- * Compares two semver-ish strings. Returns true when `candidate` is newer.
- *
- * Prerelease tags sort before their release, so 2.0.0-rc.1 is older than 2.0.0.
- * Anything unparseable is treated as not newer, which fails quiet.
- */
-export function isNewer(candidate, current) {
-  const parse = (v) => {
-    const m = /^v?(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/.exec(String(v || '').trim());
-    if (!m) return null;
-    return { nums: [Number(m[1]), Number(m[2]), Number(m[3])], pre: m[4] || null };
-  };
-
-  const a = parse(candidate);
-  const b = parse(current);
-  if (!a || !b) return false;
-
-  for (let i = 0; i < 3; i++) {
-    if (a.nums[i] !== b.nums[i]) return a.nums[i] > b.nums[i];
-  }
-  if (a.pre === b.pre) return false;
-  if (a.pre === null) return true; // release beats prerelease of the same version
-  if (b.pre === null) return false;
-  return a.pre > b.pre;
-}
+// Re-exported so callers that already import from this module keep working.
+export { isNewer };
 
 /** True when the cached version is older than the TTL. */
 export function cacheIsStale(now = Date.now()) {

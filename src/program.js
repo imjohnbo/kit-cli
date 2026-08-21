@@ -17,7 +17,7 @@ import { snippetsCommand } from './commands/snippets.js';
 import { upgradeCommand } from './commands/upgrade.js';
 
 // Imported, not just re-exported, because buildProgram() below uses it.
-import { VERSION } from './version.js';
+import { VERSION } from './package-info.js';
 
 export { VERSION };
 
