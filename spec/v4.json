@@ -1935,7 +1935,7 @@
                 "example": {
                   "broadcasts": [
                     {
-                      "id": 208,
+                      "id": 205,
                       "subject": "... or will you",
                       "send_at": null,
                       "stats": {
@@ -1954,7 +1954,7 @@
                       }
                     },
                     {
-                      "id": 207,
+                      "id": 204,
                       "subject": "You'll never guess...",
                       "send_at": null,
                       "stats": {
@@ -1976,8 +1976,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzIwOF0=",
-                    "end_cursor": "WzIwN10=",
+                    "start_cursor": "WzIwNV0=",
+                    "end_cursor": "WzIwNF0=",
                     "per_page": 500
                   }
                 }
@@ -2054,7 +2054,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 169
+            "example": 174
           }
         ],
         "responses": {
@@ -2089,6 +2089,9 @@
                               "click_to_open_rate": {
                                 "type": "number",
                                 "format": "float"
+                              },
+                              "id": {
+                                "type": "integer"
                               }
                             },
                             "required": [
@@ -2140,21 +2143,24 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 166,
+                    "id": 171,
                     "clicks": [
                       {
+                        "id": 52,
                         "url": "https://example.com/52",
                         "unique_clicks": 3,
                         "click_to_delivery_rate": 0.006,
                         "click_to_open_rate": 0.03
                       },
                       {
+                        "id": 53,
                         "url": "https://example.com/53",
                         "unique_clicks": 3,
                         "click_to_delivery_rate": 0.006,
                         "click_to_open_rate": 0.03
                       },
                       {
+                        "id": 54,
                         "url": "https://example.com/54",
                         "unique_clicks": 3,
                         "click_to_delivery_rate": 0.006,
@@ -2254,7 +2260,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 279
+            "example": 273
           }
         ],
         "responses": {
@@ -2343,7 +2349,7 @@
                 },
                 "example": {
                   "broadcast": {
-                    "id": 276,
+                    "id": 270,
                     "stats": {
                       "recipients": 0,
                       "open_rate": 0.0,
@@ -3619,12 +3625,12 @@
                 "example": {
                   "custom_field_values": [
                     {
-                      "subscriber_id": 620,
+                      "subscriber_id": 622,
                       "subscriber_custom_field_id": 157,
                       "value": "Smith"
                     },
                     {
-                      "subscriber_id": 620,
+                      "subscriber_id": 622,
                       "subscriber_custom_field_id": 158,
                       "value": "Acme Inc"
                     }
@@ -3645,7 +3651,7 @@
                         "Custom field does not exist"
                       ],
                       "custom_field_value": {
-                        "subscriber_id": 620,
+                        "subscriber_id": 622,
                         "subscriber_custom_field_id": 999999,
                         "value": "Test"
                       }
@@ -3945,7 +3951,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 638,
+                      "id": 640,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3960,7 +3966,7 @@
                       }
                     },
                     {
-                      "id": 638,
+                      "id": 640,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -3981,7 +3987,7 @@
                         "Subscriber does not exist"
                       ],
                       "subscription": {
-                        "form_id": 206,
+                        "form_id": 215,
                         "subscriber_id": null,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
@@ -3992,7 +3998,7 @@
                       ],
                       "subscription": {
                         "form_id": null,
-                        "subscriber_id": 638,
+                        "subscriber_id": 640,
                         "referrer": "https://mywebsite.com/bfpromo/?utm_source=facebook&utm_medium=cpc&utm_campaign=black_friday&utm_term=car_owners&utm_content=get_10_off"
                       }
                     }
@@ -5149,14 +5155,14 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 654,
+                      "id": 656,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
                       "tagged_at": "2023-02-17T11:43:55Z"
                     },
                     {
-                      "id": 654,
+                      "id": 656,
                       "first_name": "Sub",
                       "email_address": "sub@example.com",
                       "created_at": "2023-02-17T11:43:55Z",
@@ -5179,7 +5185,7 @@
                       ],
                       "tagging": {
                         "tag_id": null,
-                        "subscriber_id": 654
+                        "subscriber_id": 656
                       }
                     }
                   ]
@@ -6522,7 +6528,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 239
+            "example": 248
           },
           {
             "name": "include_total_count",
@@ -6703,7 +6709,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 678,
+                      "id": 680,
                       "first_name": null,
                       "email_address": "subscriber359@kit.dev",
                       "state": "active",
@@ -6722,7 +6728,7 @@
                       }
                     },
                     {
-                      "id": 677,
+                      "id": 679,
                       "first_name": null,
                       "email_address": "subscriber358@kit.dev",
                       "state": "active",
@@ -6741,7 +6747,7 @@
                       }
                     },
                     {
-                      "id": 676,
+                      "id": 678,
                       "first_name": null,
                       "email_address": "subscriber357@kit.dev",
                       "state": "active",
@@ -6763,8 +6769,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzY3OF0=",
-                    "end_cursor": "WzY3Nl0=",
+                    "start_cursor": "WzY4MF0=",
+                    "end_cursor": "WzY3OF0=",
                     "per_page": 500
                   }
                 }
@@ -6850,7 +6856,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 302
+            "example": 311
           }
         ],
         "responses": {
@@ -6944,7 +6950,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 788,
+                    "id": 790,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7054,7 +7060,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 789,
+                    "id": 791,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7206,7 +7212,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 278
+            "example": 287
           },
           {
             "name": "id",
@@ -7215,7 +7221,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 770
+            "example": 772
           }
         ],
         "responses": {
@@ -7309,7 +7315,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 765,
+                    "id": 767,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7420,7 +7426,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 766,
+                    "id": 768,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -7699,7 +7705,7 @@
                     {
                       "id": 3,
                       "publication_id": 127,
-                      "created_at": "2026-07-13T18:10:34Z",
+                      "created_at": "2026-07-28T03:01:00Z",
                       "title": "Draft Post",
                       "slug": null,
                       "description": null,
@@ -7715,14 +7721,14 @@
                     {
                       "id": 2,
                       "publication_id": 126,
-                      "created_at": "2026-07-13T18:10:34Z",
+                      "created_at": "2026-07-28T03:01:00Z",
                       "title": "Email and Web Post",
                       "slug": "email-and-web-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-07-11T18:10:34Z",
-                      "sent_at": "2026-07-13T18:10:34Z",
+                      "published_at": "2026-07-26T03:01:00Z",
+                      "sent_at": "2026-07-28T03:01:00Z",
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
                       "is_paid": false,
@@ -7731,13 +7737,13 @@
                     {
                       "id": 1,
                       "publication_id": 125,
-                      "created_at": "2026-07-13T18:10:34Z",
+                      "created_at": "2026-07-28T03:01:00Z",
                       "title": "Web Only Post",
                       "slug": "web-only-post",
                       "description": null,
                       "meta_description": null,
                       "status": "published",
-                      "published_at": "2026-07-12T18:10:34Z",
+                      "published_at": "2026-07-27T03:01:00Z",
                       "sent_at": null,
                       "thumbnail_alt": null,
                       "thumbnail_url": null,
@@ -7873,13 +7879,13 @@
                   "post": {
                     "id": 25,
                     "publication_id": 149,
-                    "created_at": "2026-07-13T18:10:36Z",
+                    "created_at": "2026-07-28T03:01:04Z",
                     "title": "My Newsletter Post",
                     "slug": "my-newsletter-post",
                     "description": null,
                     "meta_description": null,
                     "status": "published",
-                    "published_at": "2026-07-12T18:10:36Z",
+                    "published_at": "2026-07-27T03:01:04Z",
                     "sent_at": null,
                     "thumbnail_alt": null,
                     "thumbnail_url": null,
@@ -8409,7 +8415,7 @@
                         "pid": "217-99-4325"
                       }
                     ],
-                    "source": "Fancy App 438"
+                    "source": "Fancy App 434"
                   }
                 }
               }
@@ -9449,9 +9455,9 @@
                     "name": "Full Series",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-07-13T18:11:09Z",
-                    "updated_at": "2026-07-13T18:11:09Z",
-                    "email_address": "joe1152@ck.lol",
+                    "created_at": "2026-07-28T03:01:49Z",
+                    "updated_at": "2026-07-28T03:01:49Z",
+                    "email_address": "joe1150@ck.lol",
                     "email_template_id": 38,
                     "send_days": [
                       "monday",
@@ -9634,7 +9640,7 @@
               },
               "example": {
                 "name": "Full Series",
-                "email_address": "joe1152@ck.lol",
+                "email_address": "joe1150@ck.lol",
                 "email_template_id": 38,
                 "send_days": [
                   "monday",
@@ -10160,9 +10166,9 @@
                     "name": "New Name",
                     "hold": true,
                     "repeat": true,
-                    "created_at": "2026-07-13T18:11:11Z",
-                    "updated_at": "2026-07-13T18:11:11Z",
-                    "email_address": "joe1182@ck.lol",
+                    "created_at": "2026-07-28T03:01:51Z",
+                    "updated_at": "2026-07-28T03:01:52Z",
+                    "email_address": "joe1180@ck.lol",
                     "email_template_id": 40,
                     "send_days": [
                       "tuesday",
@@ -10344,7 +10350,7 @@
               },
               "example": {
                 "name": "New Name",
-                "email_address": "joe1182@ck.lol",
+                "email_address": "joe1180@ck.lol",
                 "email_template_id": 40,
                 "send_days": [
                   "tuesday",
@@ -10619,7 +10625,7 @@
                       "sequence_id": 108,
                       "subject": "Welcome to the series",
                       "preview_text": "Here's what to expect",
-                      "email_address": "joe2689@ck.lol",
+                      "email_address": "joe2790@ck.lol",
                       "email_template_id": null,
                       "published": true,
                       "position": 0,
@@ -10726,7 +10732,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 155
+            "example": 158
           }
         ],
         "responses": {
@@ -10803,11 +10809,11 @@
                 },
                 "example": {
                   "email": {
-                    "id": 35,
-                    "sequence_id": 154,
+                    "id": 38,
+                    "sequence_id": 157,
                     "subject": "Welcome to the sequence",
                     "preview_text": null,
-                    "email_address": "joe2753@ck.lol",
+                    "email_address": "joe2857@ck.lol",
                     "email_template_id": null,
                     "published": false,
                     "position": 0,
@@ -11010,7 +11016,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 100
+            "example": 103
           },
           {
             "name": "sequence_id",
@@ -11019,7 +11025,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 219
+            "example": 222
           }
         ],
         "responses": {
@@ -11258,7 +11264,7 @@
                     "sequence_id": 130,
                     "subject": "Welcome email",
                     "preview_text": "Thanks for signing up",
-                    "email_address": "joe2720@ck.lol",
+                    "email_address": "joe2821@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": 0,
@@ -11358,7 +11364,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 76
+            "example": 79
           },
           {
             "name": "sequence_id",
@@ -11367,7 +11373,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 195
+            "example": 198
           }
         ],
         "responses": {
@@ -11444,11 +11450,11 @@
                 },
                 "example": {
                   "email": {
-                    "id": 75,
-                    "sequence_id": 194,
+                    "id": 78,
+                    "sequence_id": 197,
                     "subject": "Updated subject",
                     "preview_text": "Updated preview",
-                    "email_address": "joe2802@ck.lol",
+                    "email_address": "joe2906@ck.lol",
                     "email_template_id": null,
                     "published": true,
                     "position": null,
@@ -11459,7 +11465,7 @@
                       "wednesday",
                       "friday"
                     ],
-                    "content": "Content 42"
+                    "content": "Content 44"
                   }
                 }
               }
@@ -11727,7 +11733,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 266
+            "example": 269
           },
           {
             "name": "status",
@@ -11847,7 +11853,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 921,
+                      "id": 923,
                       "first_name": null,
                       "email_address": "subscriber494@kit.dev",
                       "state": "active",
@@ -11858,7 +11864,7 @@
                       }
                     },
                     {
-                      "id": 920,
+                      "id": 922,
                       "first_name": null,
                       "email_address": "subscriber493@kit.dev",
                       "state": "active",
@@ -11869,7 +11875,7 @@
                       }
                     },
                     {
-                      "id": 919,
+                      "id": 921,
                       "first_name": null,
                       "email_address": "subscriber492@kit.dev",
                       "state": "active",
@@ -11883,8 +11889,8 @@
                   "pagination": {
                     "has_previous_page": false,
                     "has_next_page": false,
-                    "start_cursor": "WzkyMV0=",
-                    "end_cursor": "WzkxOV0=",
+                    "start_cursor": "WzkyM10=",
+                    "end_cursor": "WzkyMV0=",
                     "per_page": 500
                   }
                 }
@@ -11970,7 +11976,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 345
+            "example": 338
           }
         ],
         "responses": {
@@ -12032,7 +12038,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1038,
+                    "id": 1034,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12102,7 +12108,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1039,
+                    "id": 1035,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12241,7 +12247,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1008
+            "example": 1012
           },
           {
             "name": "sequence_id",
@@ -12250,7 +12256,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 302
+            "example": 307
           }
         ],
         "responses": {
@@ -12312,7 +12318,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1006,
+                    "id": 1008,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12382,7 +12388,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1007,
+                    "id": 1009,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -12668,7 +12674,7 @@
                       "updated_at": "2023-02-17T11:43:55Z",
                       "content": "Hello {{ subscriber.first_name }}",
                       "document": {
-                        "id": 282,
+                        "id": 292,
                         "value": null,
                         "value_html": "content",
                         "value_plain": null,
@@ -12820,11 +12826,11 @@
                     "snippet_type": "inline",
                     "archived": false,
                     "key": "cat-fact-of-the-day",
-                    "created_at": "2026-07-13T18:11:23Z",
-                    "updated_at": "2026-07-13T18:11:23Z",
+                    "created_at": "2026-07-28T03:02:06Z",
+                    "updated_at": "2026-07-28T03:02:06Z",
                     "content": "Did you know, {{ subscriber.first_name }}? Cats can rotate their ears 180 degrees.",
                     "document": {
-                      "id": 308,
+                      "id": 318,
                       "value": null,
                       "value_html": null,
                       "value_plain": null,
@@ -13086,7 +13092,7 @@
                     "updated_at": "2023-02-17T11:43:55Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
-                      "id": 301,
+                      "id": 311,
                       "value": null,
                       "value_html": "content",
                       "value_plain": null,
@@ -13267,10 +13273,10 @@
                     "archived": false,
                     "key": "welcome-message",
                     "created_at": "2023-02-17T11:43:55Z",
-                    "updated_at": "2026-07-13T18:11:26Z",
+                    "updated_at": "2026-07-28T03:02:11Z",
                     "content": "Hello {{ subscriber.first_name }}",
                     "document": {
-                      "id": 336,
+                      "id": 346,
                       "value": null,
                       "value_html": "content",
                       "value_plain": null,
@@ -14846,7 +14852,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 329
+            "example": 340
           }
         ],
         "responses": {
@@ -14897,6 +14903,38 @@
                         "canceled_at": {
                           "type": "string",
                           "nullable": true
+                        },
+                        "location": {
+                          "type": "object",
+                          "description": "The subscriber's primary location. Individual fields are `null` when not yet determined.",
+                          "properties": {
+                            "city": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "state": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "country": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "latitude": {
+                              "type": "number",
+                              "format": "float",
+                              "nullable": true
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "format": "float",
+                              "nullable": true
+                            },
+                            "timezone": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
                         }
                       },
                       "required": [
@@ -14915,7 +14953,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 328,
+                    "id": 339,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -14923,7 +14961,15 @@
                     "fields": {
                       "category": "One"
                     },
-                    "canceled_at": null
+                    "canceled_at": null,
+                    "location": {
+                      "city": "Williamstown",
+                      "state": "Massachusetts",
+                      "country": "US",
+                      "latitude": 9.99,
+                      "longitude": 9.99,
+                      "timezone": "US/EST"
+                    }
                   }
                 }
               }
@@ -15443,6 +15489,546 @@
         }
       }
     },
+    "/v4/subscribers/{subscriber_id}/location": {
+      "delete": {
+        "summary": "Delete a subscriber's location",
+        "description": "Removes the subscriber's pinned location and returns `204 No Content` on success. After deletion, Kit may re-infer the subscriber's location from future open events.\n\nTo set or replace a pinned location, use [Pin a subscriber's location](/api-reference/subscribers/pin-a-subscribers-location); to replace the values on an existing pin, use [Update a subscriber's pinned location](/api-reference/subscribers/update-a-subscribers-pinned-location). Returns `404` when the subscriber is not found.",
+        "tags": [
+          "Subscribers"
+        ],
+        "security": [
+          {
+            "API Key": []
+          },
+          {
+            "OAuth2": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subscriber_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 0
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Destroys the subscriber's pinned location and returns 204"
+          },
+          "404": {
+            "description": "returns 404 for an unknown subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      },
+      "patch": {
+        "summary": "Update a subscriber's pinned location",
+        "description": "Updates a subscriber's pinned location. This is a full replacement, not a partial update: `city`, `state_province`, `country_code` (ISO 3166-1 alpha-2), `latitude`, `longitude`, and `timezone` (IANA timezone name, e.g. `America/Denver`) are all required, so resend the current value for any field you are not changing. Omitting one returns `422`. Returns the subscriber's `id` and the updated `location` on success.\n\nTo create a pin from scratch, use [Pin a subscriber's location](/api-reference/subscribers/pin-a-subscribers-location) (POST); to remove the pin entirely, use [Delete a subscriber's location](/api-reference/subscribers/delete-a-subscribers-location). Returns `404` when the subscriber is not found, `422` when a required field is missing or invalid.",
+        "tags": [
+          "Subscribers"
+        ],
+        "security": [
+          {
+            "API Key": []
+          },
+          {
+            "OAuth2": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subscriber_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1133
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pins the location and returns it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subscriber": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "location": {
+                          "type": "object",
+                          "properties": {
+                            "city": {
+                              "type": "string"
+                            },
+                            "state_province": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "latitude": {
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "timezone": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "city",
+                            "state_province",
+                            "country_code",
+                            "latitude",
+                            "longitude",
+                            "timezone"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "location"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "subscriber"
+                  ]
+                },
+                "example": {
+                  "subscriber": {
+                    "id": 1128,
+                    "location": {
+                      "city": "Boise",
+                      "state_province": "Idaho",
+                      "country_code": "US",
+                      "latitude": 43.62,
+                      "longitude": -116.2,
+                      "timezone": "America/Denver"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns 404 for an unknown subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns 422 and does not persist when country_code is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Country code can't be blank"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "city": {
+                        "type": "string"
+                      },
+                      "state_province": {
+                        "type": "string"
+                      },
+                      "country_code": {
+                        "type": "string"
+                      },
+                      "latitude": {
+                        "type": "number",
+                        "format": "float"
+                      },
+                      "longitude": {
+                        "type": "number",
+                        "format": "float"
+                      },
+                      "timezone": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "city",
+                      "state_province",
+                      "country_code",
+                      "latitude",
+                      "longitude",
+                      "timezone"
+                    ]
+                  }
+                },
+                "required": [
+                  "location"
+                ]
+              },
+              "example": {
+                "location": {
+                  "city": "Boise",
+                  "state_province": "Idaho",
+                  "country_code": "US",
+                  "latitude": 43.62,
+                  "longitude": -116.2,
+                  "timezone": "America/Denver"
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      },
+      "post": {
+        "summary": "Pin a subscriber's location",
+        "description": "Pins an explicit location to a subscriber, overriding any location Kit has inferred from open events. Provide `city`, `state_province`, `country_code` (ISO 3166-1 alpha-2, required), `latitude`, `longitude`, and `timezone` (IANA timezone name, e.g. `America/Denver`). Returns the subscriber's `id` and the pinned `location` on success.\n\nIf the subscriber already has a pinned location this replaces it. To replace the values on an existing pin, use [Update a subscriber's pinned location](/api-reference/subscribers/update-a-subscribers-pinned-location) (PATCH); to remove the pin, use [Delete a subscriber's location](/api-reference/subscribers/delete-a-subscribers-location). The pinned location is returned on [Get a subscriber](/api-reference/subscribers/get-a-subscriber). Returns `404` when the subscriber is not found, `422` when a required field is missing or invalid.",
+        "tags": [
+          "Subscribers"
+        ],
+        "security": [
+          {
+            "API Key": []
+          },
+          {
+            "OAuth2": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "subscriber_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1105
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pins the location and returns it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subscriber": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "location": {
+                          "type": "object",
+                          "properties": {
+                            "city": {
+                              "type": "string"
+                            },
+                            "state_province": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "latitude": {
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "longitude": {
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "timezone": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "city",
+                            "state_province",
+                            "country_code",
+                            "latitude",
+                            "longitude",
+                            "timezone"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "location"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "subscriber"
+                  ]
+                },
+                "example": {
+                  "subscriber": {
+                    "id": 1100,
+                    "location": {
+                      "city": "Boise",
+                      "state_province": "Idaho",
+                      "country_code": "US",
+                      "latitude": 43.62,
+                      "longitude": -116.2,
+                      "timezone": "America/Denver"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Returns a 401 if the token and/or account cannot be authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "The access token is invalid"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Returns 404 for an unknown subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Not Found"
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Returns 422 and does not persist when country_code is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ]
+                },
+                "example": {
+                  "errors": [
+                    "Country code can't be blank"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "city": {
+                        "type": "string"
+                      },
+                      "state_province": {
+                        "type": "string"
+                      },
+                      "country_code": {
+                        "type": "string"
+                      },
+                      "latitude": {
+                        "type": "number",
+                        "format": "float"
+                      },
+                      "longitude": {
+                        "type": "number",
+                        "format": "float"
+                      },
+                      "timezone": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "city",
+                      "state_province",
+                      "country_code",
+                      "latitude",
+                      "longitude",
+                      "timezone"
+                    ]
+                  }
+                },
+                "required": [
+                  "location"
+                ]
+              },
+              "example": {
+                "location": {
+                  "city": "Boise",
+                  "state_province": "Idaho",
+                  "country_code": "US",
+                  "latitude": 43.62,
+                  "longitude": -116.2,
+                  "timezone": "America/Denver"
+                }
+              }
+            }
+          }
+        },
+        "x-mcp": {
+          "enabled": true
+        }
+      }
+    },
     "/v4/subscribers/{subscriber_id}/stats": {
       "get": {
         "summary": "List stats for a subscriber",
@@ -15486,7 +16072,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1111
+            "example": 1103
           }
         ],
         "responses": {
@@ -15569,7 +16155,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1111,
+                    "id": 1103,
                     "stats": {
                       "sent": 2,
                       "opened": 1,
@@ -15680,7 +16266,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1145
+            "example": 1137
           }
         ],
         "responses": {
@@ -16708,7 +17294,7 @@
                 "example": {
                   "subscribers": [
                     {
-                      "id": 1148,
+                      "id": 1140,
                       "first_name": null,
                       "email_address": "subscriber634@kit.dev",
                       "state": "active",
@@ -16719,7 +17305,7 @@
                       }
                     },
                     {
-                      "id": 1147,
+                      "id": 1139,
                       "first_name": null,
                       "email_address": "subscriber633@kit.dev",
                       "state": "active",
@@ -16730,7 +17316,7 @@
                       }
                     },
                     {
-                      "id": 1146,
+                      "id": 1138,
                       "first_name": null,
                       "email_address": "subscriber632@kit.dev",
                       "state": "active",
@@ -16893,7 +17479,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1284,
+                    "id": 1276,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -16963,7 +17549,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1285,
+                    "id": 1277,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -17102,7 +17688,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1309
+            "example": 1301
           },
           {
             "name": "tag_id",
@@ -17197,7 +17783,7 @@
             "schema": {
               "type": "integer"
             },
-            "example": 1266
+            "example": 1258
           },
           {
             "name": "tag_id",
@@ -17268,7 +17854,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1264,
+                    "id": 1256,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -17338,7 +17924,7 @@
                 },
                 "example": {
                   "subscriber": {
-                    "id": 1265,
+                    "id": 1257,
                     "first_name": "Alice",
                     "email_address": "alice@convertkit.dev",
                     "state": "active",
@@ -17561,7 +18147,7 @@
                   "webhooks": [
                     {
                       "id": 2,
-                      "account_id": 1762,
+                      "account_id": 1776,
                       "event": {
                         "name": "tag_add",
                         "tag_id": 50
@@ -17570,10 +18156,10 @@
                     },
                     {
                       "id": 1,
-                      "account_id": 1762,
+                      "account_id": 1776,
                       "event": {
                         "name": "form_subscribe",
-                        "form_id": 15
+                        "form_id": 7
                       },
                       "target_url": "http://example.convertkit.dev/"
                     }
@@ -17687,7 +18273,7 @@
                 "example": {
                   "webhook": {
                     "id": 9,
-                    "account_id": 1788,
+                    "account_id": 1802,
                     "event": {
                       "name": "subscriber_activate",
                       "initiator_value": null
@@ -18027,6 +18613,31 @@
                 }
               }
             }
+          },
+          "sort_field": {
+            "type": "string",
+            "default": "created_at",
+            "enum": [
+              "id",
+              "first_name",
+              "email_address",
+              "created_at",
+              "engagement__sent",
+              "engagement__opens",
+              "engagement__clicks",
+              "engagement__open_rate",
+              "engagement__click_rate",
+              "location__distance"
+            ],
+            "description": "Field to order results by. Base columns (`id`, `first_name`, `email_address`, `created_at`) order by that subscriber attribute. `engagement__<metric>` orders by an engagement stat over the trailing 90 days: counts (`sent`, `opens`, `clicks`) and rates (`open_rate`, `click_rate`); subscribers with no sends order as 0. `location__distance` orders by great-circle distance and requires a `location` filter in the same request — its `latitude`/`longitude` supply the origin, and subscribers without a primary location are excluded. Distance defaults to nearest-first (`sort_order` defaults to `asc` for this field); pass `sort_order=desc` for farthest-first."
+          },
+          "sort_order": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "Sort direction (default: desc)."
           }
         },
         "required": [
