@@ -22,7 +22,7 @@ Current auth status:
 If the status above shows `NOT_INSTALLED`, install the CLI:
 
 ```
-npm install -g kit-cli
+npm install -g @imjohnbo/kit-cli
 ```
 
 After installing, verify with `kit --version`. If the CLI reports that an update

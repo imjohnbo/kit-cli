@@ -1,5 +1,5 @@
 {
-  "name": "kit-cli",
+  "name": "@imjohnbo/kit-cli",
   "version": "0.0.1",
   "description": "A fully featured CLI for the Kit (ConvertKit) email marketing API",
   "type": "module",

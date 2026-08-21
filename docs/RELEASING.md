@@ -1,24 +1,21 @@
 # Releasing kit-cli
 
-## Blocker: the npm name is taken
+## The package name
 
-`kit-cli` on npm belongs to another author. It has existed since 2015 and sits at
-version 0.0.4. Publishing under that name is not possible.
+The package publishes as `@imjohnbo/kit-cli`.
 
-Pick a name before the first release. These were free at the time of writing:
+The unscoped `kit-cli` on npm belongs to another author. It has existed since
+2015 and sits at version 0.0.4, so that name is not available.
 
-| Name | Note |
-|---|---|
-| `@kit/cli` | Best branding. Needs the `kit` npm organization. |
-| `@imjohnbo/kit-cli` | Personal scope. Available now, no organization needed. |
-| `kit-api-cli` | Unscoped fallback. |
+The installed command is still `kit`, because `bin` names it separately from the
+package.
 
-Change `name` in `package.json` and nothing else. `src/package-info.js` reads it,
-so the update check and `kit upgrade` follow automatically. The installed command
-stays `kit` either way, because `bin` sets that name separately.
+To move to a different name later, such as `@kit/cli` once that organization
+exists, change `name` in `package.json` and nothing else.
+`src/package-info.js` reads it, so the update check and `kit upgrade` follow. Then
+publish the old name one last time with a deprecation pointing at the new one.
 
-A scoped package needs `publishConfig.access` set to `public`, which is already
-set.
+A scoped package needs `publishConfig.access` set to `public`. It is already set.
 
 ## What makes a release publish to npm
 
@@ -58,7 +55,7 @@ its own cannot ship anything.
 
 1. Create a GitHub environment named `npm-publish`. Add yourself as a required
    reviewer.
-2. Set up npm trusted publishing for the `kit-cli` package. Point it at this
+2. Set up npm trusted publishing for the `@imjohnbo/kit-cli` package. Point it at this
    repository and at `release.yml`. The workflow then publishes with the OIDC
    token and needs no npm token.
 3. If you skip step 2, create an npm automation token instead. Store it in the

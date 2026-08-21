@@ -4,12 +4,12 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 
 ## Install
 
-> **Pre-release.** The version is `0.0.x`. The command surface may still change,
-> and the npm package name is not settled yet. See
+> **Pre-release.** The version is `0.0.x`, so the command surface may still
+> change. Breaking changes ship in minor bumps until `1.0.0`. See
 > [`docs/RELEASING.md`](docs/RELEASING.md).
 
 ```
-npm install -g kit-cli
+npm install -g @imjohnbo/kit-cli
 ```
 
 Requires Node.js 18+.

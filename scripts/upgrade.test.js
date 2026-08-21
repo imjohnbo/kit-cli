@@ -4,7 +4,7 @@
 import { test, describe, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { VERSION } from '../src/package-info.js';
+import { VERSION, PACKAGE_NAME } from '../src/package-info.js';
 import {
   isNewer,
   cacheIsStale,
@@ -224,7 +224,15 @@ describe('refreshLatest', () => {
     let url;
     globalThis.fetch = async (u) => { url = u; return { ok: true, json: async () => ({ version: '1.0.0' }) }; };
     await refreshLatest({ force: true });
-    assert.equal(url, 'https://registry.npmjs.org/kit-cli/latest');
+    // Built from package.json, so renaming the package cannot break the check.
+    assert.equal(url, `https://registry.npmjs.org/${PACKAGE_NAME}/latest`);
+  });
+
+  test('leaves a scoped name unencoded, which is what the registry serves', async () => {
+    let url;
+    globalThis.fetch = async (u) => { url = u; return { ok: true, json: async () => ({ version: '1.0.0' }) }; };
+    await refreshLatest({ force: true });
+    assert.ok(!String(url).includes('%2F'), 'the scope separator must stay a slash');
   });
 
   test('honors KIT_REGISTRY for mirrors', async () => {
@@ -232,7 +240,7 @@ describe('refreshLatest', () => {
     let url;
     globalThis.fetch = async (u) => { url = u; return { ok: true, json: async () => ({ version: '1.0.0' }) }; };
     await refreshLatest({ force: true });
-    assert.equal(url, 'https://npm.internal.example/kit-cli/latest');
+    assert.equal(url, `https://npm.internal.example/${PACKAGE_NAME}/latest`);
   });
 
   test('returns null on a non-ok response', async () => {
@@ -307,7 +315,12 @@ describe('detectInstaller', () => {
 
 describe('upgradeArgv', () => {
   test('npm installs the latest globally', () => {
-    assert.deepEqual(upgradeArgv('npm'), ['npm', 'install', '-g', 'kit-cli@latest']);
+    assert.deepEqual(upgradeArgv('npm'), ['npm', 'install', '-g', `${PACKAGE_NAME}@latest`]);
+  });
+
+  test('the target comes from package.json, not a literal', () => {
+    // Renaming the package must not leave `kit upgrade` pointing at the old name.
+    assert.ok(upgradeArgv('npm').some((part) => part.startsWith(`${PACKAGE_NAME}@`)));
   });
 
   test('every manager has a command', () => {
