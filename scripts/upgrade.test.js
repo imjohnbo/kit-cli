@@ -4,13 +4,17 @@
 import { test, describe, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { VERSION, PACKAGE_NAME } from '../src/package-info.js';
+import { VERSION, PACKAGE_NAME, REPOSITORY } from '../src/package-info.js';
 import {
   isNewer,
   cacheIsStale,
   updateCheckAllowed,
   noticeIfOutdated,
   refreshLatest,
+  OK,
+  NOT_FOUND,
+  UNREACHABLE,
+  DISABLED,
 } from '../src/update-check.js';
 import { detectInstaller, upgradeArgv, upgradeCommand } from '../src/commands/upgrade.js';
 import config from '../src/config.js';
@@ -27,6 +31,7 @@ beforeEach(() => {
     updateCheck: config.get('updateCheck'),
     updateCheckedAt: config.get('updateCheckedAt'),
     updateLatestVersion: config.get('updateLatestVersion'),
+    updateLatestPackage: config.get('updateLatestPackage'),
     CI: process.env.CI,
     KIT_NO_UPDATE_CHECK: process.env.KIT_NO_UPDATE_CHECK,
     KIT_REGISTRY: process.env.KIT_REGISTRY,
@@ -38,12 +43,14 @@ beforeEach(() => {
   config.set('updateCheck', true);
   config.set('updateCheckedAt', 0);
   config.set('updateLatestVersion', '');
+  config.set('updateLatestPackage', PACKAGE_NAME);
 });
 
 afterEach(() => {
   config.set('updateCheck', snapshot.updateCheck);
   config.set('updateCheckedAt', snapshot.updateCheckedAt);
   config.set('updateLatestVersion', snapshot.updateLatestVersion);
+  config.set('updateLatestPackage', snapshot.updateLatestPackage);
   for (const key of ['CI', 'KIT_NO_UPDATE_CHECK', 'KIT_REGISTRY']) {
     if (snapshot[key] === undefined) delete process.env[key];
     else process.env[key] = snapshot[key];
@@ -214,15 +221,15 @@ describe('cacheIsStale', () => {
 
 describe('refreshLatest', () => {
   test('reads the version and caches it', async () => {
-    globalThis.fetch = async () => ({ ok: true, json: async () => ({ version: '3.2.1' }) });
-    assert.equal(await refreshLatest({ force: true }), '3.2.1');
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ version: '3.2.1' }) });
+    assert.deepEqual(await refreshLatest({ force: true }), { status: OK, version: '3.2.1' });
     assert.equal(config.get('updateLatestVersion'), '3.2.1');
     assert.ok(config.get('updateCheckedAt') > 0);
   });
 
   test('asks the npm registry for the package', async () => {
     let url;
-    globalThis.fetch = async (u) => { url = u; return { ok: true, json: async () => ({ version: '1.0.0' }) }; };
+    globalThis.fetch = async (u) => { url = u; return { ok: true, status: 200, json: async () => ({ version: '1.0.0' }) }; };
     await refreshLatest({ force: true });
     // Built from package.json, so renaming the package cannot break the check.
     assert.equal(url, `https://registry.npmjs.org/${PACKAGE_NAME}/latest`);
@@ -230,7 +237,7 @@ describe('refreshLatest', () => {
 
   test('leaves a scoped name unencoded, which is what the registry serves', async () => {
     let url;
-    globalThis.fetch = async (u) => { url = u; return { ok: true, json: async () => ({ version: '1.0.0' }) }; };
+    globalThis.fetch = async (u) => { url = u; return { ok: true, status: 200, json: async () => ({ version: '1.0.0' }) }; };
     await refreshLatest({ force: true });
     assert.ok(!String(url).includes('%2F'), 'the scope separator must stay a slash');
   });
@@ -238,41 +245,65 @@ describe('refreshLatest', () => {
   test('honors KIT_REGISTRY for mirrors', async () => {
     process.env.KIT_REGISTRY = 'https://npm.internal.example/';
     let url;
-    globalThis.fetch = async (u) => { url = u; return { ok: true, json: async () => ({ version: '1.0.0' }) }; };
+    globalThis.fetch = async (u) => { url = u; return { ok: true, status: 200, json: async () => ({ version: '1.0.0' }) }; };
     await refreshLatest({ force: true });
     assert.equal(url, `https://npm.internal.example/${PACKAGE_NAME}/latest`);
   });
 
-  test('returns null on a non-ok response', async () => {
+  test('reports not-found for an unpublished package', async () => {
     globalThis.fetch = async () => ({ ok: false, status: 404, json: async () => ({}) });
-    assert.equal(await refreshLatest({ force: true }), null);
+    const r = await refreshLatest({ force: true });
+    assert.equal(r.status, NOT_FOUND);
+    assert.equal(r.version, null);
   });
 
-  test('returns null when the request throws, rather than propagating', async () => {
+  test('reports unreachable for a server error', async () => {
+    globalThis.fetch = async () => ({ ok: false, status: 500, json: async () => ({}) });
+    assert.equal((await refreshLatest({ force: true })).status, UNREACHABLE);
+  });
+
+  test('reports unreachable when the request throws, rather than propagating', async () => {
     globalThis.fetch = async () => { throw new Error('ENOTFOUND'); };
-    assert.equal(await refreshLatest({ force: true }), null);
+    assert.equal((await refreshLatest({ force: true })).status, UNREACHABLE);
   });
 
-  test('returns null on a response with no version', async () => {
-    globalThis.fetch = async () => ({ ok: true, json: async () => ({}) });
-    assert.equal(await refreshLatest({ force: true }), null);
+  test('reports unreachable on a response with no version', async () => {
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({}) });
+    assert.equal((await refreshLatest({ force: true })).status, UNREACHABLE);
   });
 
-  test('makes no request when the check is disabled', async () => {
+  test('makes no automatic request when the check is disabled', async () => {
     config.set('updateCheck', false);
     let called = false;
-    globalThis.fetch = async () => { called = true; return { ok: true, json: async () => ({}) }; };
-    assert.equal(await refreshLatest({ force: true }), null);
+    globalThis.fetch = async () => { called = true; return { ok: true, status: 200, json: async () => ({}) }; };
+    assert.equal((await refreshLatest({ force: true })).status, DISABLED);
     assert.equal(called, false);
+  });
+
+  test('an explicit request runs even when the notice is disabled', async () => {
+    // `kit upgrade` must work for someone who turned the background notice off.
+    config.set('updateCheck', false);
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ version: '5.0.0' }) });
+    const r = await refreshLatest({ force: true, automatic: false });
+    assert.equal(r.status, OK);
+    assert.equal(r.version, '5.0.0');
   });
 
   test('serves a fresh cache without a request', async () => {
     config.set('updateLatestVersion', '2.0.0');
+    config.set('updateLatestPackage', PACKAGE_NAME);
     config.set('updateCheckedAt', Date.now());
     let called = false;
-    globalThis.fetch = async () => { called = true; return { ok: true, json: async () => ({}) }; };
-    assert.equal(await refreshLatest(), '2.0.0');
+    globalThis.fetch = async () => { called = true; return { ok: true, status: 200, json: async () => ({}) }; };
+    assert.deepEqual(await refreshLatest(), { status: OK, version: '2.0.0' });
     assert.equal(called, false);
+  });
+
+  test('records which package the cached version came from', async () => {
+    config.set('updateLatestPackage', '');
+    globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => ({ version: '3.0.0' }) });
+    await refreshLatest({ force: true });
+    assert.equal(config.get('updateLatestPackage'), PACKAGE_NAME);
   });
 });
 
@@ -372,6 +403,18 @@ describe('kit upgrade', () => {
     assert.match(res.err, /KIT_REGISTRY/);
   });
 
+  test('says the package is unpublished on a 404, not "unreachable"', async () => {
+    const res = await runCommand(upgradeCommand, ['--check'], { responses: { __status: 404 } });
+    assert.equal(res.exitCode, 1);
+    assert.match(res.err, /is not published to npm yet/);
+    assert.doesNotMatch(res.err, /Could not reach the registry/);
+  });
+
+  test('points at the GitHub install when unpublished', async () => {
+    const res = await runCommand(upgradeCommand, ['--check'], { responses: { __status: 404 } });
+    assert.match(res.err, new RegExp(`npm install -g github:${REPOSITORY}`));
+  });
+
   test('is registered with --check and --dry-run', () => {
     const cmd = upgradeCommand();
     const flags = cmd.options.map((o) => o.long);
@@ -400,5 +443,66 @@ describe('bin/kit.js wiring', () => {
 
   test('does not await the background refresh', () => {
     assert.doesNotMatch(entry, /await refreshLatestInBackground/);
+  });
+});
+
+// ── the cache is keyed by package name ─────────────────────────────────────
+
+describe('cache keyed by package name', () => {
+  test('ignores a version cached under a different package name', () => {
+    // This package was briefly named kit-cli, which belongs to another author on
+    // npm. A cache that forgets the name keeps pointing at a stranger's release.
+    config.set('updateLatestVersion', '0.0.4');
+    config.set('updateLatestPackage', 'kit-cli');
+    config.set('updateCheckedAt', Date.now());
+
+    const lines = [];
+    const notice = noticeIfOutdated({ write: (s) => lines.push(s), current: '0.0.1' });
+    assert.equal(notice, null);
+    assert.equal(lines.length, 0);
+  });
+
+  test('uses a version cached under the current package name', () => {
+    config.set('updateLatestVersion', '9.9.9');
+    config.set('updateLatestPackage', PACKAGE_NAME);
+    config.set('updateCheckedAt', Date.now());
+
+    const lines = [];
+    assert.ok(noticeIfOutdated({ write: (s) => lines.push(s), current: '0.0.1' }));
+    assert.match(lines[0], /9\.9\.9/);
+  });
+
+  test('treats a cache from another package as stale', () => {
+    config.set('updateLatestPackage', 'kit-cli');
+    config.set('updateCheckedAt', Date.now());
+    assert.equal(cacheIsStale(Date.now()), true);
+  });
+
+  test('refetches rather than serving another package version', async () => {
+    config.set('updateLatestVersion', '0.0.4');
+    config.set('updateLatestPackage', 'kit-cli');
+    config.set('updateCheckedAt', Date.now());
+
+    let called = false;
+    globalThis.fetch = async () => {
+      called = true;
+      return { ok: true, status: 200, json: async () => ({ version: '1.2.3' }) };
+    };
+    const r = await refreshLatest();
+    assert.equal(called, true, 'a foreign cache must not be served');
+    assert.equal(r.version, '1.2.3');
+  });
+});
+
+// ── REPOSITORY ─────────────────────────────────────────────────────────────
+
+describe('REPOSITORY', () => {
+  test('parses owner/repo from the repository URL', () => {
+    assert.equal(REPOSITORY, 'imjohnbo/kit-cli');
+  });
+
+  test('is not a second hardcoded copy of the repo name', () => {
+    const body = readFileSync(new URL('../src/commands/upgrade.js', import.meta.url), 'utf8');
+    assert.ok(!body.includes('imjohnbo/kit-cli'), 'upgrade.js hardcodes the repo slug');
   });
 });

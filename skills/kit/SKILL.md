@@ -19,14 +19,16 @@ Current auth status:
 
 ## Step 1: Ensure the CLI is Available
 
-If the status above shows `NOT_INSTALLED`, install the CLI:
+If the status above shows `NOT_INSTALLED`, install the CLI from GitHub. The
+package is not on npm yet:
 
 ```
-npm install -g @imjohnbo/kit-cli
+npm install -g github:imjohnbo/kit-cli
 ```
 
 After installing, verify with `kit --version`. If the CLI reports that an update
-is available, run `kit upgrade`.
+is available, run `kit upgrade`. Before the package is published, `kit upgrade`
+says so and points back at the GitHub install.
 
 ## Step 2: Ensure Authentication is Configured
 
