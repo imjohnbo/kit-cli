@@ -16,9 +16,13 @@ import {
   post,
   put,
   del,
+  patch,
   paginate,
   parseIdList,
   parseCsvList,
+  validateFloatInRange,
+  validateTimeZone,
+  validateCountryCode,
 } from '../src/client.js';
 import config from '../src/config.js';
 
@@ -737,5 +741,150 @@ describe('put and del query parameters', () => {
     };
     await del('/tags/5/subscribers', undefined, { email_address: undefined });
     assert.equal(new URL(captured).search, '');
+  });
+});
+
+// ── patch ──────────────────────────────────────────────────────────────────
+
+describe('patch', () => {
+  let snap;
+  before(() => {
+    snap = oauthSnapshot();
+    clearOAuth();
+    process.env.KIT_API_KEY = TEST_API_KEY;
+  });
+  after(() => {
+    restoreOAuth(snap);
+    delete process.env.KIT_API_KEY;
+    globalThis.fetch = _originalFetch;
+  });
+
+  test('sends the PATCH method', async () => {
+    let method;
+    globalThis.fetch = async (_url, opts) => {
+      method = opts.method;
+      return { ok: true, status: 200, statusText: 'OK', json: async () => ({}) };
+    };
+    await patch('/subscribers/1/location', { location: {} });
+    assert.equal(method, 'PATCH');
+  });
+
+  test('sends a JSON body', async () => {
+    let opts;
+    globalThis.fetch = async (_url, o) => {
+      opts = o;
+      return { ok: true, status: 200, statusText: 'OK', json: async () => ({}) };
+    };
+    await patch('/subscribers/1/location', { location: { city: 'Boise' } });
+    assert.deepEqual(JSON.parse(opts.body), { location: { city: 'Boise' } });
+    assert.equal(opts.headers['Content-Type'], 'application/json');
+  });
+});
+
+// ── validateFloatInRange ───────────────────────────────────────────────────
+
+describe('validateFloatInRange', () => {
+  test('accepts a value inside the range', () => {
+    assert.equal(validateFloatInRange('43.62', -90, 90, 'latitude'), 43.62);
+  });
+
+  test('accepts zero', () => {
+    assert.equal(validateFloatInRange('0', -90, 90), 0);
+  });
+
+  test('accepts the boundaries', () => {
+    assert.equal(validateFloatInRange('-90', -90, 90), -90);
+    assert.equal(validateFloatInRange('90', -90, 90), 90);
+  });
+
+  test('exits above the range', () => {
+    const exit = mockExit();
+    const err = captureConsoleError();
+    assert.throws(() => validateFloatInRange('91', -90, 90, 'latitude'), /process.exit\(1\)/);
+    err.restore();
+    exit.restore();
+    assert.ok(err.lines.join(' ').includes('latitude'));
+  });
+
+  test('exits on a non-numeric value', () => {
+    const exit = mockExit();
+    const err = captureConsoleError();
+    assert.throws(() => validateFloatInRange('north', -90, 90), /process.exit\(1\)/);
+    err.restore();
+    exit.restore();
+  });
+
+  test('exits on Infinity', () => {
+    const exit = mockExit();
+    const err = captureConsoleError();
+    assert.throws(() => validateFloatInRange('Infinity', -90, 90), /process.exit\(1\)/);
+    err.restore();
+    exit.restore();
+  });
+});
+
+// ── validateTimeZone ───────────────────────────────────────────────────────
+
+describe('validateTimeZone', () => {
+  for (const tz of ['America/Denver', 'Europe/London', 'UTC', 'Asia/Tokyo']) {
+    test(`accepts ${tz}`, () => assert.equal(validateTimeZone(tz), tz));
+  }
+
+  for (const bad of ['Mars/Olympus', '-07:00', 'PST', '']) {
+    test(`rejects ${JSON.stringify(bad)}`, () => {
+      const exit = mockExit();
+      const err = captureConsoleError();
+      assert.throws(() => validateTimeZone(bad), /process.exit\(1\)/);
+      err.restore();
+      exit.restore();
+    });
+  }
+});
+
+// ── validateCountryCode ────────────────────────────────────────────────────
+
+describe('validateCountryCode', () => {
+  test('accepts two letters', () => {
+    assert.equal(validateCountryCode('US'), 'US');
+  });
+
+  test('upper-cases the value', () => {
+    assert.equal(validateCountryCode('gb'), 'GB');
+  });
+
+  test('trims whitespace', () => {
+    assert.equal(validateCountryCode(' de '), 'DE');
+  });
+
+  for (const bad of ['USA', 'U', 'United States', '12', '']) {
+    test(`rejects ${JSON.stringify(bad)}`, () => {
+      const exit = mockExit();
+      const err = captureConsoleError();
+      assert.throws(() => validateCountryCode(bad), /process.exit\(1\)/);
+      err.restore();
+      exit.restore();
+    });
+  }
+});
+
+describe('validateTimeZone canonicalization', () => {
+  test('returns the canonical spelling for a lowercase name', () => {
+    assert.equal(validateTimeZone('america/denver'), 'America/Denver');
+  });
+
+  test('canonicalizes utc to UTC', () => {
+    assert.equal(validateTimeZone('utc'), 'UTC');
+  });
+
+  test('accepts the Etc family', () => {
+    assert.equal(validateTimeZone('Etc/UTC'), 'Etc/UTC');
+  });
+
+  test('rejects a positive UTC offset', () => {
+    const exit = mockExit();
+    const err = captureConsoleError();
+    assert.throws(() => validateTimeZone('+05:30'), /process.exit\(1\)/);
+    err.restore();
+    exit.restore();
   });
 });

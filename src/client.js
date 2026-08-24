@@ -51,6 +51,70 @@ export function validateIntInRange(value, min, max, label = 'value') {
 }
 
 /**
+ * Validates that a value is a finite number within an inclusive range.
+ * Used for coordinates, where zero and negatives are both legitimate.
+ */
+export function validateFloatInRange(value, min, max, label = 'value') {
+  const num = Number(value);
+  if (!Number.isFinite(num) || num < min || num > max) {
+    console.error(`Invalid ${label}: "${value}". Must be a number between ${min} and ${max}.`);
+    process.exit(1);
+  }
+  return num;
+}
+
+/**
+ * Validates an IANA time zone name, such as America/Denver.
+ *
+ * Intl on its own is too permissive here. It accepts a UTC offset like `-07:00`
+ * and an abbreviation like `PST`, and neither is an IANA name. An offset also
+ * ignores daylight saving, which is the whole reason to send a zone. So this
+ * checks the value against the real zone list that Intl carries, and returns the
+ * canonical spelling.
+ */
+const IANA_BY_LOWERCASE = (() => {
+  const map = new Map();
+  if (typeof Intl.supportedValuesOf === 'function') {
+    for (const zone of Intl.supportedValuesOf('timeZone')) map.set(zone.toLowerCase(), zone);
+  }
+  // Real IANA zones that supportedValuesOf leaves out.
+  for (const zone of ['UTC', 'GMT']) map.set(zone.toLowerCase(), zone);
+  return map;
+})();
+
+export function validateTimeZone(value, label = 'time zone') {
+  const input = String(value).trim();
+  const canonical = IANA_BY_LOWERCASE.get(input.toLowerCase());
+
+  if (canonical) return canonical;
+
+  // The Etc/* family is legitimate but not enumerated. Let Intl arbitrate.
+  if (/^Etc\//i.test(input)) {
+    try {
+      new Intl.DateTimeFormat('en-US', { timeZone: input });
+      return input;
+    } catch {
+      // fall through to the error below
+    }
+  }
+
+  console.error(`Invalid ${label}: "${value}". Must be an IANA name, such as America/Denver.`);
+  process.exit(1);
+}
+
+/**
+ * Validates an ISO 3166-1 alpha-2 country code, returning it upper-cased.
+ */
+export function validateCountryCode(value, label = 'country code') {
+  const code = String(value).trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(code)) {
+    console.error(`Invalid ${label}: "${value}". Must be two letters, such as US.`);
+    process.exit(1);
+  }
+  return code;
+}
+
+/**
  * Validates that a value is one of an allowed set, case-sensitively.
  */
 export function validateEnum(value, allowed, label = 'value') {
@@ -172,6 +236,10 @@ export async function post(path, body, query) {
 
 export async function put(path, body, query) {
   return request('PUT', path, { body, query });
+}
+
+export async function patch(path, body, query) {
+  return request('PATCH', path, { body, query });
 }
 
 export async function del(path, body, query) {

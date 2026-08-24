@@ -107,6 +107,9 @@ export const COVERAGE = {
   'PUT /v4/subscribers/{id}': 'subscribers update',
   'POST /v4/subscribers/{id}/unsubscribe': 'subscribers unsubscribe',
   'GET /v4/subscribers/{subscriber_id}/stats': 'subscribers stats',
+  'POST /v4/subscribers/{subscriber_id}/location': 'subscribers location pin',
+  'PATCH /v4/subscribers/{subscriber_id}/location': 'subscribers location update',
+  'DELETE /v4/subscribers/{subscriber_id}/location': 'subscribers location delete',
   'GET /v4/subscribers/{subscriber_id}/tags': 'subscribers tags',
 
   // ── Tags ─────────────────────────────────────────────────────────────────

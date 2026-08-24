@@ -83,7 +83,10 @@ jobs:
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add spec/v4.json
-          git commit -m "chore: update Kit API spec snapshot [skip ci]"
+          # No [skip ci]. The spec snapshot feeds scripts/spec-coverage.test.js, so
+          # a new endpoint makes the suite fail on purpose. Skipping CI here once
+          # pushed a red main that nobody saw.
+          git commit -m "chore: update Kit API spec snapshot"
           git push
 
       - name: Clean up temp files (no changes case)

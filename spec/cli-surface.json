@@ -254,6 +254,56 @@
         "--sent-before"
       ]
     },
+    "subscribers location": {
+      "arguments": [],
+      "options": []
+    },
+    "subscribers location pin": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--city",
+        "--country-code",
+        "--format",
+        "--latitude",
+        "--longitude",
+        "--state-province",
+        "--time-zone"
+      ]
+    },
+    "subscribers location update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--city",
+        "--country-code",
+        "--format",
+        "--latitude",
+        "--longitude",
+        "--state-province",
+        "--time-zone"
+      ]
+    },
+    "subscribers location delete": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
     "tags": {
       "arguments": [],
       "options": []
