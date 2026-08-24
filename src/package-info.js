@@ -20,3 +20,15 @@ export const VERSION = pkg.version;
  * single edit in package.json.
  */
 export const PACKAGE_NAME = pkg.name;
+
+/**
+ * The GitHub slug, as `owner/repo`, parsed from the repository URL.
+ *
+ * The CLI points users at a GitHub install while the package is unpublished, so
+ * the slug must not be a second hardcoded copy of the repo name.
+ */
+export const REPOSITORY = (() => {
+  const url = typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url ?? '';
+  const m = /github\.com[/:]([^/]+)\/([^/.]+)/.exec(url);
+  return m ? `${m[1]}/${m[2]}` : null;
+})();

@@ -4,25 +4,55 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 
 ## Install
 
-> **Pre-release.** The version is `0.0.x`, so the command surface may still
-> change. Breaking changes ship in minor bumps until `1.0.0`. See
-> [`docs/RELEASING.md`](docs/RELEASING.md).
+> **Not on npm yet.** The release pipeline is ready but nothing is published, so
+> install from GitHub for now. The version is `0.0.x` and the command surface may
+> still change. See [`docs/RELEASING.md`](docs/RELEASING.md).
+
+Requires Node.js 18+. Every method installs the same `kit` command.
+
+### From GitHub
+
+```
+npm install -g github:imjohnbo/kit-cli
+```
+
+This installs the current `main`. To move to a newer `main`, run the same command
+again. `kit upgrade` cannot help until the package is on npm, and it says so.
+
+Pin to a commit or tag if you want a fixed version:
+
+```
+npm install -g github:imjohnbo/kit-cli#<commit-or-tag>
+```
+
+### From a clone, for development
+
+```
+git clone https://github.com/imjohnbo/kit-cli
+cd kit-cli
+npm install
+npm link
+```
+
+`npm link` points the global `kit` at your working tree, so edits take effect
+with no reinstall. `kit upgrade` detects this and tells you to use `git pull`
+rather than trying to install over your checkout.
+
+Run `npm unlink -g @imjohnbo/kit-cli` to undo it.
+
+### From npm, once published
 
 ```
 npm install -g @imjohnbo/kit-cli
 ```
 
-Requires Node.js 18+.
-
-Update it later with `kit upgrade`. That hands the work to whichever package
+Then `kit upgrade` keeps it current. It hands the work to whichever package
 manager installed the CLI, so npm keeps verifying the download.
-
-To work on the CLI itself, clone the repo and run `npm i && npm link`.
 
 ### Verifying what you installed
 
-Every release carries a provenance attestation that links the package to the
-commit and workflow that built it:
+A GitHub install carries no attestation, because npm builds it from the git tree
+on your machine. Published releases do:
 
 ```
 npm audit signatures

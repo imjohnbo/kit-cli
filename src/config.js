@@ -22,6 +22,7 @@ const config = new Conf({
     updateCheck:    { type: 'boolean', default: true },
     updateCheckedAt: { type: 'number', default: 0 }, // unix ms
     updateLatestVersion: { type: 'string', default: '' },
+    updateLatestPackage: { type: 'string', default: '' },
   },
 });
 
@@ -174,12 +175,18 @@ export function getCachedLatestVersion() {
   return config.get('updateLatestVersion');
 }
 
+/** The package the cached version was read from. */
+export function getCachedLatestPackage() {
+  return config.get('updateLatestPackage');
+}
+
 export function getUpdateCheckedAt() {
   return config.get('updateCheckedAt');
 }
 
-export function setCachedLatestVersion(version) {
+export function setCachedLatestVersion(version, packageName) {
   config.set('updateLatestVersion', version);
+  config.set('updateLatestPackage', packageName);
   config.set('updateCheckedAt', Date.now());
 }
 

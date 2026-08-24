@@ -3,8 +3,8 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import { printSuccess, withErrorHandler } from '../output.js';
-import { VERSION, PACKAGE_NAME } from '../package-info.js';
-import { refreshLatest } from '../update-check.js';
+import { VERSION, PACKAGE_NAME, REPOSITORY } from '../package-info.js';
+import { refreshLatest, NOT_FOUND, UNREACHABLE } from '../update-check.js';
 import { isNewer } from '../semver.js';
 
 
@@ -60,9 +60,21 @@ export function upgradeCommand() {
     .option('--dry-run', 'show the command that would run, then stop')
     .action(
       withErrorHandler(async (opts) => {
-        const latest = await refreshLatest({ force: true });
+        // automatic: false, because the user asked for this directly. Turning
+        // off the background notice must not disable the explicit command.
+        const { status, version: latest } = await refreshLatest({ force: true, automatic: false });
 
-        if (!latest) {
+        if (status === NOT_FOUND) {
+          console.error(`${PACKAGE_NAME} is not published to npm yet.`);
+          if (REPOSITORY) {
+            console.error('Install the current code straight from GitHub instead:');
+            console.error('');
+            console.error(`  npm install -g github:${REPOSITORY}`);
+          }
+          process.exit(1);
+        }
+
+        if (status === UNREACHABLE || !latest) {
           console.error('Could not reach the registry to check for a newer version.');
           console.error('Check your connection, or set KIT_REGISTRY if you use a mirror.');
           process.exit(1);
