@@ -108,7 +108,15 @@ update [options] <id>
 unsubscribe <id>
 tags [options] <id>
 stats [options] <id>
+location pin [options] <id>     Pin an explicit location
+location update [options] <id>  Replace a pinned location
+location delete <id>            Remove a pinned location
 ```
+
+Kit infers a subscriber's location from open events. `location pin` overrides that
+with an explicit one. Both `pin` and `update` require `--city`,
+`--state-province`, `--country-code`, `--latitude`, `--longitude`, and
+`--time-zone`, because the API replaces the whole location rather than merging.
 
 `list` takes `--slim` to drop the expensive optional fields.
 

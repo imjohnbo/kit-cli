@@ -4,8 +4,13 @@ import {
   get,
   post,
   put,
+  patch,
+  del,
   validatePathSegment,
   validateEnum,
+  validateFloatInRange,
+  validateTimeZone,
+  validateCountryCode,
   safeJsonParse,
   parseCsvList,
 } from '../client.js';
@@ -104,6 +109,96 @@ function buildInclude(opts) {
     if (opts.statsEnd) range.end = opts.statsEnd;
     return Object.keys(range).length > 0 ? { type, range } : { type };
   });
+}
+
+const LOCATION_FIELDS = [
+  { label: 'Subscriber ID', accessor: (d) => d.id },
+  { label: 'City', accessor: (d) => d.location?.city },
+  { label: 'State / Province', accessor: (d) => d.location?.state_province },
+  { label: 'Country', accessor: (d) => d.location?.country_code },
+  { label: 'Latitude', accessor: (d) => d.location?.latitude },
+  { label: 'Longitude', accessor: (d) => d.location?.longitude },
+  { label: 'Time Zone', accessor: (d) => d.location?.timezone },
+];
+
+/**
+ * Flags for pinning a location. The API requires all six on both the create and
+ * the update, because the update is a full replacement rather than a patch.
+ */
+function addLocationOptions(cmd) {
+  return cmd
+    .requiredOption('--city <city>', 'city name')
+    .requiredOption('--state-province <state>', 'state or province name')
+    .requiredOption('--country-code <code>', 'ISO 3166-1 alpha-2 country code, e.g. US')
+    .requiredOption('--latitude <lat>', 'latitude in decimal degrees')
+    .requiredOption('--longitude <lon>', 'longitude in decimal degrees')
+    .requiredOption('--time-zone <tz>', 'IANA time zone, e.g. America/Denver');
+}
+
+function buildLocationBody(opts) {
+  return {
+    location: {
+      city: opts.city,
+      state_province: opts.stateProvince,
+      country_code: validateCountryCode(opts.countryCode),
+      latitude: validateFloatInRange(opts.latitude, -90, 90, 'latitude'),
+      longitude: validateFloatInRange(opts.longitude, -180, 180, 'longitude'),
+      timezone: validateTimeZone(opts.timeZone),
+    },
+  };
+}
+
+/**
+ * `kit subscribers location ...`
+ *
+ * Kit infers a location from open events. These commands pin an explicit one,
+ * which overrides what Kit inferred.
+ */
+function locationCommand() {
+  const cmd = new Command('location').description("Manage a subscriber's pinned location");
+
+  const pin = cmd
+    .command('pin <id>')
+    .description("Pin a location, overriding what Kit inferred from open events");
+  addFormatOption(pin);
+  addLocationOptions(pin).action(
+    withErrorHandler(async (id, opts) => {
+      const safeId = validatePathSegment(id, 'subscriber ID');
+      const res = await post(`/subscribers/${safeId}/location`, buildLocationBody(opts));
+      const sub = res.subscriber || res;
+      printSuccess(`Location pinned for subscriber ${id}.`, opts);
+      printDetail(sub, LOCATION_FIELDS, opts);
+    })
+  );
+
+  // PATCH, but a full replacement. The API requires every field, so the flags
+  // match `pin` exactly rather than allowing a partial update.
+  const update = cmd
+    .command('update <id>')
+    .description('Replace a pinned location. Every field is required');
+  addFormatOption(update);
+  addLocationOptions(update).action(
+    withErrorHandler(async (id, opts) => {
+      const safeId = validatePathSegment(id, 'subscriber ID');
+      const res = await patch(`/subscribers/${safeId}/location`, buildLocationBody(opts));
+      const sub = res.subscriber || res;
+      printSuccess(`Location updated for subscriber ${id}.`, opts);
+      printDetail(sub, LOCATION_FIELDS, opts);
+    })
+  );
+
+  cmd
+    .command('delete <id>')
+    .description('Remove a pinned location, letting Kit infer one again')
+    .action(
+      withErrorHandler(async (id) => {
+        const safeId = validatePathSegment(id, 'subscriber ID');
+        await del(`/subscribers/${safeId}/location`);
+        printSuccess(`Location removed for subscriber ${id}.`);
+      })
+    );
+
+  return cmd;
 }
 
 export function subscribersCommand() {
@@ -295,6 +390,8 @@ export function subscribersCommand() {
         ], opts);
       })
     );
+
+  cmd.addCommand(locationCommand());
 
   return cmd;
 }

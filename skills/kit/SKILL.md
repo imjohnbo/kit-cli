@@ -82,6 +82,9 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 - `kit subscribers unsubscribe <id>` — Unsubscribe a subscriber
 - `kit subscribers tags <id>` — List tags for a subscriber
 - `kit subscribers stats <id>` — Get engagement stats
+- `kit subscribers location pin <id> --city --state-province --country-code --latitude --longitude --time-zone` — Pin an explicit location, overriding what Kit inferred
+- `kit subscribers location update <id>` — Replace a pinned location (same six flags, all required)
+- `kit subscribers location delete <id>` — Remove a pinned location
 - `kit subscribers filter --json '<conditions>'` — Filter by engagement, sign-up date, state, and tags. Also takes `--file <path>`, `--counting-mode <raw|unique_email>`, `--include <types>`, `--stats-start`, `--stats-end`
 
 **Tags:**
