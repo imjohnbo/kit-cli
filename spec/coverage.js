@@ -123,13 +123,25 @@ export const COVERAGE = {
   'DELETE /v4/tags/{tag_id}/subscribers/{id}': 'tags remove',
 
   // ── Webhooks ─────────────────────────────────────────────────────────────
-  'GET /v4/webhooks': 'webhooks list',
-  'POST /v4/webhooks': 'webhooks create',
-  'DELETE /v4/webhooks/{id}': 'webhooks delete',
+  // `kit webhooks` reaches the current-generation /webhook_endpoints resource.
+  // The legacy /webhooks resource below is intentionally not exposed.
+  'GET /v4/webhook_endpoints': 'webhooks list',
+  'POST /v4/webhook_endpoints': 'webhooks create',
+  'GET /v4/webhook_endpoints/{id}': 'webhooks get',
+  'PATCH /v4/webhook_endpoints/{id}': 'webhooks update',
+  'DELETE /v4/webhook_endpoints/{id}': 'webhooks delete',
+  'POST /v4/webhook_endpoints/{id}/rotate_secret': 'webhooks rotate-secret',
+  'POST /v4/webhook_endpoints/{id}/revoke_previous_secret': 'webhooks revoke-previous-secret',
 };
 
 /** Operations the CLI leaves alone on purpose, with the reason. */
-export const NOT_EXPOSED = {};
+export const NOT_EXPOSED = {
+  // Legacy webhooks resource, kept working by the API but superseded by
+  // /webhook_endpoints (see `kit webhooks`) for all new integrations.
+  'GET /v4/webhooks': 'Legacy resource superseded by /webhook_endpoints; use `kit webhooks` instead.',
+  'POST /v4/webhooks': 'Legacy resource superseded by /webhook_endpoints; use `kit webhooks` instead.',
+  'DELETE /v4/webhooks/{id}': 'Legacy resource superseded by /webhook_endpoints; use `kit webhooks` instead.',
+};
 
 /** Lists every operation key in a spec document, in the same shape as COVERAGE. */
 export function specOperations(spec) {
