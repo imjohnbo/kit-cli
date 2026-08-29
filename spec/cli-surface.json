@@ -911,29 +911,56 @@
         "--after",
         "--before",
         "--format",
-        "--per-page"
+        "--per-page",
+        "--status"
       ]
     },
-    "webhooks create": {
+    "webhooks get": {
       "arguments": [
         {
-          "name": "targetUrl",
-          "required": true,
-          "variadic": false
-        },
-        {
-          "name": "eventName",
+          "name": "id",
           "required": true,
           "variadic": false
         }
       ],
       "options": [
-        "--custom-field-id",
-        "--form-id",
-        "--initiator-value",
-        "--product-id",
-        "--sequence-id",
-        "--tag-id"
+        "--format"
+      ]
+    },
+    "webhooks create": {
+      "arguments": [
+        {
+          "name": "url",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "events",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--description",
+        "--format",
+        "--name"
+      ]
+    },
+    "webhooks update": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--description",
+        "--events",
+        "--format",
+        "--name",
+        "--status",
+        "--url"
       ]
     },
     "webhooks delete": {
@@ -945,6 +972,31 @@
         }
       ],
       "options": []
+    },
+    "webhooks rotate-secret": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--force",
+        "--format"
+      ]
+    },
+    "webhooks revoke-previous-secret": {
+      "arguments": [
+        {
+          "name": "id",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--format"
+      ]
     },
     "segments": {
       "arguments": [],

@@ -242,11 +242,24 @@ create --file <path>          Record a purchase from JSON
 
 ### webhooks
 
+One webhook subscribes to many event types and receives signed, automatically
+retried deliveries. This is the `/webhook_endpoints` resource, the current
+generation of Kit webhooks — recommended for all new integrations. The older
+`/webhooks` resource still works on the API but has no CLI command here.
+
 ```
-list [options]
-create [options] <targetUrl> <eventName>
+list [options]                 --status <active|disabled>
+get [options] <id>
+create [options] <url> <events>   events is comma-separated, e.g. subscriber.created,custom_field.created
+update [options] <id>          --name, --url, --description, --status, --events
 delete <id>
+rotate-secret [options] <id>   --force
+revoke-previous-secret [options] <id>
 ```
+
+`create` and `rotate-secret` are the only two responses that ever include the
+signing `secret` in plaintext — store it right away. `update --events`
+replaces the webhook's entire subscription list, not just the additions.
 
 ### posts
 
