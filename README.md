@@ -121,6 +121,14 @@ or a restricted environment), credentials fall back to the config file with
 `0600` (owner-only) permissions — the previous behavior, unchanged. A
 fallback prints a one-line warning so you know it happened.
 
+That fallback reads whatever plaintext value is already in the config file,
+which is blank once a credential has migrated into the Keychain. So if the
+Keychain becomes unavailable in a *later* process — a locked login keychain
+over SSH, a cron/launchd job, "Always Allow" revoked — after an *earlier*
+process already migrated your credentials, you may see "Not authenticated"
+even though the credential is still intact in the Keychain. Re-running
+`kit login` (or `kit config set-api-key`) resolves it; nothing is lost.
+
 Force file storage on any platform, including macOS, with:
 
 ```

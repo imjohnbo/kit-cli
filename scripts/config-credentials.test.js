@@ -133,6 +133,24 @@ describe('credentials, Keychain available', () => {
     assert.equal(store.reads, 1);
   });
 
+  test('setTokens writes both tokens in a single Keychain write, not one per field', () => {
+    const store = fakeStore({ blob: {} });
+    _setKeychainStoreForTests(store);
+
+    setTokens('access-1', 'refresh-1', 1_700_000_000, 3600);
+
+    assert.equal(store.writes, 1);
+  });
+
+  test('clearTokens writes both tokens in a single Keychain write, not one per field', () => {
+    const store = fakeStore({ blob: { accessToken: 'access-1', refreshToken: 'refresh-1' } });
+    _setKeychainStoreForTests(store);
+
+    clearTokens();
+
+    assert.equal(store.writes, 1);
+  });
+
   test('KIT_API_KEY env var still wins over the Keychain', () => {
     const store = fakeStore({ blob: { apiKey: 'sk-from-keychain' } });
     _setKeychainStoreForTests(store);

@@ -64,7 +64,11 @@ function credentialAccount() {
 function warnKeychainFallback(err) {
   if (warnedAboutFallback) return;
   warnedAboutFallback = true;
-  console.error(`Warning: Keychain access failed (${err.message}). Using the local config file instead.`);
+  console.error(
+    `Warning: Keychain access failed (${err.message}). Using the local config file instead.\n` +
+    `If you were previously logged in, this may be a transient Keychain issue rather than a ` +
+    `missing credential — try \`kit login\` again, or check Keychain Access for a "kit-cli" item.`
+  );
 }
 
 function keychainUsable() {
@@ -116,19 +120,28 @@ function readSecretField(field) {
 }
 
 function writeSecretField(field, value) {
+  writeSecretFields({ [field]: value });
+}
+
+/**
+ * Like writeSecretField, but for setting several fields at once (e.g. both
+ * OAuth tokens) with a single Keychain read-modify-write round trip instead
+ * of one per field.
+ */
+function writeSecretFields(fields) {
   if (!keychainUsable()) {
-    config.set(field, value);
+    for (const [field, value] of Object.entries(fields)) config.set(field, value);
     return;
   }
 
   try {
-    const blob = { ...loadCredentialBlob(), [field]: value };
+    const blob = { ...loadCredentialBlob(), ...fields };
     keychainStore.writeCredentials(credentialAccount(), blob);
     credentialBlob = blob;
   } catch (err) {
     keychainDisabledForProcess = true;
     warnKeychainFallback(err);
-    config.set(field, value);
+    for (const [field, value] of Object.entries(fields)) config.set(field, value);
   }
 }
 
@@ -238,15 +251,13 @@ export function isTokenExpired() {
 
 export function setTokens(accessToken, refreshToken, createdAt, expiresIn) {
   // Kit returns created_at as unix seconds, expires_in as seconds
-  writeSecretField('accessToken', accessToken);
-  writeSecretField('refreshToken', refreshToken);
+  writeSecretFields({ accessToken, refreshToken });
   config.set('tokenExpiresAt', (createdAt + expiresIn) * 1000);
   secureConfig();
 }
 
 export function clearTokens() {
-  writeSecretField('accessToken', '');
-  writeSecretField('refreshToken', '');
+  writeSecretFields({ accessToken: '', refreshToken: '' });
   config.set('tokenExpiresAt', 0);
 }
 
