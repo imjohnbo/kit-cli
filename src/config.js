@@ -1,5 +1,26 @@
 import Conf from 'conf';
 import { chmodSync } from 'node:fs';
+import { dirname } from 'node:path';
+import * as realKeychainStore from './keychain.js';
+
+// The real backend, unless a test swaps it out via _setKeychainStoreForTests
+// below. A plain local variable, not an export — reassigning it is ordinary
+// JS, unlike trying to monkey-patch an ES module's own named export (which
+// throws "Cannot redefine property").
+let keychainStore = realKeychainStore;
+
+// Populated lazily, once per process, the first time a secret is read while
+// the Keychain is in use. null means "not loaded yet"; after that it's
+// always an object (possibly {}).
+let credentialBlob = null;
+
+// Set for the rest of the process once any Keychain operation fails, so a
+// paginated run doesn't retry a broken Keychain (and re-print the warning)
+// on every single request.
+let keychainDisabledForProcess = false;
+let warnedAboutFallback = false;
+
+const SECRET_FIELDS = ['apiKey', 'accessToken', 'refreshToken'];
 
 // KIT_CONFIG_DIR moves the config file somewhere else. Point it at a directory
 // per Kit account to keep separate profiles, or at a throwaway directory to keep
@@ -31,6 +52,109 @@ try {
   chmodSync(config.path, 0o600);
 } catch {
   // May fail on Windows or if file doesn't exist yet — non-fatal
+}
+
+/** One Keychain item per config profile: the resolved config directory
+ *  itself is the account name, so KIT_CONFIG_DIR profiles (work, personal,
+ *  default) never collide in the single shared Keychain. */
+function credentialAccount() {
+  return dirname(config.path);
+}
+
+function warnKeychainFallback(err) {
+  if (warnedAboutFallback) return;
+  warnedAboutFallback = true;
+  console.error(
+    `Warning: Keychain access failed (${err.message}). Using the local config file instead.\n` +
+    `If you were previously logged in, this may be a transient Keychain issue rather than a ` +
+    `missing credential — try \`kit login\` again, or check Keychain Access for a "kit-cli" item.`
+  );
+}
+
+function keychainUsable() {
+  return keychainStore.isAvailable() && !keychainDisabledForProcess;
+}
+
+/**
+ * Returns the cached credential blob, loading it on first use. If no
+ * Keychain item exists yet, migrates any plaintext secrets already in the
+ * config file into a new one — but only blanks those plaintext fields after
+ * the Keychain write actually succeeds, so a failed migration never loses
+ * data.
+ */
+function loadCredentialBlob() {
+  if (credentialBlob !== null) return credentialBlob;
+
+  let blob = keychainStore.readCredentials(credentialAccount());
+
+  if (blob === null) {
+    const legacy = {};
+    for (const field of SECRET_FIELDS) {
+      const value = config.get(field);
+      if (value) legacy[field] = value;
+    }
+
+    if (Object.keys(legacy).length > 0) {
+      keychainStore.writeCredentials(credentialAccount(), legacy);
+      for (const field of Object.keys(legacy)) config.set(field, '');
+      blob = legacy;
+    } else {
+      blob = {};
+    }
+  }
+
+  credentialBlob = blob;
+  return credentialBlob;
+}
+
+function readSecretField(field) {
+  if (!keychainUsable()) return config.get(field);
+
+  try {
+    return loadCredentialBlob()[field] || '';
+  } catch (err) {
+    keychainDisabledForProcess = true;
+    warnKeychainFallback(err);
+    return config.get(field);
+  }
+}
+
+function writeSecretField(field, value) {
+  writeSecretFields({ [field]: value });
+}
+
+/**
+ * Like writeSecretField, but for setting several fields at once (e.g. both
+ * OAuth tokens) with a single Keychain read-modify-write round trip instead
+ * of one per field.
+ */
+function writeSecretFields(fields) {
+  if (!keychainUsable()) {
+    for (const [field, value] of Object.entries(fields)) config.set(field, value);
+    return;
+  }
+
+  try {
+    const blob = { ...loadCredentialBlob(), ...fields };
+    keychainStore.writeCredentials(credentialAccount(), blob);
+    credentialBlob = blob;
+  } catch (err) {
+    keychainDisabledForProcess = true;
+    warnKeychainFallback(err);
+    for (const [field, value] of Object.entries(fields)) config.set(field, value);
+  }
+}
+
+/**
+ * Test-only: swap the Keychain backend for a fake one, and reset the
+ * in-process cache/fallback state. Call with no arguments to restore the
+ * real backend. Not used outside the test suite.
+ */
+export function _setKeychainStoreForTests(fake) {
+  keychainStore = fake || realKeychainStore;
+  credentialBlob = null;
+  keychainDisabledForProcess = false;
+  warnedAboutFallback = false;
 }
 
 // --- API base URL ---
@@ -71,7 +195,7 @@ export function setBaseUrl(url) {
 // --- API key ---
 
 export function getApiKey() {
-  return process.env.KIT_API_KEY || config.get('apiKey');
+  return process.env.KIT_API_KEY || readSecretField('apiKey');
 }
 
 export function setApiKey(key) {
@@ -84,7 +208,7 @@ export function setApiKey(key) {
   if (/[\x00-\x1f\x7f]/.test(key)) {
     throw new Error('API key contains invalid control characters.');
   }
-  config.set('apiKey', key.trim());
+  writeSecretField('apiKey', key.trim());
   secureConfig();
 }
 
@@ -111,11 +235,11 @@ export function setOAuthRedirectUri(uri) {
 // --- OAuth tokens ---
 
 export function getAccessToken() {
-  return config.get('accessToken');
+  return readSecretField('accessToken');
 }
 
 export function getRefreshToken() {
-  return config.get('refreshToken');
+  return readSecretField('refreshToken');
 }
 
 export function isTokenExpired() {
@@ -127,15 +251,13 @@ export function isTokenExpired() {
 
 export function setTokens(accessToken, refreshToken, createdAt, expiresIn) {
   // Kit returns created_at as unix seconds, expires_in as seconds
-  config.set('accessToken', accessToken);
-  config.set('refreshToken', refreshToken);
+  writeSecretFields({ accessToken, refreshToken });
   config.set('tokenExpiresAt', (createdAt + expiresIn) * 1000);
   secureConfig();
 }
 
 export function clearTokens() {
-  config.set('accessToken', '');
-  config.set('refreshToken', '');
+  writeSecretFields({ accessToken: '', refreshToken: '' });
   config.set('tokenExpiresAt', 0);
 }
 
@@ -204,6 +326,7 @@ export function getAll() {
   return {
     baseUrl:         getBaseUrl(),
     apiKey:          getApiKey() ? '****' + getApiKey().slice(-4) : '(not set)',
+    credentialStore: credentialStoreLabel(),
     oauthClientId:   getOAuthClientId() || '(not set)',
     oauthRedirectUri: getOAuthRedirectUri(),
     oauthToken:      oauthStatus,
@@ -212,6 +335,10 @@ export function getAll() {
     updateCheck:     getUpdateCheckEnabled(),
     configPath:      config.path,
   };
+}
+
+function credentialStoreLabel() {
+  return keychainUsable() ? 'macOS Keychain' : 'file (plaintext)';
 }
 
 function secureConfig() {

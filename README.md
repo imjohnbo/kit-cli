@@ -108,6 +108,39 @@ export KIT_API_BASE=https://api.example.com/v4
 
 OAuth authorize/token endpoints derive from this base, so logging in targets the same environment. OAuth apps and credentials are environment-specific — register an app in that environment's developer settings and use its client ID.
 
+### Where credentials are stored
+
+On macOS, `kit login`'s OAuth tokens and `kit config set-api-key`'s API key
+are stored in your login Keychain (service `kit-cli`), not in the config
+file — real encryption at rest, not just file permissions. The first access
+may show a one-time Keychain permission prompt; choose "Always Allow" to
+avoid seeing it again.
+
+Everywhere else, and if the Keychain is ever unavailable (locked, denied,
+or a restricted environment), credentials fall back to the config file with
+`0600` (owner-only) permissions — the previous behavior, unchanged. A
+fallback prints a one-line warning so you know it happened.
+
+That fallback reads whatever plaintext value is already in the config file,
+which is blank once a credential has migrated into the Keychain. So if the
+Keychain becomes unavailable in a *later* process — a locked login keychain
+over SSH, a cron/launchd job, "Always Allow" revoked — after an *earlier*
+process already migrated your credentials, you may see "Not authenticated"
+even though the credential is still intact in the Keychain. Re-running
+`kit login` (or `kit config set-api-key`) resolves it; nothing is lost.
+
+Force file storage on any platform, including macOS, with:
+
+```
+export KIT_CREDENTIAL_STORE=file
+```
+
+Run `kit config show` to see which backend is actually in use — its
+`credentialStore` line reports `macOS Keychain` or `file (plaintext)`.
+
+Existing plaintext credentials from before this feature migrate into the
+Keychain automatically the next time they're read; nothing to do manually.
+
 ## Commands
 
 ```
