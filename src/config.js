@@ -327,7 +327,7 @@ export function getAll() {
 }
 
 function credentialStoreLabel() {
-  return keychainStore.isAvailable() ? 'macOS Keychain' : 'file (plaintext)';
+  return keychainUsable() ? 'macOS Keychain' : 'file (plaintext)';
 }
 
 function secureConfig() {

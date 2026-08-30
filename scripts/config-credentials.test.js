@@ -190,12 +190,44 @@ describe('fallback when the Keychain is unavailable or fails', () => {
 
 describe('getAll credentialStore label', () => {
   test('reports macOS Keychain when available', () => {
-    _setKeychainStoreForTests(fakeStore({ available: true }));
+    // blob: {} so this fake is a genuinely working backend — getAll() calls
+    // getApiKey() before computing the label, and a fake with no working
+    // readCredentials/writeCredentials would throw internally, get caught,
+    // and silently fall back, making this test pass for the wrong reason.
+    _setKeychainStoreForTests(fakeStore({ available: true, blob: {} }));
     assert.equal(getAll().credentialStore, 'macOS Keychain');
   });
 
   test('reports the plaintext file when unavailable', () => {
     _setKeychainStoreForTests(fakeStore({ available: false }));
     assert.equal(getAll().credentialStore, 'file (plaintext)');
+  });
+
+  test('reports the plaintext file after a mid-process fallback, even though isAvailable() still says true', () => {
+    // A working-looking backend (isAvailable() -> true) that fails on the
+    // very first real operation. That failure sets keychainDisabledForProcess,
+    // which credentialStoreLabel() must reflect — not just static availability.
+    const store = fakeStore({ available: true, failWith: new KeychainError('locked') });
+    _setKeychainStoreForTests(store);
+
+    getApiKey(); // triggers the failure and the fallback
+
+    assert.equal(getAll().credentialStore, 'file (plaintext)');
+  });
+});
+
+// ── warn-once dedupe ──────────────────────────────────────────────────────
+
+describe('Keychain fallback warning', () => {
+  test('is printed only once per process, even across repeated failures', (t) => {
+    const store = fakeStore({ failWith: new KeychainError('locked') });
+    _setKeychainStoreForTests(store);
+    const errorMock = t.mock.method(console, 'error', () => {});
+
+    getApiKey();
+    getApiKey();
+
+    assert.equal(errorMock.mock.callCount(), 1);
+    assert.match(errorMock.mock.calls[0].arguments[0], /Keychain access failed \(locked\)/);
   });
 });

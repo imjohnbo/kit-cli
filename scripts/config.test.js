@@ -5,9 +5,18 @@
  * suite is safe to run in any environment without polluting the developer's
  * stored credentials.  Writing tests are intentionally omitted.
  */
-import { test, describe, before, after, afterEach } from 'node:test';
+
+// Self-protecting regardless of how this file is invoked (e.g. directly via
+// `npm run test:file scripts/config.test.js`, which bypasses run-tests.js's
+// own KIT_CREDENTIAL_STORE=file env setup). Without this, a real macOS dev
+// machine's actual Keychain-stored credentials could get silently read and
+// overwritten by this file's setApiKey() calls. `??=` so it never clobbers
+// an intentional override.
+process.env.KIT_CREDENTIAL_STORE ??= 'file';
+
+import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri, setBaseUrl, getBaseUrl, getAll, _setKeychainStoreForTests } from '../src/config.js';
+import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri, setBaseUrl, getBaseUrl } from '../src/config.js';
 
 // ── setApiKey – validation (throws before writing to disk) ─────────────────
 
@@ -270,23 +279,5 @@ describe('getOAuthRedirectUri', () => {
     // With no env var and a fresh config, redirect URI defaults to ''
     const val = getOAuthRedirectUri();
     assert.equal(typeof val, 'string');
-  });
-});
-
-// ── getAll credentialStore label (read-only, safe to run anywhere) ───────
-
-describe('getAll credentialStore label', () => {
-  afterEach(() => {
-    _setKeychainStoreForTests(); // restore the real backend
-  });
-
-  test('reports macOS Keychain when the backend says it is available', () => {
-    _setKeychainStoreForTests({ isAvailable: () => true });
-    assert.equal(getAll().credentialStore, 'macOS Keychain');
-  });
-
-  test('reports the plaintext file when the backend is unavailable', () => {
-    _setKeychainStoreForTests({ isAvailable: () => false });
-    assert.equal(getAll().credentialStore, 'file (plaintext)');
   });
 });
