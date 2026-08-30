@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { platform, arch } from 'node:os';
 
 /**
  * Facts read from package.json, so there is one source of truth for each.
@@ -32,3 +33,10 @@ export const REPOSITORY = (() => {
   const m = /github\.com[/:]([^/]+)\/([^/.]+)/.exec(url);
   return m ? `${m[1]}/${m[2]}` : null;
 })();
+
+/**
+ * Identifies this CLI to Kit's API and to npm's registry. Every outbound
+ * request in the codebase sends this — see client.js, auth.js, and
+ * update-check.js.
+ */
+export const USER_AGENT = `kit-cli/${VERSION} (${platform()} ${arch()}; node/${process.version})`;
