@@ -9,7 +9,27 @@
  * regardless of platform or KIT_CREDENTIAL_STORE. (Real ES module exports
  * can't be monkey-patched with t.mock.method — see the plan's "Before you
  * start" section.)
+ *
+ * It still calls the real config.set()/config.get() for the plaintext
+ * fallback/migration paths, so it needs the same KIT_CONFIG_DIR guard as
+ * scripts/config.test.js, for the same reason: src/config.js reads
+ * KIT_CONFIG_DIR eagerly, at its own module top level (`new Conf({ cwd: ... })`),
+ * and ES module imports are fully evaluated before any of this file's own
+ * statements run — so an in-file default (`??=`) placed before the import
+ * has no effect on it (verified empirically; confirmed necessary by two real
+ * incidents on a real dev machine). A hard refusal is the only thing that
+ * actually works here.
  */
+if (!process.env.KIT_CONFIG_DIR) {
+  console.error(
+    'Refusing to run scripts/config-credentials.test.js directly: KIT_CONFIG_DIR is not set.\n' +
+    'This file writes real config values during some tests, and without KIT_CONFIG_DIR\n' +
+    'they would land in your real config file. Run it via `npm test`, which sets this\n' +
+    'automatically, or set KIT_CONFIG_DIR yourself to a scratch directory first.'
+  );
+  process.exit(1);
+}
+
 import { test, describe, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import config, {
