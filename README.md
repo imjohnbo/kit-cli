@@ -108,6 +108,16 @@ export KIT_API_BASE=https://api.example.com/v4
 
 OAuth authorize/token endpoints derive from this base, so logging in targets the same environment. OAuth apps and credentials are environment-specific — register an app in that environment's developer settings and use its client ID.
 
+## Shell completion
+
+```
+eval "$(kit completion bash)"   # add to ~/.bashrc
+eval "$(kit completion zsh)"    # add to ~/.zshrc, after compinit
+kit completion fish | source    # add to ~/.config/fish/config.fish
+```
+
+Completions cover command and subcommand names, plus flags — not argument values like subscriber IDs.
+
 ## Commands
 
 ```
