@@ -361,6 +361,25 @@ Installs the `/kit` skill to `~/.claude/skills/kit/`. Then in Claude Code:
 /kit tag subscriber jane@example.com with "vip"
 ```
 
+## Telemetry
+
+kit sends anonymous usage data — which command ran, whether it succeeded,
+and basic environment info like CLI/Node version and OS — and, on a crash,
+an error report. It never includes the arguments, flags, request/response
+bodies, or output of a command, which routinely carry subscriber emails and
+content.
+
+Turn it off:
+
+```
+kit config set-telemetry false
+# or, for a single invocation or in CI:
+export KIT_NO_TELEMETRY=1
+```
+
+It's also off automatically when `CI` is set, and respects the `DO_NOT_TRACK`
+convention some other CLIs use.
+
 ## Security
 
 - Config file is stored with `600` permissions (owner-only). Contains API key and OAuth tokens.
@@ -372,6 +391,14 @@ Installs the `/kit` skill to `~/.claude/skills/kit/`. Then in Claude Code:
   source before publishing. See [`docs/RELEASING.md`](docs/RELEASING.md).
 - `kit upgrade` delegates to your package manager. It never fetches and executes
   code on its own.
+
+## Support
+
+Found a bug or have a feature request for the CLI itself? [Open an
+issue](https://github.com/imjohnbo/kit-cli/issues).
+
+For help with your Kit account, subscribers, or the API, use Kit's own
+support channels — this project isn't an official Kit product (yet).
 
 ## License
 
