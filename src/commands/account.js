@@ -16,6 +16,7 @@ import {
   setDefaultFormat,
   setPerPage,
   setUpdateCheckEnabled,
+  setTelemetryEnabled,
 } from '../config.js';
 import chalk from 'chalk';
 import { cpSync, mkdirSync, existsSync } from 'node:fs';
@@ -262,6 +263,18 @@ export function configCommand() {
       }
       setUpdateCheckEnabled(enabled === 'true');
       console.log(chalk.green(`\u2713 Update check ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
+    });
+
+  cmd
+    .command('set-telemetry <enabled>')
+    .description('Turn anonymous usage telemetry and error reporting on or off (true, false)')
+    .action((enabled) => {
+      if (!['true', 'false'].includes(enabled)) {
+        console.error(chalk.red('Value must be "true" or "false".'));
+        process.exit(1);
+      }
+      setTelemetryEnabled(enabled === 'true');
+      console.log(chalk.green(`\u2713 Telemetry ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
     });
 
   return cmd;

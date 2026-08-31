@@ -132,6 +132,16 @@
       ],
       "options": []
     },
+    "config set-telemetry": {
+      "arguments": [
+        {
+          "name": "enabled",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
     "setup-skill": {
       "arguments": [],
       "options": []
