@@ -30,7 +30,7 @@ describe('runChecks', () => {
     globalThis.fetch = _originalFetch;
   });
 
-  test('reports the running Node.js version as ok (test suite requires 18+)', async () => {
+  test('reports the running Node.js version as ok (test suite requires 20+)', async () => {
     const results = await runChecks();
     const node = results.find((r) => r.label === 'Node.js version');
     assert.equal(node.ok, true);
@@ -172,6 +172,18 @@ describe('runChecks', () => {
 });
 
 describe('checkConfigPermissions', () => {
+  let savedApiKey, oauthSnap;
+  before(() => {
+    savedApiKey = config.get('apiKey');
+    config.set('apiKey', '');
+    oauthSnap = oauthSnapshot();
+    clearOAuth();
+  });
+  after(() => {
+    config.set('apiKey', savedApiKey);
+    restoreOAuth(oauthSnap);
+  });
+
   test('flags a config file that is not 0600', async () => {
     if (process.platform === 'win32') return;
     const originalMode = statSync(config.path).mode & 0o777;

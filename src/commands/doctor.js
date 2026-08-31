@@ -163,12 +163,18 @@ export async function runChecks() {
   ];
 }
 
-/** Shared with kit init, which prints the same checklist at the end of its wizard. */
-export function printChecks(results) {
+/**
+ * Shared with kit init, which prints the same checklist at the end of its
+ * wizard. `log` defaults to console.log for doctorCommand()'s own use;
+ * kit init passes a writer bound to its own injectable output stream
+ * instead, since console.log always targets the real process.stdout
+ * regardless of what stream init's caller supplied.
+ */
+export function printChecks(results, log = console.log) {
   const width = Math.max(...results.map((r) => r.label.length)) + 1;
   for (const r of results) {
     const mark = r.ok ? chalk.green('✓') : chalk.red('✗');
-    console.log(`${mark} ${r.label.padEnd(width)}${r.detail}`);
+    log(`${mark} ${r.label.padEnd(width)}${r.detail}`);
   }
 }
 
