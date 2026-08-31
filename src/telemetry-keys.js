@@ -12,5 +12,5 @@
  * reviewable edit to the literal default below — set the env var instead
  * for local testing without touching source.
  */
-export const SEGMENT_WRITE_KEY = process.env.KIT_SEGMENT_WRITE_KEY || '';
-export const SENTRY_DSN = process.env.KIT_SENTRY_DSN || '';
+export const SEGMENT_WRITE_KEY = (process.env.KIT_SEGMENT_WRITE_KEY || '').trim();
+export const SENTRY_DSN = (process.env.KIT_SENTRY_DSN || '').trim();
