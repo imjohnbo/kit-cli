@@ -6,6 +6,7 @@ import {
   printPagination,
   addFormatOption,
   addPaginationOptions,
+  addSlimOption,
   withErrorHandler,
 } from '../output.js';
 
@@ -82,6 +83,7 @@ export function tagsCommand() {
     .description('List subscribers for a tag');
   addFormatOption(subs);
   addPaginationOptions(subs);
+  addSlimOption(subs, 'custom field values');
   subs
     .option('-s, --state <state>', `filter by state (${SUB_STATUSES.join(', ')})`)
     .option('--created-after <date>', 'filter by subscriber created after (yyyy-mm-dd)')
@@ -101,6 +103,7 @@ export function tagsCommand() {
           created_before: opts.createdBefore,
           tagged_after: opts.taggedAfter,
           tagged_before: opts.taggedBefore,
+          slim: opts.slim ? 'true' : undefined,
         };
         const res = await get(`/tags/${safeTagId}/subscribers`, query);
         formatOutput(res.subscribers, SUB_COLUMNS, opts);

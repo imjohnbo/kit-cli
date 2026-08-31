@@ -181,7 +181,11 @@ with an explicit one. Both `pin` and `update` require `--city`,
 `--state-province`, `--country-code`, `--latitude`, `--longitude`, and
 `--time-zone`, because the API replaces the whole location rather than merging.
 
-`list` takes `--slim` to drop the expensive optional fields.
+`list` returns slim responses by default, dropping the `fields` object (custom
+field values). Pass `--no-slim` when you need it. The same default applies to
+`broadcasts list`, `tags subscribers`, and `forms subscribers`. Those four are
+the V4 endpoints that accept `slim`. Slim mode skips the joins behind those
+fields, so it is faster as well as smaller.
 
 `filter` reads its conditions from `--json <json>` or `--file <path>`, as either a
 bare conditions array or a full body with an `all` key:

@@ -149,6 +149,7 @@
         "--created-before",
         "--email",
         "--format",
+        "--no-slim",
         "--per-page",
         "--slim",
         "--sort-field",
@@ -360,7 +361,9 @@
         "--created-after",
         "--created-before",
         "--format",
+        "--no-slim",
         "--per-page",
+        "--slim",
         "--state",
         "--tagged-after",
         "--tagged-before"
@@ -453,7 +456,9 @@
         "--after",
         "--before",
         "--format",
-        "--per-page"
+        "--no-slim",
+        "--per-page",
+        "--slim"
       ]
     },
     "forms add": {
@@ -731,9 +736,11 @@
         "--after",
         "--before",
         "--format",
+        "--no-slim",
         "--per-page",
         "--sent-after",
         "--sent-before",
+        "--slim",
         "--status"
       ]
     },

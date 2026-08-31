@@ -1,5 +1,6 @@
 import Table from 'cli-table3';
 import chalk from 'chalk';
+import { Option } from 'commander';
 import { getDefaultFormat } from './config.js';
 
 export function formatOutput(data, columns, opts = {}) {
@@ -100,6 +101,24 @@ export function addPaginationOptions(cmd) {
     .option('--per-page <n>', 'results per page (max 1000)', '50')
     .option('--after <cursor>', 'cursor for next page')
     .option('--before <cursor>', 'cursor for previous page');
+}
+
+/**
+ * Adds the slim/no-slim pair to a list command.
+ *
+ * Slim is the default, matching the Kit MCP server: the V4 API skips the
+ * expensive fields *and* the joins behind them, so the caller doesn't pay for
+ * data it discards. `omitted` names what slim drops, for the help text.
+ *
+ * `--slim` stays accepted so existing scripts keep working, but it's now a
+ * no-op and hidden from help. `--no-slim` is the way back to full responses.
+ * Order matters: commander takes the default from the `--no-slim` declaration,
+ * so it has to come first.
+ */
+export function addSlimOption(cmd, omitted) {
+  return cmd
+    .option('--no-slim', `include ${omitted} (slower, larger response)`)
+    .addOption(new Option('--slim', 'omit expensive optional fields (default)').hideHelp());
 }
 
 export function withErrorHandler(fn) {

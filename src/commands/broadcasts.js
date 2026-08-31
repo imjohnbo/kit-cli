@@ -16,6 +16,7 @@ import {
   printPagination,
   addFormatOption,
   addPaginationOptions,
+  addSlimOption,
   withErrorHandler,
 } from '../output.js';
 
@@ -97,6 +98,7 @@ export function broadcastsCommand() {
   const list = cmd.command('list').description('List broadcasts');
   addFormatOption(list);
   addPaginationOptions(list);
+  addSlimOption(list, 'content, public_url, email_address, email_template and subscriber_filter');
   list
     .option('-s, --status <status>', `filter by status (${BROADCAST_STATUSES.join(', ')})`)
     .option('--sent-after <date>', 'only broadcasts sent after this date (yyyy-mm-dd)')
@@ -111,6 +113,7 @@ export function broadcastsCommand() {
           status: opts.status,
           sent_after: opts.sentAfter,
           sent_before: opts.sentBefore,
+          slim: opts.slim ? 'true' : undefined,
         };
         const res = await get('/broadcasts', query);
         formatOutput(res.broadcasts, BROADCAST_COLUMNS, opts);
