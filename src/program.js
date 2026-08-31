@@ -18,6 +18,7 @@ import { upgradeCommand } from './commands/upgrade.js';
 import { apiCommand } from './commands/api.js';
 import { doctorCommand } from './commands/doctor.js';
 import { initCommand } from './commands/init.js';
+import { completionCommand, completeCommand } from './commands/completion.js';
 
 // Imported, not just re-exported, because buildProgram() below uses it.
 import { VERSION } from './package-info.js';
@@ -68,6 +69,8 @@ export function buildProgram() {
   program.addCommand(apiCommand());
   program.addCommand(doctorCommand());
   program.addCommand(initCommand());
+  program.addCommand(completionCommand());
+  program.addCommand(completeCommand(program), { hidden: true });
 
   return program;
 }
