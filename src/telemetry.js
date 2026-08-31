@@ -41,6 +41,11 @@ import { EVENT_NAMES } from './telemetry-events.js';
 // telemetry-keys.js import keeps the two modules' freshness in lockstep,
 // while resolving to the exact same plain URL a static import would use
 // whenever there's no query string to forward.
+// This top-level await means anything that does `require()` this module (or
+// any module that imports it) fails with ERR_REQUIRE_ASYNC_MODULE. Not a
+// concern today — package.json has no `exports`/`main` for library
+// consumers, and nothing in this codebase uses require() — but worth
+// knowing if that ever changes.
 const _keysUrl = new URL('./telemetry-keys.js', import.meta.url);
 _keysUrl.search = new URL(import.meta.url).search;
 const { SEGMENT_WRITE_KEY } = await import(_keysUrl.href);
@@ -107,18 +112,23 @@ function maybeShowFirstRunNotice() {
 // the process.
 
 async function resolveAccountId() {
-  if (getCachedAccountId()) return;
-
-  const accessToken = !isTokenExpired() ? getAccessToken() : '';
-  const apiKey = getApiKey();
-  const headers = accessToken
-    ? { Authorization: `Bearer ${accessToken}` }
-    : apiKey
-      ? { 'X-Kit-Api-Key': apiKey }
-      : null;
-  if (!headers) return; // no usable credentials yet; try again on a later command
-
+  // The whole body is one try/catch, not just the fetch: this function is
+  // always invoked as `void resolveAccountId()` (fire-and-forget), so a
+  // throw anywhere in here — including the synchronous config reads below —
+  // would surface as an unhandled promise rejection and could crash the
+  // process, violating this module's invariant #1.
   try {
+    if (getCachedAccountId()) return;
+
+    const accessToken = !isTokenExpired() ? getAccessToken() : '';
+    const apiKey = getApiKey();
+    const headers = accessToken
+      ? { Authorization: `Bearer ${accessToken}` }
+      : apiKey
+        ? { 'X-Kit-Api-Key': apiKey }
+        : null;
+    if (!headers) return; // no usable credentials yet; try again on a later command
+
     const res = await fetch(`${getBaseUrl()}/account`, {
       headers: { ...headers, Accept: 'application/json', 'User-Agent': USER_AGENT },
       signal: AbortSignal.timeout(2000),
