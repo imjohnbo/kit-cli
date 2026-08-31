@@ -235,6 +235,13 @@ describe('refreshLatest', () => {
     assert.equal(url, `https://registry.npmjs.org/${PACKAGE_NAME}/latest`);
   });
 
+  test('sends a descriptive User-Agent header', async () => {
+    let headers;
+    globalThis.fetch = async (u, opts) => { headers = opts.headers; return { ok: true, status: 200, json: async () => ({ version: '1.0.0' }) }; };
+    await refreshLatest({ force: true });
+    assert.match(headers['User-Agent'], /^kit-cli\//);
+  });
+
   test('leaves a scoped name unencoded, which is what the registry serves', async () => {
     let url;
     globalThis.fetch = async (u) => { url = u; return { ok: true, status: 200, json: async () => ({ version: '1.0.0' }) }; };
