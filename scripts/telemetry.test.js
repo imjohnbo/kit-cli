@@ -180,4 +180,26 @@ describe('trackCommand', () => {
     await flushTelemetry({ timeout: 300 });
     assert.equal(called, false);
   });
+
+  test('a single successful event sends promptly, without an explicit flush', async () => {
+    // The success path in output.js's withErrorHandler never calls
+    // flushTelemetry() — it relies on the Segment client sending on its own.
+    // The SDK's default batches up to 15 events or waits up to 10s before
+    // sending, which would otherwise hang every successful command for up
+    // to 10 seconds once a real write key is configured. getClient() sets
+    // flushAt: 1 specifically so a single track() call sends immediately.
+    // This asserts that directly, with NO flushTelemetry() call in sight.
+    const getCaptured = mockSegmentFetch();
+    const { trackCommand } = await freshTelemetry();
+    trackCommand({ command: 'account', status: 'success', durationMs: 1 });
+
+    const deadline = Date.now() + 1000;
+    while (!getCaptured() && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+
+    const captured = getCaptured();
+    assert.ok(captured, 'expected the event to send within 1s without calling flushTelemetry()');
+    assert.equal(captured.batch[0].event, 'Account Viewed');
+  });
 });

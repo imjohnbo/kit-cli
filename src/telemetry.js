@@ -73,7 +73,17 @@ function getClient() {
   if (_client !== undefined) return _client;
   // Analytics() throws if writeKey is falsy, so this is skipped entirely
   // rather than constructed-and-disabled.
-  _client = SEGMENT_WRITE_KEY ? new Analytics({ writeKey: SEGMENT_WRITE_KEY }) : null;
+  //
+  // flushAt: 1 — the SDK's default batches up to 15 events or waits up to
+  // flushInterval (10s) before sending. A CLI process tracks at most one
+  // event in its whole lifetime, so batching only adds latency: without
+  // this, a successful command would sit alive for up to 10 seconds after
+  // printing its result, waiting on a pending flush timer that
+  // trackCommand()'s success path never explicitly triggers (only the
+  // error path calls flushTelemetry()/closeAndFlush() — see below).
+  // Confirmed empirically: without flushAt, the process lingered ~10.2s
+  // past a successful command; with it, ~0.2s.
+  _client = SEGMENT_WRITE_KEY ? new Analytics({ writeKey: SEGMENT_WRITE_KEY, flushAt: 1 }) : null;
   return _client;
 }
 
