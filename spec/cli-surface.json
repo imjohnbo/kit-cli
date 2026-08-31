@@ -1228,6 +1228,26 @@
     "init": {
       "arguments": [],
       "options": []
+    },
+    "completion": {
+      "arguments": [
+        {
+          "name": "shell",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "__complete": {
+      "arguments": [
+        {
+          "name": "words",
+          "required": false,
+          "variadic": true
+        }
+      ],
+      "options": []
     }
   }
 }

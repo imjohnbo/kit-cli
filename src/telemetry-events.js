@@ -51,6 +51,7 @@ export const EVENT_NAMES = {
   'bulk tags remove':                   'Subscribers Untagged',
 
   // ── CLI config and utility commands ─────────────────────────────────────
+  'completion':                  'Shell Completion Installed',
   'config set-api-key':          'CLI Config Updated',
   'config set-base-url':         'CLI Config Updated',
   'config set-client-id':        'CLI Config Updated',
@@ -157,6 +158,7 @@ export const EVENT_NAMES = {
 const GROUP_ONLY = 'Group command; only its own subcommands have an action, so no event ever fires for this path.';
 
 export const NO_EVENT = {
+  '__complete':            'Invoked by shell tab-completion on every keypress; excluded from telemetry to avoid noise.',
   'broadcasts':            GROUP_ONLY,
   'bulk':                  GROUP_ONLY,
   'bulk custom-fields':    GROUP_ONLY,
