@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import chalk from 'chalk';
 import { accountCommand, configCommand, setupSkillCommand } from './commands/account.js';
 import { loginCommand, logoutCommand } from './commands/auth.js';
 import { bulkCommand } from './commands/bulk.js';
@@ -46,6 +47,8 @@ export function buildProgram() {
     .name('kit')
     .description('CLI for the Kit (ConvertKit) email marketing API (V4)')
     .version(VERSION);
+
+  program.addHelpText('before', `${chalk.hex('#44B1FF').bold('kit')} — CLI for Kit (ConvertKit)\n`);
 
   program.addCommand(loginCommand());
   program.addCommand(logoutCommand());
