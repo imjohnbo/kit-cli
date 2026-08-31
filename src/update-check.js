@@ -15,7 +15,7 @@ import {
   getUpdateCheckedAt,
   setCachedLatestVersion,
 } from './config.js';
-import { VERSION, PACKAGE_NAME } from './package-info.js';
+import { VERSION, PACKAGE_NAME, USER_AGENT } from './package-info.js';
 import { isNewer } from './semver.js';
 
 export { isNewer };
@@ -106,7 +106,10 @@ export async function refreshLatest({ force = false, automatic = true } = {}) {
 
   try {
     const res = await fetch(`${registryBase()}/${PACKAGE_NAME}/latest`, {
-      headers: { Accept: 'application/vnd.npm.install-v1+json, application/json' },
+      headers: {
+        Accept: 'application/vnd.npm.install-v1+json, application/json',
+        'User-Agent': USER_AGENT,
+      },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
 
