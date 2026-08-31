@@ -179,103 +179,107 @@ export function configCommand() {
   cmd
     .command('show')
     .description('Show current configuration')
-    .action(() => {
-      const cfg = getAll();
-      for (const [key, val] of Object.entries(cfg)) {
-        console.log(`${chalk.cyan(key.padEnd(20))}${val}`);
-      }
-    });
+    .action(
+      withErrorHandler(async () => {
+        const cfg = getAll();
+        for (const [key, val] of Object.entries(cfg)) {
+          console.log(`${chalk.cyan(key.padEnd(20))}${val}`);
+        }
+      })
+    );
 
   cmd
     .command('set-base-url <url>')
     .description('Set the API base URL (default: https://api.kit.com/v4)')
-    .action((url) => {
-      try {
+    .action(
+      withErrorHandler(async (url) => {
         setBaseUrl(url);
         console.log(chalk.green('✓ API base URL saved.'));
-      } catch (err) {
-        console.error(chalk.red(err.message));
-        process.exit(1);
-      }
-    });
+      })
+    );
 
   cmd
     .command('set-api-key <key>')
     .description('Set your Kit API key')
-    .action((key) => {
-      try {
+    .action(
+      withErrorHandler(async (key) => {
         setApiKey(key);
         console.log(chalk.green('\u2713 API key saved.'));
-      } catch (err) {
-        console.error(chalk.red(err.message));
-        process.exit(1);
-      }
-    });
+      })
+    );
 
   cmd
     .command('set-client-id <id>')
     .description('Set your Kit OAuth client ID (used by `kit login`)')
-    .action((id) => {
-      setOAuthClientId(id);
-      console.log(chalk.green('\u2713 OAuth client ID saved.'));
-    });
+    .action(
+      withErrorHandler(async (id) => {
+        setOAuthClientId(id);
+        console.log(chalk.green('\u2713 OAuth client ID saved.'));
+      })
+    );
 
   cmd
     .command('set-redirect-uri <uri>')
     .description('Set the OAuth redirect URI (default: hosted GitHub Pages shim)')
-    .action((uri) => {
-      setOAuthRedirectUri(uri);
-      console.log(chalk.green('\u2713 OAuth redirect URI saved.'));
-    });
+    .action(
+      withErrorHandler(async (uri) => {
+        setOAuthRedirectUri(uri);
+        console.log(chalk.green('\u2713 OAuth redirect URI saved.'));
+      })
+    );
 
   cmd
     .command('set-format <format>')
     .description('Set default output format (table, json)')
-    .action((format) => {
-      if (!['table', 'json'].includes(format)) {
-        console.error(chalk.red('Format must be "table" or "json".'));
-        process.exit(1);
-      }
-      setDefaultFormat(format);
-      console.log(chalk.green(`\u2713 Default format set to ${format}.`));
-    });
+    .action(
+      withErrorHandler(async (format) => {
+        if (!['table', 'json'].includes(format)) {
+          throw new Error('Format must be "table" or "json".');
+        }
+        setDefaultFormat(format);
+        console.log(chalk.green(`\u2713 Default format set to ${format}.`));
+      })
+    );
 
   cmd
     .command('set-per-page <n>')
     .description('Set default results per page (1-1000)')
-    .action((n) => {
-      const num = parseInt(n, 10);
-      if (isNaN(num) || num < 1 || num > 1000) {
-        console.error(chalk.red('Per page must be between 1 and 1000.'));
-        process.exit(1);
-      }
-      setPerPage(num);
-      console.log(chalk.green(`\u2713 Default per_page set to ${num}.`));
-    });
+    .action(
+      withErrorHandler(async (n) => {
+        const num = parseInt(n, 10);
+        if (isNaN(num) || num < 1 || num > 1000) {
+          throw new Error('Per page must be between 1 and 1000.');
+        }
+        setPerPage(num);
+        console.log(chalk.green(`\u2713 Default per_page set to ${num}.`));
+      })
+    );
 
   cmd
     .command('set-update-check <enabled>')
     .description('Turn the update notice on or off (true, false)')
-    .action((enabled) => {
-      if (!['true', 'false'].includes(enabled)) {
-        console.error(chalk.red('Value must be "true" or "false".'));
-        process.exit(1);
-      }
-      setUpdateCheckEnabled(enabled === 'true');
-      console.log(chalk.green(`\u2713 Update check ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
-    });
+    .action(
+      withErrorHandler(async (enabled) => {
+        if (!['true', 'false'].includes(enabled)) {
+          throw new Error('Value must be "true" or "false".');
+        }
+        setUpdateCheckEnabled(enabled === 'true');
+        console.log(chalk.green(`\u2713 Update check ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
+      })
+    );
 
   cmd
     .command('set-telemetry <enabled>')
     .description('Turn anonymous usage telemetry and error reporting on or off (true, false)')
-    .action((enabled) => {
-      if (!['true', 'false'].includes(enabled)) {
-        console.error(chalk.red('Value must be "true" or "false".'));
-        process.exit(1);
-      }
-      setTelemetryEnabled(enabled === 'true');
-      console.log(chalk.green(`\u2713 Telemetry ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
-    });
+    .action(
+      withErrorHandler(async (enabled) => {
+        if (!['true', 'false'].includes(enabled)) {
+          throw new Error('Value must be "true" or "false".');
+        }
+        setTelemetryEnabled(enabled === 'true');
+        console.log(chalk.green(`\u2713 Telemetry ${enabled === 'true' ? 'enabled' : 'disabled'}.`));
+      })
+    );
 
   return cmd;
 }
@@ -284,20 +288,21 @@ export function setupSkillCommand() {
   const cmd = new Command('setup-skill')
     .description('Install the Claude Code /kit skill to ~/.claude/skills/kit/');
 
-  cmd.action(() => {
-    const src = join(__dirname, '..', '..', 'skills', 'kit');
-    const dest = join(homedir(), '.claude', 'skills', 'kit');
+  cmd.action(
+    withErrorHandler(async () => {
+      const src = join(__dirname, '..', '..', 'skills', 'kit');
+      const dest = join(homedir(), '.claude', 'skills', 'kit');
 
-    if (!existsSync(join(src, 'SKILL.md'))) {
-      console.error(chalk.red('Skill source not found. Ensure the skills/kit/ directory exists in the kit-cli package.'));
-      process.exit(1);
-    }
+      if (!existsSync(join(src, 'SKILL.md'))) {
+        throw new Error('Skill source not found. Ensure the skills/kit/ directory exists in the kit-cli package.');
+      }
 
-    mkdirSync(dest, { recursive: true });
-    cpSync(src, dest, { recursive: true });
-    printSuccess(`Claude Code skill installed to ${dest}`);
-    console.log(chalk.dim('You can now use /kit in Claude Code to manage your Kit account.'));
-  });
+      mkdirSync(dest, { recursive: true });
+      cpSync(src, dest, { recursive: true });
+      printSuccess(`Claude Code skill installed to ${dest}`);
+      console.log(chalk.dim('You can now use /kit in Claude Code to manage your Kit account.'));
+    })
+  );
 
   return cmd;
 }

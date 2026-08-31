@@ -36,3 +36,11 @@ describe('config show', () => {
     assert.match(res.out, /telemetry/i);
   });
 });
+
+describe('config set-base-url', () => {
+  test('rejects an invalid URL with a clear error', async () => {
+    const res = await cfg(['set-base-url', 'not-a-url']);
+    assert.equal(res.exitCode, 1);
+    assert.match(res.err, /Invalid base URL/);
+  });
+});

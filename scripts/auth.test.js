@@ -57,3 +57,16 @@ describe('refreshAccessToken', () => {
     assert.equal(captured.headers['Accept'], 'application/json');
   });
 });
+
+describe('loginCommand error handling', () => {
+  test('routes a missing-client-ID error through withErrorHandler, not a direct process.exit', async () => {
+    const { loginCommand } = await import('../src/commands/auth.js');
+    const { runCommand } = await import('./helpers.js');
+    delete process.env.KIT_CLIENT_ID;
+    const res = await runCommand(loginCommand, []);
+    assert.equal(res.exitCode, 1);
+    // The "Error: " prefix only appears via printError()'s generic-Error
+    // formatting, which only runs when withErrorHandler is in the call path.
+    assert.match(res.err, /^Error: Client ID required/);
+  });
+});
