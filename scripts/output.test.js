@@ -13,6 +13,7 @@ import {
   withErrorHandler,
 } from '../src/output.js';
 import { KitApiError } from '../src/client.js';
+import { setCurrentCommand, getCurrentCommand } from '../src/current-command.js';
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
@@ -211,6 +212,58 @@ describe('withErrorHandler', () => {
     process.exit = origExit;
     assert.ok(c.errors[0].includes('403'));
     assert.ok(c.errors[0].includes('Forbidden'));
+  });
+});
+
+// ── withErrorHandler telemetry wiring ───────────────────────────────────────
+//
+// No write key or DSN is configured in this test environment (they default
+// to empty — see telemetry-keys.js), so trackCommand()/maybeReportError()
+// are inert here. These tests confirm the wiring runs and stays bounded,
+// not what gets sent — that's covered in telemetry.test.js and
+// error-reporting.test.js.
+
+describe('withErrorHandler telemetry wiring', () => {
+  test('does not affect a successful resolve', async () => {
+    setCurrentCommand('subscribers list');
+    let ran = false;
+    const wrapped = withErrorHandler(async () => { ran = true; });
+    await wrapped();
+    assert.ok(ran);
+  });
+
+  test('success path never throws even though telemetry runs inline', async () => {
+    setCurrentCommand('subscribers list');
+    await assert.doesNotReject(() => withErrorHandler(async () => {})());
+  });
+
+  test('still exits 1 and prints the error on failure', async () => {
+    const origExit = process.exit;
+    let exitCode;
+    process.exit = (c) => { exitCode = c; };
+    const c = capture();
+    setCurrentCommand('tags create');
+    await withErrorHandler(async () => { throw new Error('Boom'); })();
+    c.restore();
+    process.exit = origExit;
+    assert.equal(exitCode, 1);
+    assert.ok(c.errors[0].includes('Boom'));
+  });
+
+  test('resolves within a bounded time even with no telemetry configured', async () => {
+    const origExit = process.exit;
+    process.exit = () => {};
+    const c = capture();
+    const started = Date.now();
+    await withErrorHandler(async () => { throw new Error('Boom'); })();
+    c.restore();
+    process.exit = origExit;
+    assert.ok(Date.now() - started < 2000, 'withErrorHandler took too long to resolve');
+  });
+
+  test('reads back the command recorded by setCurrentCommand', async () => {
+    setCurrentCommand('webhooks create');
+    assert.equal(getCurrentCommand(), 'webhooks create');
   });
 });
 

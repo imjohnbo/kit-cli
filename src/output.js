@@ -1,6 +1,9 @@
 import Table from 'cli-table3';
 import chalk from 'chalk';
 import { getDefaultFormat } from './config.js';
+import { getCurrentCommand } from './current-command.js';
+import { trackCommand, flushTelemetry } from './telemetry.js';
+import { maybeReportError } from './error-reporting.js';
 
 export function formatOutput(data, columns, opts = {}) {
   const format = opts.format || getDefaultFormat();
@@ -104,10 +107,16 @@ export function addPaginationOptions(cmd) {
 
 export function withErrorHandler(fn) {
   return async (...args) => {
+    const command = getCurrentCommand();
+    const startedAt = Date.now();
     try {
       await fn(...args);
+      trackCommand({ command, status: 'success', durationMs: Date.now() - startedAt });
     } catch (err) {
+      trackCommand({ command, status: 'failure', durationMs: Date.now() - startedAt, statusCode: err.status });
+      const reportPromise = maybeReportError(err, { command });
       printError(err);
+      await Promise.allSettled([flushTelemetry({ timeout: 300 }), reportPromise]);
       process.exit(1);
     }
   };
