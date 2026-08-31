@@ -4,10 +4,18 @@ import { withErrorHandler } from '../output.js';
 
 const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
-/** Parses "per_page=10,status=active" into { per_page: '10', status: 'active' }. */
+/**
+ * Parses "per_page=10&include=stats,subscriber_count" into
+ * { per_page: '10', include: 'stats,subscriber_count' }.
+ *
+ * Pairs split on `&`, not `,` — several Kit endpoints take a comma-separated
+ * `include` list (GET /tags, /subscribers, /forms, /sequences, and the
+ * sequence-emails routes), and splitting on comma would silently truncate
+ * exactly that value at the first item, with no error and a 200 response.
+ */
 function parseQuery(value) {
   const query = {};
-  for (const pair of String(value).split(',')) {
+  for (const pair of String(value).split('&')) {
     const [key, ...rest] = pair.split('=');
     if (!key) continue;
     query[key.trim()] = rest.join('=').trim();
@@ -30,14 +38,21 @@ export function apiCommand() {
     .description('Send a raw request to the Kit API — an escape hatch for endpoints without a dedicated command')
     .argument('<method>', 'HTTP method: GET, POST, PUT, PATCH, or DELETE')
     .argument('<path>', 'API path, e.g. /subscribers or /tags/123')
-    .option('--data <json>', 'JSON request body')
-    .option('--query <pairs>', 'comma-separated key=value query parameters, e.g. per_page=10,status=active');
+    .option('--data <json>', 'JSON request body (ignored for GET)')
+    .option('--query <pairs>', "'&'-separated key=value query parameters, e.g. per_page=10&include=stats,subscriber_count");
 
   cmd.action(
     withErrorHandler(async (method, path, opts) => {
       const verb = validateEnum(String(method).toUpperCase(), METHODS, 'method');
       const fullPath = path.startsWith('/') ? path : `/${path}`;
       const query = opts.query ? parseQuery(opts.query) : undefined;
+
+      if (opts.data && verb === 'GET') {
+        // request() in client.js only attaches a body to POST/PUT/PATCH/
+        // DELETE — a GET with --data would otherwise silently send without
+        // it, with no indication the flag did nothing.
+        throw new Error('--data has no effect on a GET request — GET requests never send a body.');
+      }
       const body = opts.data ? safeJsonParse(opts.data, 'request body') : undefined;
 
       const result = await callMethod(verb, fullPath, body, query);

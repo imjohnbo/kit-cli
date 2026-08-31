@@ -44,10 +44,15 @@ describe('kit api', () => {
   });
 
   test('--query is parsed into query parameters', async () => {
-    const res = await api(['GET', '/subscribers', '--query', 'per_page=10,status=active'], { subscribers: [] });
+    const res = await api(['GET', '/subscribers', '--query', 'per_page=10&status=active'], { subscribers: [] });
     const call = onlyCall(res);
     assert.equal(call.query.per_page, '10');
     assert.equal(call.query.status, 'active');
+  });
+
+  test('a comma inside a query value survives intact (e.g. Kit\'s comma-separated include lists)', async () => {
+    const res = await api(['GET', '/tags', '--query', 'include=stats,subscriber_count'], { tags: [] });
+    assert.equal(onlyCall(res).query.include, 'stats,subscriber_count');
   });
 
   test('DELETE sends no body when --data is omitted', async () => {
@@ -73,4 +78,23 @@ describe('kit api', () => {
     assert.equal(res.calls.length, 0);
     assert.equal(res.exitCode, 1);
   });
+
+  test('rejects --data on a GET request instead of silently dropping it', async () => {
+    const res = await api(['GET', '/subscribers', '--data', '{"a":1}'], {});
+    assert.equal(res.calls.length, 0);
+    assert.equal(res.exitCode, 1);
+    assert.match(res.err, /--data has no effect on a GET request/);
+  });
+
+  for (const [label, raw, parsed] of [
+    ['0', '0', 0],
+    ['null', 'null', null],
+    ['false', 'false', false],
+  ]) {
+    test(`sends a falsy JSON --data value (${label}) rather than silently dropping it`, async () => {
+      const res = await api(['POST', '/tags', '--data', raw], { tag: {} });
+      const call = onlyCall(res);
+      assert.equal(call.body, parsed);
+    });
+  }
 });
