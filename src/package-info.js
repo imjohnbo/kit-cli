@@ -38,5 +38,12 @@ export const REPOSITORY = (() => {
  * Identifies this CLI to Kit's API and to npm's registry. Every outbound
  * request in the codebase sends this — see client.js, auth.js, and
  * update-check.js.
+ *
+ * Derived from PACKAGE_NAME rather than a second hardcoded literal, with the
+ * npm scope stripped: an HTTP product token can't contain `@` or `/`, and
+ * the unscoped `kit-cli` belongs to a different author on npm (see
+ * update-check.js), so this UA must not silently drift from whatever
+ * PACKAGE_NAME actually is if the package is ever renamed.
  */
-export const USER_AGENT = `kit-cli/${VERSION} (${platform()} ${arch()}; node/${process.version})`;
+const UA_PRODUCT = PACKAGE_NAME.replace(/^@[^/]+\//, '');
+export const USER_AGENT = `${UA_PRODUCT}/${VERSION} (${platform()} ${arch()}; node/${process.version})`;
