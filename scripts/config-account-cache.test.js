@@ -3,18 +3,18 @@
  * clearTokens() both clear it, and neither leaves the config file world-
  * readable in the process.
  *
- * scripts/config.test.js deliberately contains no writing tests, so a bare
- * `node --test` against it can never touch a developer's real config. These
- * tests do write, which is why they live in a separate file: they rely on
- * the per-file KIT_CONFIG_DIR isolation that scripts/run-tests.js and
- * scripts/run-single-test.js (npm test / npm run test:file --) both provide
- * — the same safety net scripts/auth.test.js and scripts/upgrade.test.js
- * already depend on for their own config-writing tests.
+ * scripts/config.test.js states a "no writing tests" policy for itself, so
+ * these live in their own file instead of there. Like every config-writing
+ * test in this suite (scripts/auth.test.js, scripts/upgrade.test.js), they
+ * rely on the per-file KIT_CONFIG_DIR isolation that scripts/run-tests.js
+ * and scripts/run-single-test.js (npm test / npm run test:file --) provide
+ * — always use one of those two entry points, never a bare `node --test`,
+ * for any file that writes to config.
  */
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { statSync } from 'node:fs';
-import config, { setApiKey, clearTokens, setCachedAccountId, getCachedAccountId } from '../src/config.js';
+import config, { setApiKey, setBaseUrl, clearTokens, setCachedAccountId, getCachedAccountId } from '../src/config.js';
 
 describe('account ID cache clearing', () => {
   let snap;
@@ -61,5 +61,20 @@ describe('account ID cache clearing', () => {
     if (process.platform === 'win32') return;
     const mode = statSync(config.path).mode & 0o777;
     assert.equal(mode.toString(8), '600');
+  });
+
+  test('setCachedAccountId treats null and undefined as empty, not the literal strings', () => {
+    setCachedAccountId(null);
+    assert.equal(getCachedAccountId(), '');
+    setCachedAccountId(undefined);
+    assert.equal(getCachedAccountId(), '');
+  });
+
+  test('setBaseUrl clears a cached account ID', () => {
+    const savedBaseUrl = config.get('baseUrl');
+    setCachedAccountId('acct_3');
+    setBaseUrl('https://api.example.com/v4');
+    assert.equal(getCachedAccountId(), '');
+    config.set('baseUrl', savedBaseUrl);
   });
 });

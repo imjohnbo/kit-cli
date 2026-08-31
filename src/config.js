@@ -10,12 +10,12 @@ const config = new Conf({
   // that holds a user's credentials. Renaming the package must not orphan it.
   projectName: 'kit-cli',
   cwd: process.env.KIT_CONFIG_DIR || undefined,
-  // Conf defaults to 0o666, applied via fs.writeFileSync's `mode` option —
-  // which only takes effect when a file is newly created, not on later
-  // writes to an existing one (verified directly against Node's fs
-  // behavior). So this closes the gap for a brand-new config file only; an
-  // existing file still needs the explicit chmodSync calls below after every
-  // write that might have recreated it at a looser mode.
+  // Conf defaults to 0o666. It writes atomically — a fresh temp file per
+  // write, renamed into place — so this mode is genuinely applied on every
+  // write, not just the first. Still paired with the explicit chmodSync
+  // calls below: they're what actually matter for a config file that
+  // predates this option being set, since a temp-file rename doesn't
+  // retroactively fix a file's existing permissions before that write.
   configFileMode: 0o600,
   schema: {
     apiKey:         { type: 'string', default: '' },
@@ -78,6 +78,7 @@ export function setBaseUrl(url) {
     throw new Error('Base URL must use http or https.');
   }
   config.set('baseUrl', normalizeBaseUrl(url));
+  clearCachedAccountId();
 }
 
 // --- API key ---
@@ -244,17 +245,19 @@ export function getOrCreateInstallId() {
 /**
  * The authenticated account's ID, cached so telemetry looks it up at most
  * once per set of credentials rather than on every command. Cleared by
- * setApiKey, clearTokens, and login() (in auth.js) — covering a new API key,
- * an explicit logout, and a fresh OAuth login.
+ * setApiKey, setBaseUrl, clearTokens, and login() (in auth.js) — covering a
+ * new API key, a new target environment, an explicit logout, and a fresh
+ * OAuth login.
  *
  * Known gap, accepted rather than engineered around: switching accounts via
- * the KIT_API_KEY env var, or switching environments via KIT_API_BASE /
- * setBaseUrl, does not clear this cache, since neither goes through a
- * function this module controls. A cached ID could then be misattributed
- * until the cache is next cleared by one of the paths above. Low-harm since
- * this only affects anonymous usage-analytics attribution, never anything
- * the CLI itself does with the value — but real, so it's written down here
- * rather than implied away.
+ * the KIT_API_KEY env var, or switching environments via the KIT_API_BASE
+ * env var, does not clear this cache — env vars for a single invocation
+ * bypass every setter in this module, including setApiKey/setBaseUrl above,
+ * so there is no function call to hook. A cached ID could then be
+ * misattributed until the cache is next cleared by one of the paths above.
+ * Low-harm since this only affects anonymous usage-analytics attribution,
+ * never anything the CLI itself does with the value — but real, so it's
+ * written down here rather than implied away.
  */
 export function getCachedAccountId() {
   return config.get('accountId') || '';
@@ -262,6 +265,7 @@ export function getCachedAccountId() {
 
 export function setCachedAccountId(id) {
   config.set('accountId', id == null ? '' : String(id));
+  secureConfig();
 }
 
 /**
@@ -269,9 +273,17 @@ export function setCachedAccountId(id) {
  * so login() in auth.js can call it too — starting a fresh OAuth flow is the
  * one case setTokens() itself deliberately doesn't cover, since setTokens()
  * also runs on routine token refresh, where clearing would be wrong.
+ *
+ * Calls secureConfig() itself, deliberately, rather than trusting every
+ * present and future call site to remember to call it last: an earlier
+ * version of this function didn't, and a config.set() after it silently
+ * undid a chmod a caller had already made. Making this function respect its
+ * own security invariant instead of depending on caller ordering is what
+ * actually closes that class of bug, not getting the order right once.
  */
 export function clearCachedAccountId() {
   config.set('accountId', '');
+  secureConfig();
 }
 
 // --- Misc ---
