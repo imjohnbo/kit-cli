@@ -1,5 +1,6 @@
 import Conf from 'conf';
 import { chmodSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 
 // KIT_CONFIG_DIR moves the config file somewhere else. Point it at a directory
 // per Kit account to keep separate profiles, or at a throwaway directory to keep
@@ -23,6 +24,10 @@ const config = new Conf({
     updateCheckedAt: { type: 'number', default: 0 }, // unix ms
     updateLatestVersion: { type: 'string', default: '' },
     updateLatestPackage: { type: 'string', default: '' },
+    telemetry:      { type: 'boolean', default: true },
+    installId:      { type: 'string', default: '' },
+    accountId:      { type: 'string', default: '' },
+    telemetryNoticeShown: { type: 'boolean', default: false },
   },
 });
 
@@ -86,6 +91,7 @@ export function setApiKey(key) {
   }
   config.set('apiKey', key.trim());
   secureConfig();
+  clearCachedAccountId();
 }
 
 // --- OAuth client ID ---
@@ -137,6 +143,7 @@ export function clearTokens() {
   config.set('accessToken', '');
   config.set('refreshToken', '');
   config.set('tokenExpiresAt', 0);
+  clearCachedAccountId();
 }
 
 // --- Preferences ---
@@ -190,6 +197,60 @@ export function setCachedLatestVersion(version, packageName) {
   config.set('updateCheckedAt', Date.now());
 }
 
+// --- Telemetry ---
+//
+// One combined opt-out for both usage telemetry and error reporting (see
+// src/telemetry.js and src/error-reporting.js). Mirrors the updateCheck
+// preference above: a config key, plus KIT_NO_TELEMETRY for a single
+// invocation, CI, or containers — see telemetryAllowed() in telemetry.js.
+
+export function getTelemetryEnabled() {
+  return config.get('telemetry');
+}
+
+export function setTelemetryEnabled(enabled) {
+  config.set('telemetry', Boolean(enabled));
+}
+
+export function getTelemetryNoticeShown() {
+  return config.get('telemetryNoticeShown');
+}
+
+export function setTelemetryNoticeShown() {
+  config.set('telemetryNoticeShown', true);
+}
+
+/**
+ * A random ID that identifies this install, not this person. Generated once,
+ * on first use, and persisted — never derived from or linked to a Kit
+ * account or email address.
+ */
+export function getOrCreateInstallId() {
+  const existing = config.get('installId');
+  if (existing) return existing;
+  const id = randomUUID();
+  config.set('installId', id);
+  return id;
+}
+
+/**
+ * The authenticated account's ID, cached so telemetry looks it up at most
+ * once per set of credentials rather than on every command. Cleared by
+ * setApiKey and clearTokens above, so a cached ID from one account can't
+ * leak into another account's events.
+ */
+export function getCachedAccountId() {
+  return config.get('accountId') || '';
+}
+
+export function setCachedAccountId(id) {
+  config.set('accountId', String(id));
+}
+
+function clearCachedAccountId() {
+  config.set('accountId', '');
+}
+
 // --- Misc ---
 
 export function getAll() {
@@ -210,6 +271,7 @@ export function getAll() {
     defaultFormat:   getDefaultFormat(),
     perPage:         getPerPage(),
     updateCheck:     getUpdateCheckEnabled(),
+    telemetry:       getTelemetryEnabled(),
     configPath:      config.path,
   };
 }
