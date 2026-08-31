@@ -8,7 +8,7 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 > install from GitHub for now. The version is `0.0.x` and the command surface may
 > still change. See [`docs/RELEASING.md`](docs/RELEASING.md).
 
-Requires Node.js 18+. Every method installs the same `kit` command.
+Requires Node.js 20+. Every method installs the same `kit` command.
 
 ### From GitHub
 

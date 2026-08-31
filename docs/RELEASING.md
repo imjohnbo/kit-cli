@@ -43,7 +43,7 @@ a person.
 
 | Job | Runs | Stops the release when |
 |---|---|---|
-| `verify` | Node 18, 20, 22 | A test fails |
+| `verify` | Node 20, 22 | A test fails |
 | `verify-package` | Once | The version breaks a semver rule, or the tarball does not match the source |
 | `publish` | After approval | The repacked tarball differs from the verified one |
 
