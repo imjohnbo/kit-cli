@@ -60,6 +60,8 @@ export const EVENT_NAMES = {
   'config set-telemetry':        'CLI Config Updated',
   'config set-update-check':     'CLI Config Updated',
   'config show':                 'CLI Config Viewed',
+  'doctor':                      'CLI Doctor Run',
+  'init':                        'CLI Onboarding Started',
   'login':                       'CLI Signed In',
   'logout':                      'CLI Signed Out',
   'setup-skill':                 'Claude Skill Installed',

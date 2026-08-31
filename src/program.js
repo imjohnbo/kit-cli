@@ -16,6 +16,8 @@ import { postsCommand } from './commands/posts.js';
 import { snippetsCommand } from './commands/snippets.js';
 import { upgradeCommand } from './commands/upgrade.js';
 import { apiCommand } from './commands/api.js';
+import { doctorCommand } from './commands/doctor.js';
+import { initCommand } from './commands/init.js';
 
 // Imported, not just re-exported, because buildProgram() below uses it.
 import { VERSION } from './package-info.js';
@@ -64,6 +66,8 @@ export function buildProgram() {
   program.addCommand(bulkCommand());
   program.addCommand(upgradeCommand());
   program.addCommand(apiCommand());
+  program.addCommand(doctorCommand());
+  program.addCommand(initCommand());
 
   return program;
 }

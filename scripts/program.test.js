@@ -21,6 +21,12 @@ describe('commandPaths', () => {
     assert.ok(commandPaths(buildProgram()).includes('sequences emails create'));
   });
 
+  test('includes doctor and init', () => {
+    const paths = commandPaths(buildProgram());
+    assert.ok(paths.includes('doctor'));
+    assert.ok(paths.includes('init'));
+  });
+
   test('excludes a command literally named "help", even though the real tree never has one', () => {
     // Commander 13 stashes its own auto-generated help command in
     // `_helpCommand`, never in `.commands` — so this guard is never exercised

@@ -1220,6 +1220,14 @@
         "--data",
         "--query"
       ]
+    },
+    "doctor": {
+      "arguments": [],
+      "options": []
+    },
+    "init": {
+      "arguments": [],
+      "options": []
     }
   }
 }
