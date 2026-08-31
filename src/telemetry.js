@@ -50,16 +50,6 @@ const _keysUrl = new URL('./telemetry-keys.js', import.meta.url);
 _keysUrl.search = new URL(import.meta.url).search;
 const { SEGMENT_WRITE_KEY } = await import(_keysUrl.href);
 
-// ── current command tracking ────────────────────────────────────────────
-//
-// Lives in its own module (current-command.js) so program.js's preAction
-// hook can call setCurrentCommand() on every invocation without loading the
-// Segment SDK above just to reach two accessor functions. Re-exported here
-// since output.js's withErrorHandler imports getCurrentCommand alongside
-// trackCommand/flushTelemetry from this one module.
-
-export { getCurrentCommand, setCurrentCommand } from './current-command.js';
-
 const SESSION_ID = randomUUID();
 
 // ── consent ──────────────────────────────────────────────────────────────
