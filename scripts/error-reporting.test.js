@@ -97,4 +97,73 @@ describe('maybeReportError', () => {
     const { maybeReportError } = await freshErrorReporting();
     await assert.doesNotReject(() => maybeReportError(new Error('Boom')));
   });
+
+  test('the envelope is a valid 3-line structure with a trailing newline', async () => {
+    let captured;
+    globalThis.fetch = async (url, opts) => { captured = opts; return { ok: true, status: 200, text: async () => '{}' }; };
+    const { maybeReportError } = await freshErrorReporting();
+    await maybeReportError(new Error('Boom'), { command: 'tags create' });
+
+    assert.ok(captured.body.endsWith('\n'));
+    const lines = captured.body.split('\n');
+    assert.equal(lines.length, 4); // 3 content lines + the empty string after the final \n
+    assert.equal(lines[3], '');
+
+    const envelopeHeader = JSON.parse(lines[0]);
+    assert.equal(typeof envelopeHeader.event_id, 'string');
+    assert.equal(envelopeHeader.event_id.length, 32);
+    assert.equal(typeof envelopeHeader.sent_at, 'string');
+    assert.equal(envelopeHeader.dsn, 'https://testkey@o0.ingest.sentry.io/123');
+
+    assert.deepEqual(JSON.parse(lines[1]), { type: 'event' });
+
+    const event = JSON.parse(lines[2]);
+    assert.equal(event.event_id, envelopeHeader.event_id);
+  });
+
+  test("stack frames are ordered oldest-to-youngest, per Sentry's spec (V8 gives youngest-first)", async () => {
+    let captured;
+    globalThis.fetch = async (url, opts) => { captured = opts; return { ok: true, status: 200, text: async () => '{}' }; };
+    const { maybeReportError } = await freshErrorReporting();
+
+    function innermost() { throw new Error('deep failure'); }
+    function middle() { innermost(); }
+    function outer() { middle(); }
+    let thrown;
+    try { outer(); } catch (err) { thrown = err; }
+
+    await maybeReportError(thrown, { command: 'tags create' });
+    const event = JSON.parse(captured.body.trim().split('\n')[2]);
+    const names = event.exception.values[0].stacktrace.frames.map((f) => f.function);
+    assert.ok(names.indexOf('outer') < names.indexOf('middle'));
+    assert.ok(names.indexOf('middle') < names.indexOf('innermost'));
+  });
+
+  test('each frame has a parsed filename/line/column, not the raw stack line', async () => {
+    let captured;
+    globalThis.fetch = async (url, opts) => { captured = opts; return { ok: true, status: 200, text: async () => '{}' }; };
+    const { maybeReportError } = await freshErrorReporting();
+
+    function willThrow() { throw new Error('parsed frame check'); }
+    let thrown;
+    try { willThrow(); } catch (err) { thrown = err; }
+
+    await maybeReportError(thrown, { command: 'tags create' });
+    const event = JSON.parse(captured.body.trim().split('\n')[2]);
+    const frame = event.exception.values[0].stacktrace.frames.find((f) => f.function === 'willThrow');
+    assert.ok(frame, 'expected a frame for willThrow');
+    assert.equal(typeof frame.filename, 'string');
+    assert.ok(!frame.filename.startsWith('at '), 'filename should not be the raw stack line');
+    assert.equal(typeof frame.lineno, 'number');
+    assert.equal(typeof frame.colno, 'number');
+  });
+
+  test('a non-Error thrown value still produces a usable report', async () => {
+    let captured;
+    globalThis.fetch = async (url, opts) => { captured = opts; return { ok: true, status: 200, text: async () => '{}' }; };
+    const { maybeReportError } = await freshErrorReporting();
+    await maybeReportError('a plain string was thrown', { command: 'tags create' });
+    const event = JSON.parse(captured.body.trim().split('\n')[2]);
+    assert.equal(event.exception.values[0].value, 'a plain string was thrown');
+  });
 });

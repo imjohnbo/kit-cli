@@ -53,6 +53,41 @@ function shouldReport(err) {
   return true;
 }
 
+/**
+ * Parses one V8 stack trace line ("at fn (file:line:col)", or the anonymous
+ * "at file:line:col") into Sentry's frame shape. Falls back to a bare
+ * filename when the line doesn't match either form — still a valid frame,
+ * just without line/column data.
+ */
+function parseStackFrame(line) {
+  const trimmed = line.trim();
+  const m = trimmed.match(/^at\s+(?:(.+?)\s+\()?(.+?)\)?$/);
+  if (!m) return { filename: trimmed };
+  const [, fn, location] = m;
+  const loc = location.match(/^(.*):(\d+):(\d+)$/);
+  if (!loc) return { function: fn, filename: location };
+  const [, filename, lineno, colno] = loc;
+  return { function: fn, filename, lineno: Number(lineno), colno: Number(colno) };
+}
+
+/**
+ * V8's err.stack is "Error: message\n<optional more message lines>\n    at
+ * ...\n    at ...". Filtering to lines that actually look like a frame
+ * (rather than assuming the message is always exactly one line) handles a
+ * multi-line message correctly. Sentry's frame order is oldest-to-youngest,
+ * the reverse of V8's youngest-first — get this backwards and Sentry blames
+ * the wrong line for every report.
+ */
+function parseStackFrames(stack) {
+  if (!stack) return undefined;
+  const frames = stack
+    .split('\n')
+    .filter((line) => /^\s*at\s+/.test(line))
+    .map(parseStackFrame)
+    .reverse();
+  return frames.length ? frames : undefined;
+}
+
 export async function maybeReportError(err, { command } = {}) {
   if (!telemetryAllowed()) return;
   if (!shouldReport(err)) return;
@@ -64,6 +99,8 @@ export async function maybeReportError(err, { command } = {}) {
     const eventId = randomUUID().replace(/-/g, '');
     const timestamp = new Date().toISOString();
 
+    const frames = parseStackFrames(err?.stack);
+
     const event = {
       event_id: eventId,
       timestamp,
@@ -73,11 +110,12 @@ export async function maybeReportError(err, { command } = {}) {
       exception: {
         values: [
           {
-            type: err.name || 'Error',
-            value: err.message,
-            stacktrace: err.stack
-              ? { frames: err.stack.split('\n').slice(1).map((line) => ({ filename: line.trim() })) }
-              : undefined,
+            type: err?.name || 'Error',
+            // err.message can be undefined for a non-Error thrown value (a
+            // string, a plain object) — String(err) still gives Sentry
+            // something to show rather than a content-free report.
+            value: err?.message || String(err),
+            stacktrace: frames ? { frames } : undefined,
           },
         ],
       },
@@ -95,7 +133,13 @@ export async function maybeReportError(err, { command } = {}) {
         'X-Sentry-Auth': `Sentry sentry_version=7, sentry_client=kit-cli/${VERSION}, sentry_key=${dsn.publicKey}`,
       },
       body,
-      signal: AbortSignal.timeout(300),
+      // Not the 300ms flushTelemetry() uses — that bounds flushing work
+      // already in flight, this fetch starts from a cold connection at the
+      // exact moment of a crash. Measured ~180ms for DNS+TCP+TLS to Sentry's
+      // ingest host alone on a fast connection, leaving no real budget for
+      // the request itself at 300ms. The command has already failed and
+      // printed its error by this point, so the extra latency costs little.
+      signal: AbortSignal.timeout(2000),
     });
   } catch {
     // Best-effort only.
