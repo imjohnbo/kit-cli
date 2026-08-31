@@ -1,5 +1,6 @@
 import { getApiKey, getAccessToken, isTokenExpired, getBaseUrl } from './config.js';
 import { refreshAccessToken } from './auth.js';
+import { USER_AGENT } from './package-info.js';
 
 const MAX_PAGINATE_PAGES = 100;
 
@@ -199,6 +200,7 @@ async function request(method, path, { body, query } = {}) {
   const headers = {
     ...authHeader,
     'Accept': 'application/json',
+    'User-Agent': USER_AGENT,
   };
 
   const opts = { method, headers };
