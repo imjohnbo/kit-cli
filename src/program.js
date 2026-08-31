@@ -18,7 +18,11 @@ import { upgradeCommand } from './commands/upgrade.js';
 
 // Imported, not just re-exported, because buildProgram() below uses it.
 import { VERSION } from './package-info.js';
-import { setCurrentCommand } from './telemetry.js';
+// current-command.js, not telemetry.js: this hook runs on every single
+// invocation (--help, --version, telemetry disabled, all of it), so it must
+// not have to load telemetry.js's Segment SDK import just to reach two
+// accessor functions.
+import { setCurrentCommand } from './current-command.js';
 
 export { VERSION };
 

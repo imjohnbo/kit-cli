@@ -1,11 +1,11 @@
 /**
  * Tests for src/program.js
  */
-import { test, describe } from 'node:test';
+import { test, describe, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { Command } from 'commander';
 import { buildProgram, commandPath, commandPaths } from '../src/program.js';
-import { getCurrentCommand } from '../src/telemetry.js';
+import { getCurrentCommand, setCurrentCommand } from '../src/current-command.js';
 import { runCommand } from './helpers.js';
 
 describe('commandPaths', () => {
@@ -47,6 +47,12 @@ describe('commandPath', () => {
 });
 
 describe('preAction hook', () => {
+  // Independence is structural, not incidental: each test's expected value
+  // is distinct today, but without a reset, a future test asserting a path
+  // an earlier test already set would keep passing even with the hook
+  // deleted.
+  beforeEach(() => setCurrentCommand(''));
+
   test('records a top-level command before its action runs', async () => {
     await runCommand(buildProgram, ['logout']);
     assert.equal(getCurrentCommand(), 'logout');
@@ -60,5 +66,35 @@ describe('preAction hook', () => {
   test('records a doubly-nested subcommand path', async () => {
     await runCommand(buildProgram, ['sequences', 'emails', 'list', '1'], { responses: { sequence_emails: [] } });
     assert.equal(getCurrentCommand(), 'sequences emails list');
+  });
+
+  test('is set before the action runs, not after', async () => {
+    // The three tests above only assert *after* the command finishes, which
+    // can't tell buildProgram()'s real preAction hook from a postAction hook
+    // (or one that fires too late) — withErrorHandler needs the value
+    // available from *inside* the running action, since that's where it
+    // reads it. Captures getCurrentCommand() from inside the fetch call
+    // `tags list`'s own action makes (via get('/tags') in client.js) — that
+    // only happens while the action's body is still executing, so this
+    // exercises the real, actual hook registration in buildProgram(), not a
+    // reimplementation of it.
+    const originalFetch = globalThis.fetch;
+    const originalApiKey = process.env.KIT_API_KEY;
+    process.env.KIT_API_KEY = 'test-key';
+    let capturedDuringAction;
+    globalThis.fetch = async () => {
+      capturedDuringAction = getCurrentCommand();
+      return { ok: true, status: 200, json: async () => ({ tags: [] }) };
+    };
+    try {
+      const program = buildProgram();
+      program.exitOverride();
+      await program.parseAsync(['tags', 'list'], { from: 'user' });
+    } finally {
+      globalThis.fetch = originalFetch;
+      if (originalApiKey === undefined) delete process.env.KIT_API_KEY;
+      else process.env.KIT_API_KEY = originalApiKey;
+    }
+    assert.equal(capturedDuringAction, 'tags list');
   });
 });

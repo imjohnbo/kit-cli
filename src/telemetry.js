@@ -52,19 +52,13 @@ const { SEGMENT_WRITE_KEY } = await import(_keysUrl.href);
 
 // ── current command tracking ────────────────────────────────────────────
 //
-// Set by the preAction hook in program.js, before any action runs. Reading
-// it here (rather than passing it through every command file) keeps every
-// existing command file untouched.
+// Lives in its own module (current-command.js) so program.js's preAction
+// hook can call setCurrentCommand() on every invocation without loading the
+// Segment SDK above just to reach two accessor functions. Re-exported here
+// since output.js's withErrorHandler imports getCurrentCommand alongside
+// trackCommand/flushTelemetry from this one module.
 
-let _currentCommand = '';
-
-export function setCurrentCommand(path) {
-  _currentCommand = path;
-}
-
-export function getCurrentCommand() {
-  return _currentCommand;
-}
+export { getCurrentCommand, setCurrentCommand } from './current-command.js';
 
 const SESSION_ID = randomUUID();
 
