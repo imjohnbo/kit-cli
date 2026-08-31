@@ -20,6 +20,9 @@
  * can always filter or group by it.
  */
 export const EVENT_NAMES = {
+  // ── API escape hatch ─────────────────────────────────────────────────────
+  'api':                         'API Request Sent',
+
   // ── Account ──────────────────────────────────────────────────────────────
   'account':                     'Account Viewed',
   'account colors':              'Account Colors Viewed',
