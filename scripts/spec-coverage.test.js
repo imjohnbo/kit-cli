@@ -11,25 +11,13 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { COVERAGE, NOT_EXPOSED, specOperations } from '../spec/coverage.js';
-import { buildProgram } from '../src/program.js';
+import { buildProgram, commandPaths } from '../src/program.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const spec = JSON.parse(readFileSync(join(__dirname, '..', 'spec', 'v4.json'), 'utf8'));
 const spec_pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
 
 const OPERATIONS = specOperations(spec);
-
-/** Every command path in the tree, as space-separated strings. */
-function commandPaths(cmd, prefix = []) {
-  const paths = [];
-  for (const child of cmd.commands) {
-    if (child.name() === 'help') continue;
-    const path = [...prefix, child.name()];
-    paths.push(path.join(' '));
-    paths.push(...commandPaths(child, path));
-  }
-  return paths;
-}
 
 const COMMANDS = new Set(commandPaths(buildProgram()));
 

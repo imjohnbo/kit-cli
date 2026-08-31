@@ -3,6 +3,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import { Command } from 'commander';
 import { buildProgram, commandPath, commandPaths } from '../src/program.js';
 
 describe('commandPaths', () => {
@@ -18,8 +19,15 @@ describe('commandPaths', () => {
     assert.ok(commandPaths(buildProgram()).includes('sequences emails create'));
   });
 
-  test('excludes the auto-generated help command', () => {
-    assert.ok(!commandPaths(buildProgram()).includes('help'));
+  test('excludes a command literally named "help", even though the real tree never has one', () => {
+    // Commander 13 stashes its own auto-generated help command in
+    // `_helpCommand`, never in `.commands` — so this guard is never exercised
+    // by the real tree. Build a synthetic one so the filter itself is
+    // actually tested, not just its absence of effect.
+    const root = new Command('root');
+    root.addCommand(new Command('help'));
+    root.addCommand(new Command('real'));
+    assert.deepEqual(commandPaths(root), ['real']);
   });
 });
 

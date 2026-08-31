@@ -60,9 +60,10 @@ export function buildProgram() {
 /**
  * Every command path in the tree, as space-separated strings (e.g.
  * "sequences emails create"). Shared by the telemetry event map and shell
- * completions, so there is exactly one definition of what a "command path"
- * is — scripts/cli-surface.js and scripts/spec-coverage.test.js keep their
- * own pre-existing copies for the same purpose in test/build tooling.
+ * completions, and also used by scripts/spec-coverage.test.js — so a command
+ * added or renamed only has one place this logic could go stale.
+ * scripts/cli-surface.js keeps its own separate walk, since it also needs
+ * each command's arguments and options, not just its path.
  */
 export function commandPaths(cmd, prefix = []) {
   const paths = [];
@@ -75,7 +76,10 @@ export function commandPaths(cmd, prefix = []) {
   return paths;
 }
 
-/** The path of a single already-resolved command node, e.g. "tags list". */
+/**
+ * The path of a single already-resolved command node, e.g. "tags list".
+ * Returns '' for the root program itself, which has no parent to walk from.
+ */
 export function commandPath(cmd) {
   const parts = [];
   let node = cmd;
