@@ -10,6 +10,13 @@ const config = new Conf({
   // that holds a user's credentials. Renaming the package must not orphan it.
   projectName: 'kit-cli',
   cwd: process.env.KIT_CONFIG_DIR || undefined,
+  // Conf defaults to 0o666, applied via fs.writeFileSync's `mode` option —
+  // which only takes effect when a file is newly created, not on later
+  // writes to an existing one (verified directly against Node's fs
+  // behavior). So this closes the gap for a brand-new config file only; an
+  // existing file still needs the explicit chmodSync calls below after every
+  // write that might have recreated it at a looser mode.
+  configFileMode: 0o600,
   schema: {
     apiKey:         { type: 'string', default: '' },
     baseUrl:        { type: 'string', default: 'https://api.kit.com/v4' },
@@ -90,8 +97,8 @@ export function setApiKey(key) {
     throw new Error('API key contains invalid control characters.');
   }
   config.set('apiKey', key.trim());
-  secureConfig();
   clearCachedAccountId();
+  secureConfig();
 }
 
 // --- OAuth client ID ---
@@ -144,6 +151,7 @@ export function clearTokens() {
   config.set('refreshToken', '');
   config.set('tokenExpiresAt', 0);
   clearCachedAccountId();
+  secureConfig();
 }
 
 // --- Preferences ---
@@ -236,18 +244,33 @@ export function getOrCreateInstallId() {
 /**
  * The authenticated account's ID, cached so telemetry looks it up at most
  * once per set of credentials rather than on every command. Cleared by
- * setApiKey and clearTokens above, so a cached ID from one account can't
- * leak into another account's events.
+ * setApiKey, clearTokens, and login() (in auth.js) — covering a new API key,
+ * an explicit logout, and a fresh OAuth login.
+ *
+ * Known gap, accepted rather than engineered around: switching accounts via
+ * the KIT_API_KEY env var, or switching environments via KIT_API_BASE /
+ * setBaseUrl, does not clear this cache, since neither goes through a
+ * function this module controls. A cached ID could then be misattributed
+ * until the cache is next cleared by one of the paths above. Low-harm since
+ * this only affects anonymous usage-analytics attribution, never anything
+ * the CLI itself does with the value — but real, so it's written down here
+ * rather than implied away.
  */
 export function getCachedAccountId() {
   return config.get('accountId') || '';
 }
 
 export function setCachedAccountId(id) {
-  config.set('accountId', String(id));
+  config.set('accountId', id == null ? '' : String(id));
 }
 
-function clearCachedAccountId() {
+/**
+ * Exported (unlike the module-private uses in setApiKey/clearTokens above)
+ * so login() in auth.js can call it too — starting a fresh OAuth flow is the
+ * one case setTokens() itself deliberately doesn't cover, since setTokens()
+ * also runs on routine token refresh, where clearing would be wrong.
+ */
+export function clearCachedAccountId() {
   config.set('accountId', '');
 }
 
