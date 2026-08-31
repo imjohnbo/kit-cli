@@ -31,6 +31,10 @@ describe('commandPaths', () => {
     root.addCommand(new Command('real'));
     assert.deepEqual(commandPaths(root), ['real']);
   });
+
+  test('includes the api command', () => {
+    assert.ok(commandPaths(buildProgram()).includes('api'));
+  });
 });
 
 describe('commandPath', () => {

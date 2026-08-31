@@ -1202,6 +1202,24 @@
         "--check",
         "--dry-run"
       ]
+    },
+    "api": {
+      "arguments": [
+        {
+          "name": "method",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "path",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--data",
+        "--query"
+      ]
     }
   }
 }

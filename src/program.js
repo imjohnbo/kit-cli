@@ -15,6 +15,7 @@ import { emailTemplatesCommand } from './commands/email-templates.js';
 import { postsCommand } from './commands/posts.js';
 import { snippetsCommand } from './commands/snippets.js';
 import { upgradeCommand } from './commands/upgrade.js';
+import { apiCommand } from './commands/api.js';
 
 // Imported, not just re-exported, because buildProgram() below uses it.
 import { VERSION } from './package-info.js';
@@ -62,6 +63,7 @@ export function buildProgram() {
   program.addCommand(snippetsCommand());
   program.addCommand(bulkCommand());
   program.addCommand(upgradeCommand());
+  program.addCommand(apiCommand());
 
   return program;
 }
