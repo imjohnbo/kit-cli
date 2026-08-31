@@ -26,6 +26,10 @@ import { KitApiError } from './client.js';
 // string down keeps the two freshnesses in lockstep, and resolves to the
 // same plain URL a static import would use when there's no query to
 // forward (i.e. in production, where this module is loaded plainly once).
+//
+// Same top-level-await caveat as telemetry.js: anything that require()s this
+// module, or a module that imports it, fails with ERR_REQUIRE_ASYNC_MODULE.
+// No current impact — see telemetry.js's own note on why.
 const _keysUrl = new URL('./telemetry-keys.js', import.meta.url);
 _keysUrl.search = new URL(import.meta.url).search;
 const { SENTRY_DSN } = await import(_keysUrl.href);
