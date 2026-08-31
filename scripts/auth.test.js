@@ -8,24 +8,23 @@ import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { refreshAccessToken } from '../src/auth.js';
 import config, { setOAuthClientId } from '../src/config.js';
+import { oauthSnapshot, restoreOAuth } from './helpers.js';
 
 const _originalFetch = globalThis.fetch;
 
 describe('refreshAccessToken', () => {
-  let snap;
+  let snap, savedClientId;
 
   before(() => {
-    snap = {
-      oauthClientId: config.get('oauthClientId'),
-      refreshToken: config.get('refreshToken'),
-    };
+    savedClientId = config.get('oauthClientId');
+    snap = oauthSnapshot();
     setOAuthClientId('test-client-id');
     config.set('refreshToken', 'test-refresh-token');
   });
 
   after(() => {
-    config.set('oauthClientId', snap.oauthClientId);
-    config.set('refreshToken', snap.refreshToken);
+    config.set('oauthClientId', savedClientId);
+    restoreOAuth(snap);
     globalThis.fetch = _originalFetch;
   });
 
