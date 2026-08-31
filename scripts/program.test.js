@@ -5,6 +5,8 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { Command } from 'commander';
 import { buildProgram, commandPath, commandPaths } from '../src/program.js';
+import { getCurrentCommand } from '../src/telemetry.js';
+import { runCommand } from './helpers.js';
 
 describe('commandPaths', () => {
   test('lists a top-level command', () => {
@@ -41,5 +43,22 @@ describe('commandPath', () => {
     const subscribers = buildProgram().commands.find((c) => c.name() === 'subscribers');
     const list = subscribers.commands.find((c) => c.name() === 'list');
     assert.equal(commandPath(list), 'subscribers list');
+  });
+});
+
+describe('preAction hook', () => {
+  test('records a top-level command before its action runs', async () => {
+    await runCommand(buildProgram, ['logout']);
+    assert.equal(getCurrentCommand(), 'logout');
+  });
+
+  test('records a nested subcommand path', async () => {
+    await runCommand(buildProgram, ['tags', 'list'], { responses: { tags: [] } });
+    assert.equal(getCurrentCommand(), 'tags list');
+  });
+
+  test('records a doubly-nested subcommand path', async () => {
+    await runCommand(buildProgram, ['sequences', 'emails', 'list', '1'], { responses: { sequence_emails: [] } });
+    assert.equal(getCurrentCommand(), 'sequences emails list');
   });
 });

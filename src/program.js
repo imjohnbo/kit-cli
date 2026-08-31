@@ -18,6 +18,7 @@ import { upgradeCommand } from './commands/upgrade.js';
 
 // Imported, not just re-exported, because buildProgram() below uses it.
 import { VERSION } from './package-info.js';
+import { setCurrentCommand } from './telemetry.js';
 
 export { VERSION };
 
@@ -28,6 +29,10 @@ export { VERSION };
  */
 export function buildProgram() {
   const program = new Command();
+
+  program.hook('preAction', (_thisCommand, actionCommand) => {
+    setCurrentCommand(commandPath(actionCommand));
+  });
 
   program
     .name('kit')
