@@ -13,15 +13,19 @@
  * A name is reused across several commands on purpose — e.g. every
  * `config set-*` command fires "CLI Config Updated". The object should stay
  * as generic as possible; specifics belong in trackCommand()'s properties,
- * not in a longer event name.
+ * not in a longer event name. That's not a hand-wave: trackCommand() sends
+ * the actual command path as a `command` property on every event (see
+ * telemetry.js), so a reused name never loses the ability to tell
+ * `config set-telemetry` apart from `config set-base-url` — Kit's data team
+ * can always filter or group by it.
  */
 export const EVENT_NAMES = {
   // ── Account ──────────────────────────────────────────────────────────────
   'account':                     'Account Viewed',
   'account colors':              'Account Colors Viewed',
   'account creator-profile':     'Creator Profile Viewed',
-  'account email-stats':         'Email Stats Viewed',
-  'account growth-stats':        'Growth Stats Viewed',
+  'account email-stats':         'Account Email Stats Viewed',
+  'account growth-stats':        'Account Growth Stats Viewed',
   'account set-colors':          'Account Colors Updated',
 
   // ── Broadcasts ───────────────────────────────────────────────────────────
@@ -36,7 +40,7 @@ export const EVENT_NAMES = {
   // ── Bulk ─────────────────────────────────────────────────────────────────
   'bulk custom-fields create':          'Custom Fields Created',
   'bulk custom-fields update-values':   'Custom Field Values Updated',
-  'bulk forms add':                     'Subscribers Added to Form',
+  'bulk forms add':                     'Subscribers Added to Forms',
   'bulk subscribers create':            'Subscribers Created',
   'bulk tags add':                      'Subscribers Tagged',
   'bulk tags create':                   'Tags Created',
@@ -53,16 +57,16 @@ export const EVENT_NAMES = {
   'config set-telemetry':        'CLI Config Updated',
   'config set-update-check':     'CLI Config Updated',
   'config show':                 'CLI Config Viewed',
-  'login':                       'CLI Session Started',
-  'logout':                      'CLI Session Ended',
+  'login':                       'CLI Signed In',
+  'logout':                      'CLI Signed Out',
   'setup-skill':                 'Claude Skill Installed',
-  'upgrade':                     'CLI Upgraded',
+  'upgrade':                     'CLI Upgrade Run',
 
   // ── Custom fields ────────────────────────────────────────────────────────
   'custom-fields create':        'Custom Field Created',
   'custom-fields delete':        'Custom Field Deleted',
   'custom-fields list':          'Custom Fields Listed',
-  'custom-fields update':        'Custom Field Updated',
+  'custom-fields update':        'Custom Field Renamed',
 
   // ── Email templates ──────────────────────────────────────────────────────
   'email-templates list':        'Email Templates Listed',
@@ -111,7 +115,7 @@ export const EVENT_NAMES = {
   'subscribers filter':               'Subscribers Filtered',
   'subscribers get':                  'Subscriber Viewed',
   'subscribers list':                 'Subscribers Listed',
-  'subscribers location delete':      'Subscriber Location Deleted',
+  'subscribers location delete':      'Subscriber Location Unpinned',
   'subscribers location pin':         'Subscriber Location Pinned',
   'subscribers location update':      'Subscriber Location Updated',
   'subscribers stats':                'Subscriber Stats Viewed',
@@ -148,12 +152,12 @@ export const EVENT_NAMES = {
 const GROUP_ONLY = 'Group command; only its own subcommands have an action, so no event ever fires for this path.';
 
 export const NO_EVENT = {
+  'broadcasts':            GROUP_ONLY,
   'bulk':                  GROUP_ONLY,
   'bulk custom-fields':    GROUP_ONLY,
   'bulk forms':            GROUP_ONLY,
   'bulk subscribers':      GROUP_ONLY,
   'bulk tags':             GROUP_ONLY,
-  'broadcasts':            GROUP_ONLY,
   'config':                GROUP_ONLY,
   'custom-fields':         GROUP_ONLY,
   'email-templates':       GROUP_ONLY,
