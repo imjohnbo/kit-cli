@@ -47,3 +47,15 @@ export const REPOSITORY = (() => {
  */
 const UA_PRODUCT = PACKAGE_NAME.replace(/^@[^/]+\//, '');
 export const USER_AGENT = `${UA_PRODUCT}/${VERSION} (${platform()} ${arch()}; node/${process.version})`;
+
+/**
+ * The minimum supported Node major version, parsed from package.json's
+ * `engines.node` (e.g. ">=20" -> 20). `kit doctor` checks the running
+ * version against this — reading it from here instead of a second
+ * hardcoded literal is what keeps that check from silently going stale the
+ * next time the supported range changes, the way its first version did.
+ */
+export const MIN_NODE_MAJOR = (() => {
+  const m = (pkg.engines?.node || '').match(/^>=\s*(\d+)/);
+  return m ? Number(m[1]) : 18;
+})();
