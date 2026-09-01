@@ -37,7 +37,17 @@ const failed = [];
 function runFile(file, index) {
   return new Promise((resolve) => {
     const child = spawn(process.execPath, ['--test', file], {
-      env: { ...process.env, KIT_CONFIG_DIR: join(scratch, `cfg-${index}`) },
+      env: {
+        ...process.env,
+        KIT_CONFIG_DIR: join(scratch, `cfg-${index}`),
+        // Forces plaintext-file credential storage for the whole suite, so
+        // npm test never shells out to the real macOS Keychain (which would
+        // pop a permission prompt on a contributor's Mac). New tests that
+        // specifically want to exercise the Keychain path do so by
+        // injecting a fake backend instead — see scripts/keychain.test.js
+        // and scripts/config-credentials.test.js.
+        KIT_CREDENTIAL_STORE: 'file',
+      },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 

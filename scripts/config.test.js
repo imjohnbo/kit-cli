@@ -5,6 +5,39 @@
  * suite is safe to run in any environment without polluting the developer's
  * stored credentials.  Writing tests are intentionally omitted.
  */
+
+// Self-protecting against KIT_CREDENTIAL_STORE regardless of how this file is
+// invoked (e.g. directly via `npm run test:file scripts/config.test.js`,
+// which bypasses run-tests.js's own env setup). `??=` so it never clobbers an
+// intentional override. This line's placement WORKS because
+// keychain.js's isAvailable() reads process.env lazily, inside a function
+// body called at test-run time (long after this line executes) — unlike
+// KIT_CONFIG_DIR below, which config.js reads eagerly, at import time.
+process.env.KIT_CREDENTIAL_STORE ??= 'file';
+
+// KIT_CONFIG_DIR can NOT be defaulted the same way: src/config.js reads it in
+// `new Conf({ cwd: process.env.KIT_CONFIG_DIR || undefined })` at its own
+// top level, and ES module imports are fully evaluated — hoisted ahead of
+// everything else in this file — before any of this file's own statements
+// run, including ones written earlier in the source (verified empirically:
+// an in-file `KIT_CONFIG_DIR ??= ...` placed here, before the config.js
+// import below, silently has no effect on it). So instead of a default,
+// this refuses to run at all unless the caller already set it — exactly
+// what run-tests.js's npm test wrapper does for every test file. Confirmed
+// necessary by two real incidents on a real dev machine: running this file
+// directly, without KIT_CONFIG_DIR, silently overwrote a real stored apiKey
+// via this file's own "does NOT throw for a key of exactly 256 characters"
+// test.
+if (!process.env.KIT_CONFIG_DIR) {
+  console.error(
+    'Refusing to run scripts/config.test.js directly: KIT_CONFIG_DIR is not set.\n' +
+    'This file writes real config values during some tests, and without KIT_CONFIG_DIR\n' +
+    'they would land in your real config file. Run it via `npm test`, which sets this\n' +
+    'automatically, or set KIT_CONFIG_DIR yourself to a scratch directory first.'
+  );
+  process.exit(1);
+}
+
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri, setBaseUrl, getBaseUrl, getTelemetryEnabled } from '../src/config.js';
