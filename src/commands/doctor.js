@@ -153,13 +153,18 @@ async function checkTelemetryStatus() {
 }
 
 export async function runChecks() {
+  // checkReachability() (a network fetch) and checkTelemetryStatus() (a
+  // dynamic import) don't depend on each other or on any check around them —
+  // run them concurrently rather than paying their latency one after the
+  // other.
+  const [reachability, telemetry] = await Promise.all([checkReachability(), checkTelemetryStatus()]);
   return [
     checkNodeVersion(),
     checkConfigPermissions(),
     checkAuthConfigured(),
-    await checkReachability(),
+    reachability,
     checkUpdateStatus(),
-    await checkTelemetryStatus(),
+    telemetry,
   ];
 }
 
