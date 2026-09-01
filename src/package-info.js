@@ -57,5 +57,5 @@ export const USER_AGENT = `${UA_PRODUCT}/${VERSION} (${platform()} ${arch()}; no
  */
 export const MIN_NODE_MAJOR = (() => {
   const m = (pkg.engines?.node || '').match(/^>=\s*(\d+)/);
-  return m ? Number(m[1]) : 18;
+  return m ? Number(m[1]) : 20;
 })();
