@@ -222,8 +222,9 @@ export function setApiKey(key) {
     throw new Error('API key contains invalid control characters.');
   }
   writeSecretField('apiKey', key.trim());
+  // clearCachedAccountId() already calls secureConfig() itself; no need to
+  // repeat the chmod here.
   clearCachedAccountId();
-  secureConfig();
 }
 
 // --- OAuth client ID ---
@@ -273,8 +274,9 @@ export function setTokens(accessToken, refreshToken, createdAt, expiresIn) {
 export function clearTokens() {
   writeSecretFields({ accessToken: '', refreshToken: '' });
   config.set('tokenExpiresAt', 0);
+  // clearCachedAccountId() already calls secureConfig() itself; no need to
+  // repeat the chmod here.
   clearCachedAccountId();
-  secureConfig();
 }
 
 // --- Preferences ---
