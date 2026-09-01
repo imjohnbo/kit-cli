@@ -32,6 +32,8 @@ function tempJson(value) {
 }
 
 // ── list --slim ────────────────────────────────────────────────────────────
+// Slim is the default now. See scripts/slim.test.js for the shared behavior
+// across every list command that supports it.
 
 describe('subscribers list', () => {
   test('--slim sets slim=true', async () => {
@@ -39,9 +41,9 @@ describe('subscribers list', () => {
     assert.equal(onlyCall(res).query.slim, 'true');
   });
 
-  test('omits slim by default', async () => {
+  test('sends slim=true by default', async () => {
     const res = await run(['list'], { subscribers: [], pagination: {} });
-    assert.ok(!('slim' in onlyCall(res).query));
+    assert.equal(onlyCall(res).query.slim, 'true');
   });
 
   test('accepts every documented list status', async () => {
@@ -318,9 +320,10 @@ describe('subscribers command wiring', () => {
     assert.ok(findSubcommand(subscribersCommand(), 'filter'));
   });
 
-  test('list exposes --slim', () => {
+  test('list exposes --slim and --no-slim', () => {
     const flags = optionFlags(findSubcommand(subscribersCommand(), 'list'));
     assert.ok(flags.includes('--slim'));
+    assert.ok(flags.includes('--no-slim'));
   });
 });
 

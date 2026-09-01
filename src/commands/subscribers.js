@@ -22,6 +22,7 @@ import {
   printWarnings,
   addFormatOption,
   addPaginationOptions,
+  addSlimOption,
   withErrorHandler,
 } from '../output.js';
 
@@ -210,6 +211,7 @@ export function subscribersCommand() {
     .description('List subscribers');
   addFormatOption(list);
   addPaginationOptions(list);
+  addSlimOption(list, 'custom field values');
   list
     .option('-e, --email <email>', 'filter by email address')
     .option('-s, --state <state>', `filter by state (${LIST_STATUSES.join(', ')})`)
@@ -219,7 +221,6 @@ export function subscribersCommand() {
     .option('--updated-before <date>', 'filter by updated before (yyyy-mm-dd)')
     .option('--sort-field <field>', 'sort field (id, updated_at, cancelled_at)')
     .option('--sort-order <order>', 'sort order (asc, desc)')
-    .option('--slim', 'omit expensive optional fields for a faster, smaller response')
     .action(
       withErrorHandler(async (opts) => {
         if (opts.state) validateEnum(opts.state, LIST_STATUSES, 'state');

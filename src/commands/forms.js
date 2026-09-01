@@ -6,6 +6,7 @@ import {
   printPagination,
   addFormatOption,
   addPaginationOptions,
+  addSlimOption,
   withErrorHandler,
 } from '../output.js';
 
@@ -57,10 +58,16 @@ export function formsCommand() {
     .description('List subscribers for a form');
   addFormatOption(subs);
   addPaginationOptions(subs);
+  addSlimOption(subs, 'custom field values');
   subs.action(
     withErrorHandler(async (formId, opts) => {
       const safeId = validatePathSegment(formId, 'form ID');
-      const query = { per_page: opts.perPage, after: opts.after, before: opts.before };
+      const query = {
+        per_page: opts.perPage,
+        after: opts.after,
+        before: opts.before,
+        slim: opts.slim ? 'true' : undefined,
+      };
       const res = await get(`/forms/${safeId}/subscribers`, query);
       formatOutput(res.subscribers, SUB_COLUMNS, opts);
       printPagination(res.pagination);

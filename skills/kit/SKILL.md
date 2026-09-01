@@ -77,7 +77,7 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 - `kit upgrade` — Upgrade the CLI (`--check` to look without installing)
 
 **Subscribers:**
-- `kit subscribers list` — List subscribers (filters: `-e/--email`, `-s/--state`, `--created-after`, `--created-before`, `--sort-field`, `--sort-order`, `--slim`)
+- `kit subscribers list` — List subscribers (filters: `-e/--email`, `-s/--state`, `--created-after`, `--created-before`, `--sort-field`, `--sort-order`). Add `--no-slim` for custom field values.
 - `kit subscribers get <id>` — Get subscriber details
 - `kit subscribers create <email>` — Create/upsert subscriber (`-n/--first-name`, `--fields '{"key":"val"}'`)
 - `kit subscribers update <id>` — Update subscriber (`-e/--email`, `-n/--first-name`, `--fields`)
@@ -92,7 +92,7 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 **Tags:**
 - `kit tags list` — List all tags
 - `kit tags create <name>` — Create a tag
-- `kit tags subscribers <tagId>` — List subscribers with a tag (filters: `-s/--state`, `--created-after`, `--created-before`, `--tagged-after`, `--tagged-before`)
+- `kit tags subscribers <tagId>` — List subscribers with a tag (filters: `-s/--state`, `--created-after`, `--created-before`, `--tagged-after`, `--tagged-before`). Add `--no-slim` for custom field values.
 - `kit tags add <tagId> <subscriberId>` — Tag a subscriber by ID
 - `kit tags add-by-email <tagId> <email>` — Tag a subscriber by email
 - `kit tags remove <tagId> <subscriberId>` — Remove a tag from a subscriber
@@ -101,7 +101,7 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 
 **Forms:**
 - `kit forms list` — List all forms (filters: `-s/--status`, `-t/--type`)
-- `kit forms subscribers <formId>` — List subscribers for a form
+- `kit forms subscribers <formId>` — List subscribers for a form (add `--no-slim` for custom field values)
 - `kit forms add <formId> <subscriberId>` — Add subscriber to form
 - `kit forms add-by-email <formId> <email>` — Add subscriber by email
 
@@ -123,7 +123,7 @@ Use the `kit` CLI to fulfill the user's request: `$ARGUMENTS`
 - `kit sequences emails delete <seqId> <id>` — Delete an email
 
 **Broadcasts:**
-- `kit broadcasts list` — List all broadcasts (filters: `-s/--status <draft|scheduled|sending|completed|aborted>`, `--sent-after`, `--sent-before`)
+- `kit broadcasts list` — List all broadcasts (filters: `-s/--status <draft|scheduled|sending|completed|aborted>`, `--sent-after`, `--sent-before`). Add `--no-slim` for content and targeting.
 - `kit broadcasts get <id>` — Get broadcast details
 - `kit broadcasts create --subject "..." --content "..." [--send-at ISO8601] [--public] [--tag-ids 1,2] [--segment-ids 1,2]` — Create broadcast
 - `kit broadcasts update <id> [--subject] [--content] [--send-at] [--public/--no-public]` — Update broadcast
