@@ -1,7 +1,8 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
-import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri, getBaseUrl } from './config.js';
+import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri, getBaseUrl, clearCachedAccountId } from './config.js';
+import { USER_AGENT } from './package-info.js';
 
 const REDIRECT_PORT = 9876;
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
@@ -74,7 +75,7 @@ function waitForCallback() {
 async function exchangeCode(clientId, code, verifier) {
   const res = await fetch(tokenUrl(), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': USER_AGENT },
     body: JSON.stringify({
       client_id: clientId,
       code_verifier: verifier,
@@ -102,7 +103,7 @@ export async function refreshAccessToken() {
 
   const res = await fetch(tokenUrl(), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': USER_AGENT },
     body: JSON.stringify({
       client_id: clientId,
       grant_type: 'refresh_token',
@@ -138,4 +139,9 @@ export async function login(clientId) {
   const code = await waitForCallback();
   const data = await exchangeCode(clientId, code, verifier);
   setTokens(data.access_token, data.refresh_token, data.created_at, data.expires_in);
+  // A fresh login can be a different account than whichever one telemetry
+  // last cached an ID for. setTokens() itself deliberately doesn't clear the
+  // cache — it also runs on routine token refresh, where clearing would be
+  // wrong — so this is the one call site that has to.
+  clearCachedAccountId();
 }

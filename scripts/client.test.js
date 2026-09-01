@@ -402,6 +402,13 @@ describe('HTTP client', () => {
     assert.equal(captured.opts.headers['Accept'], 'application/json');
   });
 
+  test('get() sends a descriptive User-Agent header', async () => {
+    let captured;
+    globalThis.fetch = async (url, opts) => { captured = { url, opts }; return { ok: true, status: 200, json: async () => ({}) }; };
+    await get('/subscribers');
+    assert.match(captured.opts.headers['User-Agent'], /^kit-cli\//);
+  });
+
   test('get() appends query params to URL', async () => {
     let capturedUrl;
     globalThis.fetch = async (url) => { capturedUrl = url; return { ok: true, status: 200, json: async () => ({}) }; };

@@ -132,6 +132,16 @@
       ],
       "options": []
     },
+    "config set-telemetry": {
+      "arguments": [
+        {
+          "name": "enabled",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
     "setup-skill": {
       "arguments": [],
       "options": []
@@ -1199,6 +1209,52 @@
         "--check",
         "--dry-run"
       ]
+    },
+    "api": {
+      "arguments": [
+        {
+          "name": "method",
+          "required": true,
+          "variadic": false
+        },
+        {
+          "name": "path",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": [
+        "--data",
+        "--query"
+      ]
+    },
+    "doctor": {
+      "arguments": [],
+      "options": []
+    },
+    "init": {
+      "arguments": [],
+      "options": []
+    },
+    "completion": {
+      "arguments": [
+        {
+          "name": "shell",
+          "required": true,
+          "variadic": false
+        }
+      ],
+      "options": []
+    },
+    "__complete": {
+      "arguments": [
+        {
+          "name": "words",
+          "required": false,
+          "variadic": true
+        }
+      ],
+      "options": []
     }
   }
 }

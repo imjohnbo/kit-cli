@@ -8,7 +8,7 @@ A fully featured CLI for the [Kit](https://kit.com) (ConvertKit) email marketing
 > install from GitHub for now. The version is `0.0.x` and the command surface may
 > still change. See [`docs/RELEASING.md`](docs/RELEASING.md).
 
-Requires Node.js 18+. Every method installs the same `kit` command.
+Requires Node.js 20+. Every method installs the same `kit` command.
 
 ### From GitHub
 
@@ -140,6 +140,16 @@ Run `kit config show` to see which backend is actually in use — its
 
 Existing plaintext credentials from before this feature migrate into the
 Keychain automatically the next time they're read; nothing to do manually.
+
+## Shell completion
+
+```
+eval "$(kit completion bash)"   # add to ~/.bashrc
+eval "$(kit completion zsh)"    # add to ~/.zshrc, after compinit
+kit completion fish | source    # add to ~/.config/fish/config.fish
+```
+
+Completions cover command and subcommand names, plus flags — not argument values like subscriber IDs.
 
 ## Commands
 
@@ -388,6 +398,25 @@ Installs the `/kit` skill to `~/.claude/skills/kit/`. Then in Claude Code:
 /kit tag subscriber jane@example.com with "vip"
 ```
 
+## Telemetry
+
+kit sends anonymous usage data — which command ran, whether it succeeded,
+and basic environment info like CLI/Node version and OS — and, on a crash,
+an error report. It never includes the arguments, flags, request/response
+bodies, or output of a command, which routinely carry subscriber emails and
+content.
+
+Turn it off:
+
+```
+kit config set-telemetry false
+# or, for a single invocation or in CI:
+export KIT_NO_TELEMETRY=1
+```
+
+It's also off automatically when `CI` is set, and respects the `DO_NOT_TRACK`
+convention some other CLIs use.
+
 ## Security
 
 - Config file is stored with `600` permissions (owner-only). Contains API key and OAuth tokens.
@@ -399,6 +428,14 @@ Installs the `/kit` skill to `~/.claude/skills/kit/`. Then in Claude Code:
   source before publishing. See [`docs/RELEASING.md`](docs/RELEASING.md).
 - `kit upgrade` delegates to your package manager. It never fetches and executes
   code on its own.
+
+## Support
+
+Found a bug or have a feature request for the CLI itself? [Open an
+issue](https://github.com/imjohnbo/kit-cli/issues).
+
+For help with your Kit account, subscribers, or the API, use Kit's own
+support channels — this project isn't an official Kit product (yet).
 
 ## License
 

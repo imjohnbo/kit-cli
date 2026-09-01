@@ -40,7 +40,7 @@ if (!process.env.KIT_CONFIG_DIR) {
 
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri, setBaseUrl, getBaseUrl } from '../src/config.js';
+import { setApiKey, getApiKey, getOAuthClientId, getOAuthRedirectUri, setBaseUrl, getBaseUrl, getTelemetryEnabled } from '../src/config.js';
 
 // ── setApiKey – validation (throws before writing to disk) ─────────────────
 
@@ -303,5 +303,13 @@ describe('getOAuthRedirectUri', () => {
     // With no env var and a fresh config, redirect URI defaults to ''
     const val = getOAuthRedirectUri();
     assert.equal(typeof val, 'string');
+  });
+});
+
+// ── getTelemetryEnabled – default value (read-only, no write) ──────────────
+
+describe('getTelemetryEnabled', () => {
+  test('defaults to true when never set', () => {
+    assert.equal(getTelemetryEnabled(), true);
   });
 });

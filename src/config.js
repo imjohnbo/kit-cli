@@ -1,6 +1,7 @@
 import Conf from 'conf';
 import { chmodSync } from 'node:fs';
 import { dirname } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import * as realKeychainStore from './keychain.js';
 
 // The real backend, unless a test swaps it out via _setKeychainStoreForTests
@@ -30,6 +31,13 @@ const config = new Conf({
   // that holds a user's credentials. Renaming the package must not orphan it.
   projectName: 'kit-cli',
   cwd: process.env.KIT_CONFIG_DIR || undefined,
+  // Conf defaults to 0o666. It writes atomically — a fresh temp file per
+  // write, renamed into place — so this mode is genuinely applied on every
+  // write, not just the first. Still paired with the explicit chmodSync
+  // calls below: they're what actually matter for a config file that
+  // predates this option being set, since a temp-file rename doesn't
+  // retroactively fix a file's existing permissions before that write.
+  configFileMode: 0o600,
   schema: {
     apiKey:         { type: 'string', default: '' },
     baseUrl:        { type: 'string', default: 'https://api.kit.com/v4' },
@@ -44,6 +52,10 @@ const config = new Conf({
     updateCheckedAt: { type: 'number', default: 0 }, // unix ms
     updateLatestVersion: { type: 'string', default: '' },
     updateLatestPackage: { type: 'string', default: '' },
+    telemetry:      { type: 'boolean', default: true },
+    installId:      { type: 'string', default: '' },
+    accountId:      { type: 'string', default: '' },
+    telemetryNoticeShown: { type: 'boolean', default: false },
   },
 });
 
@@ -190,6 +202,7 @@ export function setBaseUrl(url) {
     throw new Error('Base URL must use http or https.');
   }
   config.set('baseUrl', normalizeBaseUrl(url));
+  clearCachedAccountId();
 }
 
 // --- API key ---
@@ -209,7 +222,9 @@ export function setApiKey(key) {
     throw new Error('API key contains invalid control characters.');
   }
   writeSecretField('apiKey', key.trim());
-  secureConfig();
+  // clearCachedAccountId() already calls secureConfig() itself; no need to
+  // repeat the chmod here.
+  clearCachedAccountId();
 }
 
 // --- OAuth client ID ---
@@ -259,6 +274,9 @@ export function setTokens(accessToken, refreshToken, createdAt, expiresIn) {
 export function clearTokens() {
   writeSecretFields({ accessToken: '', refreshToken: '' });
   config.set('tokenExpiresAt', 0);
+  // clearCachedAccountId() already calls secureConfig() itself; no need to
+  // repeat the chmod here.
+  clearCachedAccountId();
 }
 
 // --- Preferences ---
@@ -312,6 +330,86 @@ export function setCachedLatestVersion(version, packageName) {
   config.set('updateCheckedAt', Date.now());
 }
 
+// --- Telemetry ---
+//
+// One combined opt-out for both usage telemetry and error reporting (see
+// src/telemetry.js and src/error-reporting.js). Mirrors the updateCheck
+// preference above: a config key, plus KIT_NO_TELEMETRY for a single
+// invocation, CI, or containers — see telemetryAllowed() in telemetry.js.
+
+export function getTelemetryEnabled() {
+  return config.get('telemetry');
+}
+
+export function setTelemetryEnabled(enabled) {
+  config.set('telemetry', Boolean(enabled));
+}
+
+export function getTelemetryNoticeShown() {
+  return config.get('telemetryNoticeShown');
+}
+
+export function setTelemetryNoticeShown() {
+  config.set('telemetryNoticeShown', true);
+}
+
+/**
+ * A random ID that identifies this install, not this person. Generated once,
+ * on first use, and persisted — never derived from or linked to a Kit
+ * account or email address.
+ */
+export function getOrCreateInstallId() {
+  const existing = config.get('installId');
+  if (existing) return existing;
+  const id = randomUUID();
+  config.set('installId', id);
+  return id;
+}
+
+/**
+ * The authenticated account's ID, cached so telemetry looks it up at most
+ * once per set of credentials rather than on every command. Cleared by
+ * setApiKey, setBaseUrl, clearTokens, and login() (in auth.js) — covering a
+ * new API key, a new target environment, an explicit logout, and a fresh
+ * OAuth login.
+ *
+ * Known gap, accepted rather than engineered around: switching accounts via
+ * the KIT_API_KEY env var, or switching environments via the KIT_API_BASE
+ * env var, does not clear this cache — env vars for a single invocation
+ * bypass every setter in this module, including setApiKey/setBaseUrl above,
+ * so there is no function call to hook. A cached ID could then be
+ * misattributed until the cache is next cleared by one of the paths above.
+ * Low-harm since this only affects anonymous usage-analytics attribution,
+ * never anything the CLI itself does with the value — but real, so it's
+ * written down here rather than implied away.
+ */
+export function getCachedAccountId() {
+  return config.get('accountId') || '';
+}
+
+export function setCachedAccountId(id) {
+  config.set('accountId', id == null ? '' : String(id));
+  secureConfig();
+}
+
+/**
+ * Exported (unlike the module-private uses in setApiKey/clearTokens above)
+ * so login() in auth.js can call it too — starting a fresh OAuth flow is the
+ * one case setTokens() itself deliberately doesn't cover, since setTokens()
+ * also runs on routine token refresh, where clearing would be wrong.
+ *
+ * Calls secureConfig() itself, deliberately, rather than trusting every
+ * present and future call site to remember to call it last: an earlier
+ * version of this function didn't, and a config.set() after it silently
+ * undid a chmod a caller had already made. Making this function respect its
+ * own security invariant instead of depending on caller ordering is what
+ * actually closes that class of bug, not getting the order right once.
+ */
+export function clearCachedAccountId() {
+  config.set('accountId', '');
+  secureConfig();
+}
+
 // --- Misc ---
 
 export function getAll() {
@@ -333,6 +431,7 @@ export function getAll() {
     defaultFormat:   getDefaultFormat(),
     perPage:         getPerPage(),
     updateCheck:     getUpdateCheckEnabled(),
+    telemetry:       getTelemetryEnabled(),
     configPath:      config.path,
   };
 }

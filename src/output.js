@@ -2,6 +2,18 @@ import Table from 'cli-table3';
 import chalk from 'chalk';
 import { Option } from 'commander';
 import { getDefaultFormat } from './config.js';
+import { getCurrentCommand } from './current-command.js';
+
+// telemetry.js and error-reporting.js are imported dynamically, inside
+// withErrorHandler() below, instead of statically here. output.js is
+// imported by every command file, which program.js in turn imports eagerly
+// — a static import here would load the Segment SDK (and inherit its
+// top-level await) on every single invocation, including `--help` and
+// `--version`, which never call a wrapped action at all and so would gain
+// nothing from paying that cost. A dynamic import still resolves to the
+// same cached module the first time an actual command runs, so real command
+// invocations are unaffected — see the commit that introduced this for the
+// measured ~36% `kit --version` startup-time regression this fixes.
 
 export function formatOutput(data, columns, opts = {}) {
   const format = opts.format || getDefaultFormat();
@@ -123,10 +135,19 @@ export function addSlimOption(cmd, omitted) {
 
 export function withErrorHandler(fn) {
   return async (...args) => {
+    const command = getCurrentCommand();
+    const startedAt = Date.now();
     try {
       await fn(...args);
+      const { trackCommand } = await import('./telemetry.js');
+      trackCommand({ command, status: 'success', durationMs: Date.now() - startedAt });
     } catch (err) {
+      const { trackCommand, flushTelemetry } = await import('./telemetry.js');
+      const { maybeReportError } = await import('./error-reporting.js');
+      trackCommand({ command, status: 'failure', durationMs: Date.now() - startedAt, statusCode: err.status });
+      const reportPromise = maybeReportError(err, { command });
       printError(err);
+      await Promise.allSettled([flushTelemetry({ timeout: 300 }), reportPromise]);
       process.exit(1);
     }
   };

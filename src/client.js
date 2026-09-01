@@ -1,5 +1,6 @@
 import { getApiKey, getAccessToken, isTokenExpired, getBaseUrl } from './config.js';
 import { refreshAccessToken } from './auth.js';
+import { USER_AGENT } from './package-info.js';
 
 const MAX_PAGINATE_PAGES = 100;
 
@@ -199,11 +200,18 @@ async function request(method, path, { body, query } = {}) {
   const headers = {
     ...authHeader,
     'Accept': 'application/json',
+    'User-Agent': USER_AGENT,
   };
 
   const opts = { method, headers };
 
-  if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE')) {
+  // body !== undefined, not a truthy check: every existing caller either
+  // omits the argument entirely (undefined, meaning "no body") or passes a
+  // constructed object (always truthy) -- but `kit api`'s raw escape hatch
+  // can pass any JSON value, including a genuinely falsy one (0, null,
+  // false), and a truthy check would silently drop those instead of
+  // sending them.
+  if (body !== undefined && (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE')) {
     headers['Content-Type'] = 'application/json';
     opts.body = JSON.stringify(body);
   }
