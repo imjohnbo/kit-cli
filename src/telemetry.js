@@ -26,29 +26,17 @@ import {
 } from './config.js';
 import { VERSION, USER_AGENT } from './package-info.js';
 import { EVENT_NAMES } from './telemetry-events.js';
+import { isCI } from './update-check.js';
+import { freshKeys } from './telemetry-keys.js';
 
-// telemetry-keys.js reads its env var once, at module-load time (see its own
-// header comment). A plain static `import { SEGMENT_WRITE_KEY } from
-// './telemetry-keys.js'` here would only ever see that first-loaded value:
-// Node's module cache keys a nested import by its own resolved URL, not by
-// whatever cache-busting query string the *importer* (this file) was loaded
-// with — so once anything causes telemetry-keys.js to load once, every later
-// "fresh" reimport of telemetry.js (scripts/telemetry.test.js reimports it
-// via a new `?t=...` query per test, since KIT_SEGMENT_WRITE_KEY is meant to
-// be re-read per test) would still see that stale, cached write key.
-// Forwarding this module's own query string (empty in production, where
-// telemetry.js itself is loaded plainly and only once) down into the
-// telemetry-keys.js import keeps the two modules' freshness in lockstep,
-// while resolving to the exact same plain URL a static import would use
-// whenever there's no query string to forward.
+// See freshKeys()'s own comment in telemetry-keys.js for why this can't be a
+// plain static `import { SEGMENT_WRITE_KEY } from './telemetry-keys.js'`.
 // This top-level await means anything that does `require()` this module (or
 // any module that imports it) fails with ERR_REQUIRE_ASYNC_MODULE. Not a
 // concern today — package.json has no `exports`/`main` for library
 // consumers, and nothing in this codebase uses require() — but worth
 // knowing if that ever changes.
-const _keysUrl = new URL('./telemetry-keys.js', import.meta.url);
-_keysUrl.search = new URL(import.meta.url).search;
-const { SEGMENT_WRITE_KEY } = await import(_keysUrl.href);
+const { SEGMENT_WRITE_KEY } = await freshKeys(import.meta.url);
 
 const SESSION_ID = randomUUID();
 
@@ -60,8 +48,10 @@ const SESSION_ID = randomUUID();
 
 export function telemetryAllowed(env = process.env) {
   if (env.KIT_NO_TELEMETRY && env.KIT_NO_TELEMETRY !== '0') return false;
-  if (env.DO_NOT_TRACK === '1') return false;
-  if (env.CI && env.CI !== 'false') return false;
+  // The convention (consoledonottrack.com) is: any value other than unset
+  // or an explicit "0" opts out — not just the literal "1".
+  if (env.DO_NOT_TRACK && env.DO_NOT_TRACK !== '0') return false;
+  if (isCI(env)) return false;
   return getTelemetryEnabled();
 }
 
@@ -130,7 +120,7 @@ async function resolveAccountId() {
     if (!res.ok) return;
     const body = await res.json();
     const id = body?.account?.id ?? body?.id;
-    if (id) setCachedAccountId(id);
+    if (id != null) setCachedAccountId(id);
   } catch {
     // Best-effort only. account_id just stays unknown for now.
   }
@@ -141,22 +131,20 @@ async function resolveAccountId() {
 export function trackCommand({ command, status, durationMs, statusCode }) {
   if (!telemetryAllowed()) return;
 
-  const client = getClient();
-  if (!client) return;
-
-  maybeShowFirstRunNotice();
-
-  const accountId = getCachedAccountId();
-  if (!accountId) void resolveAccountId();
-
+  // The whole body is one try/catch, not just the final client.track() call:
+  // getClient() and maybeShowFirstRunNotice() (which writes to the config
+  // file) can throw too, and per this module's own invariant #1, a
+  // telemetry failure must never be the reason a command exits non-zero —
+  // the same reasoning resolveAccountId() documents for its own try/catch.
   try {
-    // The SDK validates its input synchronously (e.g. it throws if
-    // anonymousId were ever missing or non-string) before it ever reaches
-    // the network. getOrCreateInstallId() always returns a non-empty
-    // string, so this shouldn't fire in practice — but per this module's
-    // own invariant #1, a telemetry call must never throw past this
-    // function, so it's caught the same as every other fallible call in
-    // this file (fetch, closeAndFlush) rather than trusted to hold.
+    const client = getClient();
+    if (!client) return;
+
+    maybeShowFirstRunNotice();
+
+    const accountId = getCachedAccountId();
+    if (!accountId) void resolveAccountId();
+
     client.track({
       anonymousId: getOrCreateInstallId(),
       event: EVENT_NAMES[command] || 'Unknown Command Run',
@@ -195,6 +183,8 @@ export function trackCommand({ command, status, durationMs, statusCode }) {
  * refreshLatestInBackground() in update-check.js already relies on.
  */
 export async function flushTelemetry({ timeout = 300 } = {}) {
+  if (!telemetryAllowed()) return;
+
   const client = getClient();
   if (!client) return;
   try {

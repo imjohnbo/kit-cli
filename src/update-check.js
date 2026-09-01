@@ -31,6 +31,15 @@ export const UNREACHABLE = 'unreachable';
 export const DISABLED = 'disabled';
 
 /**
+ * Whether the environment looks like CI or another unattended container.
+ * Shared by updateCheckAllowed() below and telemetryAllowed() in
+ * telemetry.js, so the definition of "CI" can't drift between the two.
+ */
+export function isCI(env = process.env) {
+  return Boolean(env.CI) && env.CI !== 'false';
+}
+
+/**
  * Whether an automatic update check may run.
  *
  * KIT_NO_UPDATE_CHECK covers one invocation, CI, and containers.
@@ -42,7 +51,7 @@ export const DISABLED = 'disabled';
  */
 export function updateCheckAllowed(env = process.env) {
   if (env.KIT_NO_UPDATE_CHECK && env.KIT_NO_UPDATE_CHECK !== '0') return false;
-  if (env.CI && env.CI !== 'false') return false;
+  if (isCI(env)) return false;
   return getUpdateCheckEnabled();
 }
 

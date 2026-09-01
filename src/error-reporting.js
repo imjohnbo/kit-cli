@@ -14,25 +14,15 @@ import { randomUUID } from 'node:crypto';
 import { VERSION, USER_AGENT } from './package-info.js';
 import { telemetryAllowed } from './telemetry.js';
 import { KitApiError } from './client.js';
+import { freshKeys } from './telemetry-keys.js';
 
-// Same nested-cache-busting concern telemetry.js documents at its own
-// telemetry-keys.js import: a plain `import { SENTRY_DSN } from
-// './telemetry-keys.js'` here would resolve to the exact same cached module
-// regardless of whatever `?t=...` query string *this* module was loaded
-// with (scripts/error-reporting.test.js reimports error-reporting.js fresh
-// per test, since KIT_SENTRY_DSN is meant to be re-read per test) — so
-// SENTRY_DSN would silently stick to whatever value telemetry-keys.js saw
-// the first time anything loaded it. Forwarding this module's own query
-// string down keeps the two freshnesses in lockstep, and resolves to the
-// same plain URL a static import would use when there's no query to
-// forward (i.e. in production, where this module is loaded plainly once).
+// See freshKeys()'s own comment in telemetry-keys.js for why this can't be a
+// plain static `import { SENTRY_DSN } from './telemetry-keys.js'`.
 //
 // Same top-level-await caveat as telemetry.js: anything that require()s this
 // module, or a module that imports it, fails with ERR_REQUIRE_ASYNC_MODULE.
 // No current impact — see telemetry.js's own note on why.
-const _keysUrl = new URL('./telemetry-keys.js', import.meta.url);
-_keysUrl.search = new URL(import.meta.url).search;
-const { SENTRY_DSN } = await import(_keysUrl.href);
+const { SENTRY_DSN } = await freshKeys(import.meta.url);
 
 /** Parses https://<publicKey>@<host>/<projectId>, Sentry's DSN format. */
 function parseDsn(dsn) {
