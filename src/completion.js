@@ -28,7 +28,10 @@ export function complete(program, words) {
     .filter((name) => name !== 'help' && name !== '__complete' && name.startsWith(partial));
 
   if (partial.startsWith('-')) {
-    const flags = node.options.map((o) => o.long).filter(Boolean).filter((f) => f.startsWith(partial));
+    const flags = node.options
+      .flatMap((o) => [o.long, o.short])
+      .filter(Boolean)
+      .filter((f) => f.startsWith(partial));
     return [...commandNames, ...flags];
   }
 
