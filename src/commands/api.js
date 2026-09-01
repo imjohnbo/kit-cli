@@ -12,15 +12,17 @@ const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
  * `include` list (GET /tags, /subscribers, /forms, /sequences, and the
  * sequence-emails routes), and splitting on comma would silently truncate
  * exactly that value at the first item, with no error and a 200 response.
+ *
+ * Delegates to URLSearchParams rather than hand-splitting on `=`: it keeps
+ * that same `&`-only splitting behavior, but also percent-decodes each
+ * value. client.js's request() re-encodes every value when it builds the
+ * final URL (url.searchParams.set()) — without decoding here first, a value
+ * a caller had correctly percent-encoded (the only way to pass a literal
+ * `&` or `=` through this parser) would be encoded a second time and
+ * corrupted on the wire.
  */
 function parseQuery(value) {
-  const query = {};
-  for (const pair of String(value).split('&')) {
-    const [key, ...rest] = pair.split('=');
-    if (!key) continue;
-    query[key.trim()] = rest.join('=').trim();
-  }
-  return query;
+  return Object.fromEntries(new URLSearchParams(String(value)));
 }
 
 function callMethod(verb, path, body, query) {
