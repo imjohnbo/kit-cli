@@ -37,11 +37,21 @@ function callMethod(verb, path, body, query) {
 
 export function apiCommand() {
   const cmd = new Command('api')
-    .description('Send a raw request to the Kit API — an escape hatch for endpoints without a dedicated command')
+    .description('Send a raw request to the Kit API')
     .argument('<method>', 'HTTP method: GET, POST, PUT, PATCH, or DELETE')
     .argument('<path>', 'API path, e.g. /subscribers or /tags/123')
     .option('--data <json>', 'JSON request body (ignored for GET)')
-    .option('--query <pairs>', "'&'-separated key=value query parameters, e.g. per_page=10&include=stats,subscriber_count");
+    .option('--query <pairs>', "'&'-separated key=value query parameters, e.g. per_page=10&include=stats,subscriber_count")
+    .addHelpText(
+      'after',
+      `
+An escape hatch for endpoints without a dedicated command.
+
+Examples:
+  kit api GET /subscribers --query per_page=10
+  kit api POST /tags --data '{"name":"VIP"}'
+`
+    );
 
   cmd.action(
     withErrorHandler(async (method, path, opts) => {

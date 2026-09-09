@@ -30,8 +30,17 @@ const SCRIPTS = { bash: BASH_SCRIPT, zsh: ZSH_SCRIPT, fish: FISH_SCRIPT };
 
 export function completionCommand() {
   const cmd = new Command('completion')
-    .description('Print a shell completion script (bash, zsh, or fish) — add `eval "$(kit completion zsh)"` to your shell rc file')
-    .argument('<shell>', 'bash, zsh, or fish');
+    .description('Print a completion script (bash, zsh, fish)')
+    .argument('<shell>', 'bash, zsh, or fish')
+    .addHelpText(
+      'after',
+      `
+Load it from your shell rc file:
+  eval "$(kit completion bash)"   # ~/.bashrc
+  eval "$(kit completion zsh)"    # ~/.zshrc, after compinit
+  kit completion fish | source    # ~/.config/fish/config.fish
+`
+    );
 
   cmd.action(
     withErrorHandler(async (shell) => {

@@ -185,7 +185,8 @@ export function printChecks(results, log = console.log) {
 
 export function doctorCommand() {
   const cmd = new Command('doctor')
-    .description("Check the CLI's setup: Node version, config, authentication, and API connectivity");
+    .description("Check the CLI's setup and API connectivity")
+    .addHelpText('after', '\nChecks the Node version, config, authentication, and API connectivity.\n');
 
   cmd.action(
     withErrorHandler(async () => {
