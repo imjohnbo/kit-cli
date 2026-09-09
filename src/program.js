@@ -50,29 +50,44 @@ export function buildProgram() {
 
   program.addHelpText('before', `${chalk.hex('#44B1FF').bold('kit')} — CLI for Kit (ConvertKit)\n`);
 
+  // Root help groups. Commander lists a command under the most recent
+  // commandsGroup() heading, so registration order here is display order.
+  // Setup follows the first-run flow. Resources stay alphabetical.
+  program.commandsGroup('Setup:');
+  program.addCommand(initCommand());
   program.addCommand(loginCommand());
   program.addCommand(logoutCommand());
   program.addCommand(accountCommand());
   program.addCommand(configCommand());
   program.addCommand(setupSkillCommand());
-  program.addCommand(subscribersCommand());
-  program.addCommand(tagsCommand());
-  program.addCommand(formsCommand());
-  program.addCommand(sequencesCommand());
+  program.addCommand(completionCommand());
+
+  program.commandsGroup('Resources:');
   program.addCommand(broadcastsCommand());
   program.addCommand(customFieldsCommand());
-  program.addCommand(purchasesCommand());
-  program.addCommand(webhooksCommand());
-  program.addCommand(segmentsCommand());
   program.addCommand(emailTemplatesCommand());
+  program.addCommand(formsCommand());
   program.addCommand(postsCommand());
+  program.addCommand(purchasesCommand());
+  program.addCommand(segmentsCommand());
+  program.addCommand(sequencesCommand());
   program.addCommand(snippetsCommand());
-  program.addCommand(bulkCommand());
-  program.addCommand(upgradeCommand());
+  program.addCommand(subscribersCommand());
+  program.addCommand(tagsCommand());
+  program.addCommand(webhooksCommand());
+
+  program.commandsGroup('Advanced:');
   program.addCommand(apiCommand());
+  program.addCommand(bulkCommand());
+
+  program.commandsGroup('Maintenance:');
   program.addCommand(doctorCommand());
-  program.addCommand(initCommand());
-  program.addCommand(completionCommand());
+  program.addCommand(upgradeCommand());
+  // Commander creates the implicit `help [command]` lazily, when help renders,
+  // and by then no commandsGroup() applies to it. Creating it here puts it in
+  // this group instead of alone under a bare "Commands:" heading.
+  program.helpCommand(true);
+
   program.addCommand(completeCommand(program), { hidden: true });
 
   return program;

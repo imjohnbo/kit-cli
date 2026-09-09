@@ -286,7 +286,8 @@ export function configCommand() {
 
 export function setupSkillCommand() {
   const cmd = new Command('setup-skill')
-    .description('Install the Claude Code /kit skill to ~/.claude/skills/kit/');
+    .description('Install the Claude Code /kit skill')
+    .addHelpText('after', '\nInstalls to ~/.claude/skills/kit/\n');
 
   cmd.action(
     withErrorHandler(async () => {

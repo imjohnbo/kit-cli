@@ -153,13 +153,33 @@ Completions cover command and subcommand names, plus flags — not argument valu
 
 ## Commands
 
+`kit --help` lists the commands in four groups. The sections below follow the same order.
+
 ```
+Setup:        init, login, logout, account, config, setup-skill, completion
+Resources:    broadcasts, custom-fields, email-templates, forms, posts,
+              purchases, segments, sequences, snippets, subscribers, tags,
+              webhooks
+Advanced:     api, bulk
+Maintenance:  doctor, upgrade, help
+```
+
+### Setup
+
+```
+kit init                      Set up authentication interactively
 kit login                     Authenticate via OAuth (PKCE)
 kit logout                    Clear stored OAuth tokens
 kit config show               Show all config and auth status
+kit setup-skill               Install the Claude Code /kit skill
+kit completion <shell>        Print a completion script (bash, zsh, fish)
 ```
 
-### account
+`kit init` prompts for the authentication choices that the Authentication section
+above describes. See Shell completion above and Claude Code Skill below for the
+last two commands.
+
+#### account
 
 ```
 account                       View account info
@@ -170,7 +190,102 @@ account email-stats
 account growth-stats [options]
 ```
 
-### subscribers
+### Resources
+
+#### broadcasts
+
+```
+list [options]
+get [options] <id>
+create [options]
+update [options] <id>
+delete <id>
+stats [options] [id]          One broadcast, or every broadcast with no ID
+clicks [options] <id>         Link click stats
+```
+
+`list` and `stats` filter on `--status <draft|scheduled|sending|completed|aborted>`,
+`--sent-after`, and `--sent-before`.
+
+#### custom-fields
+
+```
+list [options]
+create <label>
+update <id> <label>
+delete <id>
+```
+
+#### email-templates
+
+```
+list [options]
+```
+
+#### forms
+
+```
+list [options]
+subscribers [options] <formId>
+add <formId> <subscriberId>
+add-by-email <formId> <email>
+```
+
+#### posts
+
+```
+list [options]                --include-content for post bodies
+get [options] <id>
+```
+
+#### purchases
+
+```
+list [options]
+get [options] <id>
+create --file <path>          Record a purchase from JSON
+```
+
+#### segments
+
+```
+list [options]
+```
+
+#### sequences
+
+```
+list [options]
+get [options] <id>
+create [options] --name <name>
+update [options] <id>
+delete <id>
+subscribers [options] <sequenceId>
+add <sequenceId> <subscriberId>
+add-by-email <sequenceId> <email>
+emails list [options] <sequenceId>
+emails get [options] <sequenceId> <id>
+emails create [options] <sequenceId> --subject <s> --delay-value <n> --delay-unit <days|hours>
+emails update [options] <sequenceId> <id>
+emails delete <sequenceId> <id>
+```
+
+`list` and `get` take `--include stats`. `emails list` also takes
+`--include-content`.
+
+#### snippets
+
+```
+list [options]                --snippet-type <inline|block>, --archived
+get [options] <id>
+create [options] <name> --type <inline|block>
+update [options] <id>         --name, --content, --html, --archive, --restore
+```
+
+An inline snippet holds Liquid text, passed with `--content`. A block snippet
+holds HTML, passed with `--html`.
+
+#### subscribers
 
 ```
 list [options]
@@ -209,7 +324,7 @@ kit subscribers filter --file conditions.json --include tags,stats --stats-start
 field key. Keys are the field's `key`, not its label, so `last_name` rather than
 `Last Name`.
 
-### tags
+#### tags
 
 ```
 list [options]
@@ -225,69 +340,7 @@ remove-by-email <tagId> <email>
 `subscribers` filters on `--state`, `--created-after`, `--created-before`,
 `--tagged-after`, and `--tagged-before`.
 
-### forms
-
-```
-list [options]
-subscribers [options] <formId>
-add <formId> <subscriberId>
-add-by-email <formId> <email>
-```
-
-### sequences
-
-```
-list [options]
-get [options] <id>
-create [options] --name <name>
-update [options] <id>
-delete <id>
-subscribers [options] <sequenceId>
-add <sequenceId> <subscriberId>
-add-by-email <sequenceId> <email>
-emails list [options] <sequenceId>
-emails get [options] <sequenceId> <id>
-emails create [options] <sequenceId> --subject <s> --delay-value <n> --delay-unit <days|hours>
-emails update [options] <sequenceId> <id>
-emails delete <sequenceId> <id>
-```
-
-`list` and `get` take `--include stats`. `emails list` also takes
-`--include-content`.
-
-### broadcasts
-
-```
-list [options]
-get [options] <id>
-create [options]
-update [options] <id>
-delete <id>
-stats [options] [id]          One broadcast, or every broadcast with no ID
-clicks [options] <id>         Link click stats
-```
-
-`list` and `stats` filter on `--status <draft|scheduled|sending|completed|aborted>`,
-`--sent-after`, and `--sent-before`.
-
-### custom-fields
-
-```
-list [options]
-create <label>
-update <id> <label>
-delete <id>
-```
-
-### purchases
-
-```
-list [options]
-get [options] <id>
-create --file <path>          Record a purchase from JSON
-```
-
-### webhooks
+#### webhooks
 
 One webhook subscribes to many event types and receives signed, automatically
 retried deliveries. This is the `/webhook_endpoints` resource, the current
@@ -308,26 +361,52 @@ revoke-previous-secret [options] <id>
 signing `secret` in plaintext — store it right away. `update --events`
 replaces the webhook's entire subscription list, not just the additions.
 
-### posts
+### Advanced
+
+#### api
 
 ```
-list [options]                --include-content for post bodies
-get [options] <id>
+api <method> <path>           Send a raw request to the Kit API
+  --data <json>               JSON request body (ignored for GET)
+  --query <pairs>             &-separated key=value query parameters
 ```
 
-### snippets
+`kit api` is the escape hatch for endpoints without a dedicated command. The
+method is one of GET, POST, PUT, PATCH, or DELETE. The path is the part after
+`/v4`, such as `/subscribers` or `/tags/123`.
 
 ```
-list [options]                --snippet-type <inline|block>, --archived
-get [options] <id>
-create [options] <name> --type <inline|block>
-update [options] <id>         --name, --content, --html, --archive, --restore
+kit api GET /subscribers --query per_page=10
+kit api POST /tags --data '{"name":"VIP"}'
 ```
 
-An inline snippet holds Liquid text, passed with `--content`. A block snippet
-holds HTML, passed with `--html`.
+#### bulk (requires OAuth)
 
-### upgrade
+All bulk commands take `--file <path>` (JSON array) and optional `--callback-url <url>`. Batches of ≤100 are processed synchronously (results returned immediately); larger batches are queued asynchronously and POSTed to the callback URL when complete.
+
+```
+bulk subscribers create --file <path>           [{email_address, first_name?, state?}, ...]
+bulk tags create        --file <path>           [{name}, ...]
+bulk tags delete        --file <path>           [{id}, ...]
+bulk tags add           --file <path>           [{tag_id, subscriber_id}, ...]
+bulk tags remove        --file <path>           [{tag_id, subscriber_id}, ...]
+bulk forms add          --file <path>           [{form_id, subscriber_id, referrer?}, ...]
+bulk custom-fields create       --file <path>   [{label}, ...]
+bulk custom-fields update-values --file <path>  [{subscriber_id, subscriber_custom_field_id, value}, ...]
+```
+
+### Maintenance
+
+#### doctor
+
+```
+doctor                        Check the CLI's setup and API connectivity
+```
+
+`kit doctor` checks the Node version, config, authentication, and API
+connectivity. It exits with status 1 when a check fails.
+
+#### upgrade
 
 ```
 upgrade                       Upgrade to the newest published version
@@ -343,27 +422,6 @@ reads a cached version number, so it never delays a command. A background reques
 refreshes the cache at most once a day. Turn it off with
 `kit config set-update-check false`, or with `KIT_NO_UPDATE_CHECK=1`. It stays off
 whenever `CI` is set.
-
-### segments · email-templates
-
-```
-list [options]
-```
-
-### bulk (requires OAuth)
-
-All bulk commands take `--file <path>` (JSON array) and optional `--callback-url <url>`. Batches of ≤100 are processed synchronously (results returned immediately); larger batches are queued asynchronously and POSTed to the callback URL when complete.
-
-```
-bulk subscribers create --file <path>           [{email_address, first_name?, state?}, ...]
-bulk tags create        --file <path>           [{name}, ...]
-bulk tags delete        --file <path>           [{id}, ...]
-bulk tags add           --file <path>           [{tag_id, subscriber_id}, ...]
-bulk tags remove        --file <path>           [{tag_id, subscriber_id}, ...]
-bulk forms add          --file <path>           [{form_id, subscriber_id, referrer?}, ...]
-bulk custom-fields create       --file <path>   [{label}, ...]
-bulk custom-fields update-values --file <path>  [{subscriber_id, subscriber_custom_field_id, value}, ...]
-```
 
 ### Global list options
 

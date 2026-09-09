@@ -63,9 +63,9 @@ function buildWebhookBody({ name, url, description, status, events }) {
 }
 
 export function webhooksCommand() {
-  const cmd = new Command('webhooks').description(
-    'Manage webhooks: one endpoint subscribes to many event types and receives signed, retried deliveries'
-  );
+  const cmd = new Command('webhooks')
+    .description('Manage webhooks')
+    .addHelpText('after', '\nOne webhook subscribes to many event types and receives signed, retried deliveries.\n');
 
   // List webhooks
   const list = cmd.command('list').description('List all webhooks');
