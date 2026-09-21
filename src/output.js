@@ -1,7 +1,7 @@
 import Table from 'cli-table3';
 import chalk from 'chalk';
 import { Option } from 'commander';
-import { getDefaultFormat } from './config.js';
+import { getDefaultFormat, getPerPage } from './config.js';
 import { getCurrentCommand } from './current-command.js';
 
 // telemetry.js and error-reporting.js are imported dynamically, inside
@@ -110,7 +110,7 @@ export function addFormatOption(cmd) {
 
 export function addPaginationOptions(cmd) {
   return cmd
-    .option('--per-page <n>', 'results per page (max 1000)', '50')
+    .option('--per-page <n>', 'results per page (max 1000)', String(getPerPage()))
     .option('--after <cursor>', 'cursor for next page')
     .option('--before <cursor>', 'cursor for previous page');
 }

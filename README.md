@@ -479,6 +479,8 @@ convention some other CLIs use.
 
 - Config file is stored with `600` permissions (owner-only). Contains API key and OAuth tokens.
 - OAuth tokens auto-refresh 5 minutes before expiry. Run `kit logout` to clear.
+- The OAuth callback server listens on `127.0.0.1` only. It accepts a code only
+  when the callback carries the `state` value that this login sent.
 - All IDs are validated before URL interpolation to prevent path traversal.
 - Auto-pagination is capped at 100 pages.
 - Releases publish only from a tagged commit, and only after a manual approval.

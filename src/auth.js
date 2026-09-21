@@ -5,6 +5,7 @@ import { setTokens, getOAuthClientId, getRefreshToken, getOAuthRedirectUri, getB
 import { USER_AGENT } from './package-info.js';
 
 const REDIRECT_PORT = 9876;
+const REDIRECT_HOST = '127.0.0.1';
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
 
 // OAuth endpoints derive from the configured base URL so they target the same
@@ -26,49 +27,83 @@ function generateCodeChallenge(verifier) {
   return base64url(createHash('sha256').update(verifier).digest());
 }
 
-function openBrowser(url) {
-  const cmd =
-    process.platform === 'win32' ? 'start' :
-    process.platform === 'darwin' ? 'open' :
-    'xdg-open';
-  execFile(cmd, [url]);
+/** The executable and arguments that open `url` in the default browser. */
+export function browserCommand(url, platform = process.platform) {
+  if (platform === 'win32') return { file: 'rundll32', args: ['url.dll,FileProtocolHandler', url] };
+  if (platform === 'darwin') return { file: 'open', args: [url] };
+  return { file: 'xdg-open', args: [url] };
 }
 
-function waitForCallback() {
+/** `run` defaults to execFile: an argument array, no shell. Tests pass a fake. */
+export function openBrowser(url, { platform = process.platform, run = execFile } = {}) {
+  const { file, args } = browserCommand(url, platform);
+  run(file, args, (err) => {
+    if (err) console.error(`Could not open a browser (${err.message}). Open this URL yourself:\n  ${url}`);
+  });
+}
+
+const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const resultPage = (heading, body) =>
+  `<html><body style="font-family:sans-serif;padding:2rem"><h2>${heading}</h2><p>${body}</p></body></html>`;
+
+/**
+ * Serves the one OAuth redirect and resolves with the authorization code.
+ *
+ * Listens on the loopback interface only, and accepts a code only when the
+ * callback's `state` is the one login() sent. A request from another host,
+ * or one this process did not start, cannot complete the login.
+ */
+export function waitForCallback(
+  expectedState,
+  { port = REDIRECT_PORT, host = REDIRECT_HOST, timeoutMs = LOGIN_TIMEOUT_MS, onListening } = {}
+) {
   return new Promise((resolve, reject) => {
+    let timer;
+    // Clears the timer as well as closing the server. A live timer would keep
+    // the process alive for the rest of the timeout after the login finished.
+    const settle = (fn, value) => {
+      clearTimeout(timer);
+      server.close();
+      fn(value);
+    };
+
     const server = createServer((req, res) => {
-      const parsed = new URL(req.url, `http://localhost:${REDIRECT_PORT}`);
+      const parsed = new URL(req.url, `http://${host}:${port}`);
       const code = parsed.searchParams.get('code');
+      const state = parsed.searchParams.get('state');
       const error = parsed.searchParams.get('error');
 
-      if (code) {
+      if (code && state === expectedState) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end('<html><body style="font-family:sans-serif;padding:2rem"><h2>&#10003; Authorized!</h2><p>You can close this tab and return to the terminal.</p></body></html>');
-        server.close();
-        resolve(code);
-      } else {
-        const safeError = (error || 'Unknown error').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        res.writeHead(400, { 'Content-Type': 'text/html' });
-        res.end(`<html><body style="font-family:sans-serif;padding:2rem"><h2>Authorization failed</h2><p>${safeError}</p></body></html>`);
-        server.close();
-        reject(new Error(`Authorization failed: ${error || 'unknown error'}`));
+        res.end(resultPage('&#10003; Authorized!', 'You can close this tab and return to the terminal.'));
+        settle(resolve, code);
+        return;
       }
+
+      const reason = code
+        ? 'state mismatch (the callback did not come from this login)'
+        : error || 'unknown error';
+      res.writeHead(400, { 'Content-Type': 'text/html' });
+      res.end(resultPage('Authorization failed', escapeHtml(reason)));
+      settle(reject, new Error(`Authorization failed: ${reason}`));
     });
 
     server.on('error', (err) => {
+      clearTimeout(timer);
       if (err.code === 'EADDRINUSE') {
-        reject(new Error(`Port ${REDIRECT_PORT} is already in use. Stop any process using it and try again.`));
+        reject(new Error(`Port ${port} is already in use. Stop any process using it and try again.`));
       } else {
         reject(err);
       }
     });
 
-    server.listen(REDIRECT_PORT);
+    server.listen(port, host, () => onListening?.(server.address()));
 
-    setTimeout(() => {
+    timer = setTimeout(() => {
       server.close();
-      reject(new Error('Authorization timed out after 5 minutes.'));
-    }, LOGIN_TIMEOUT_MS);
+      const after = timeoutMs % 60_000 === 0 ? `${timeoutMs / 60_000} minutes` : `${timeoutMs} ms`;
+      reject(new Error(`Authorization timed out after ${after}.`));
+    }, timeoutMs);
   });
 }
 
@@ -136,7 +171,7 @@ export async function login(clientId) {
 
   openBrowser(authUrl.toString());
 
-  const code = await waitForCallback();
+  const code = await waitForCallback(state);
   const data = await exchangeCode(clientId, code, verifier);
   setTokens(data.access_token, data.refresh_token, data.created_at, data.expires_in);
   // A fresh login can be a different account than whichever one telemetry

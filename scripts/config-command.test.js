@@ -4,10 +4,22 @@
 import { test, describe, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { configCommand } from '../src/commands/account.js';
-import { runCommand } from './helpers.js';
-import { getTelemetryEnabled, setTelemetryEnabled } from '../src/config.js';
+import { tagsCommand } from '../src/commands/tags.js';
+import { runCommand, onlyCall } from './helpers.js';
+import { getTelemetryEnabled, setTelemetryEnabled, getPerPage, setPerPage } from '../src/config.js';
 
 const cfg = (argv) => runCommand(configCommand, argv);
+
+describe('config set-per-page', () => {
+  const saved = getPerPage();
+  after(() => setPerPage(saved));
+
+  test('changes the per_page that list commands send by default', async () => {
+    await cfg(['set-per-page', '25']);
+    const res = await runCommand(tagsCommand, ['list'], { responses: { tags: [], pagination: {} } });
+    assert.equal(onlyCall(res).query.per_page, '25');
+  });
+});
 
 describe('config set-telemetry', () => {
   after(() => setTelemetryEnabled(true)); // restore the default for later tests in this run

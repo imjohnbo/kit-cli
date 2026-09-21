@@ -3,6 +3,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import { Command } from 'commander';
 import {
   formatOutput,
   printDetail,
@@ -11,9 +12,27 @@ import {
   printPagination,
   printWarnings,
   withErrorHandler,
+  addPaginationOptions,
 } from '../src/output.js';
 import { KitApiError } from '../src/client.js';
 import { setCurrentCommand, getCurrentCommand } from '../src/current-command.js';
+import { getPerPage, setPerPage } from '../src/config.js';
+
+// ── addPaginationOptions ───────────────────────────────────────────────────
+
+describe('addPaginationOptions', () => {
+  test('defaults --per-page to the configured per_page rather than a fixed 50', () => {
+    const saved = getPerPage();
+    setPerPage(25);
+    try {
+      const cmd = addPaginationOptions(new Command('x'));
+      cmd.parse([], { from: 'user' });
+      assert.equal(cmd.opts().perPage, '25');
+    } finally {
+      setPerPage(saved);
+    }
+  });
+});
 
 // ── helpers ────────────────────────────────────────────────────────────────
 

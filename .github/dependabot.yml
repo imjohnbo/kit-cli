@@ -1,0 +1,14 @@
+# The workflows pin every action to a commit SHA, with the version in a
+# trailing comment. Dependabot reads that comment and moves the SHA, so
+# without this file the pins never change.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
